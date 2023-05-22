@@ -1,0 +1,198 @@
+﻿FUNCTION_BLOCK "FHPP_DPWR_DAT"
+{ S7_Optimized_Access := 'TRUE' }
+AUTHOR : FESTO
+FAMILY : 'E-DRIVE'
+VERSION : 5.1
+   VAR_INPUT 
+      HW_IO_FHPP : HW_IO;
+      HW_IO_FPC : HW_IO;
+   END_VAR
+   VAR_INPUT DB_SPECIFIC
+      HW_IO_FHPPplus : HW_IO;
+      cfgFHPPplusOut : DInt;
+   END_VAR
+
+   VAR_OUTPUT 
+      Error : Bool;
+      Status : "DT_FML_STATUS";
+   END_VAR
+
+   VAR_IN_OUT 
+      FML_REF : "DT_FML_REF";
+   END_VAR
+
+   VAR 
+      EnableFHPPplusOutOld : DInt;
+      FHPPplusSize { ExternalAccessible := 'False'; ExternalVisible := 'False'; ExternalWritable := 'False'} : DInt;
+      FHPPplusElementSize { ExternalAccessible := 'False'; ExternalVisible := 'False'; ExternalWritable := 'False'} : Array[1..9] of DInt;
+   END_VAR
+
+   VAR_TEMP 
+      tmp_bRetVal : Bool;
+      iByteCount : Int;
+      i : Int;
+      FHPPplus8 : Array[1..8] of Byte;
+      FHPPplus16 : Array[1..16] of Byte;
+      FHPPplus24 : Array[1..24] of Byte;
+      WORD_BYTE : Word;
+      DWORD_BYTE : DInt;
+      tmpStatus : "DT_FML_STATUS";
+      tmp_FML_REF : "DT_FML_REF";
+   END_VAR
+
+
+BEGIN
+	(*############################################################
+	    FESTO AG  Co., Esslingen
+	    Copyright (c) 2015. All rights reserved.    
+	
+	    NAME OF FUNCTION BLOCK:         FHPP_DPWR_DAT
+	    VERSION NUMBER:                 V5.1
+	    COMPOSER:                       bejk
+	    
+	    -----------------------------------------------------
+	   Date        Name                Activity                                                                              
+	   06.08.2015  Benjamin Kilgus     created (V1.0)
+	   15.09.2015  Benjamin Kilgus     errorhandling changed (V1.1)
+	   29.08.2016  Benjamin Klein      version changed (V4.1)
+	   22.09.2016  Benjamin Klein      bugfix: FHPP+ copy 16Byte, tmpStatus.Err initialization  (V4.2)
+	   02.11.2016  Benjamin Klein      adapted to TIAV14 (V5.0)  
+	   05.07.2017  Benjamin Klein      optimized function block with Slice access instead of AT (V5.1)
+	   18.10.2017  Benjamin Klein      "tmpStatus" at beginning deleted, labels deleted
+	############################################################*)
+	
+	// function block (FB) is busy
+	#tmpStatus.Err := FALSE;
+	#tmpStatus.Cat := 1;
+	#tmpStatus.ID := 16#0000_0002; // FB busy 
+	
+	
+	// ### FHPP Standard ##########################################################
+	#tmpStatus.Err := false;
+	#tmpStatus.ID := INT_TO_WORD(DPWR_DAT(LADDR := #HW_IO_FHPP, RECORD := #FML_REF.OutData.FHPP));
+	
+	// #Error WHILE reading?
+	IF #tmpStatus.ID <> 0 THEN
+	    #tmpStatus.Err := TRUE;
+	    #tmpStatus.Cat := 4; // SIEMENS
+	END_IF;
+	
+	// ### FHPP FPC ###############################################################
+	IF #HW_IO_FPC <> 0 AND #tmpStatus.Err = FALSE THEN
+	    
+	    // mapping of FPC data 
+	    #tmp_FML_REF := #FML_REF;
+	    #tmp_bRetVal := NOT "FPC_MAPPING"(Mode := TRUE, FML_REF := #tmp_FML_REF);
+	    
+	    IF #tmp_bRetVal THEN
+	        #tmpStatus.Cat := 3; // FPC
+	        #tmpStatus.ID := 18;
+	    END_IF;
+	    #FML_REF := #tmp_FML_REF;
+	    
+	    #tmpStatus.ID := INT_TO_WORD(DPWR_DAT(LADDR := #HW_IO_FPC, RECORD := #FML_REF.OutData.FPC));
+	    // #Error WHILE reading?
+	    IF #tmpStatus.ID <> 0 THEN
+	        #tmpStatus.Err := TRUE;
+	        #tmpStatus.Cat := 4; // SIEMENS
+	    END_IF;
+	    
+	END_IF;
+	
+	// ### FHPP PLUS ##########################################################
+	IF #HW_IO_FHPPplus <> 0 AND #tmpStatus.Err = FALSE  THEN
+	    
+	    IF #cfgFHPPplusOut <> #EnableFHPPplusOutOld THEN
+	        #tmpStatus.ID := "FHPPPLUS_MAPPING"(cfgFHPPplus := #cfgFHPPplusOut, FHPPplusElementSize => #FHPPplusElementSize, FHPPplusSize => #FHPPplusSize);
+	        #EnableFHPPplusOutOld := #cfgFHPPplusOut;
+	    END_IF;
+	    
+	    // FHPP+ Berechnung fehlerhaft beendet
+	    IF #tmpStatus.ID <> 0 THEN
+	        #tmpStatus.Err := TRUE;
+	        #tmpStatus.Cat := 1; // functionblock
+	    END_IF;
+	    
+	    // copy data from FML_REF
+	    #iByteCount := 1;
+	    FOR #i := 1 TO 9 DO
+	        CASE #FHPPplusElementSize[#i] OF
+	            0:(* Element is empty *)
+	                ;// do nothing
+	            8:(* Element is a BYTE *)
+	                #FHPPplus24[#iByteCount] := DINT_TO_BYTE(#FML_REF.OutData.FHPPplus[#i]);
+	                #iByteCount := #iByteCount + 1;
+	            16:(* Element is a WORD *)
+	                #WORD_BYTE := DINT_TO_WORD(#FML_REF.OutData.FHPPplus[#i]);
+	                #FHPPplus24[#iByteCount] := #WORD_BYTE.%B1;
+	                #FHPPplus24[#iByteCount + 1] := #WORD_BYTE.%B0;
+	                #iByteCount := #iByteCount + 2;
+	            32:(* Element is a DWORD *)
+	                #DWORD_BYTE := #FML_REF.OutData.FHPPplus[#i];
+	                #FHPPplus24[#iByteCount] := #DWORD_BYTE.%B3;
+	                #FHPPplus24[#iByteCount + 1] := #DWORD_BYTE.%B2;
+	                #FHPPplus24[#iByteCount + 2] := #DWORD_BYTE.%B1;
+	                #FHPPplus24[#iByteCount + 3] := #DWORD_BYTE.%B0;
+	                #iByteCount := #iByteCount + 4;
+	            ELSE
+	                #tmpStatus.Err := TRUE;
+	                #tmpStatus.Cat := 1;
+	                #tmpStatus.ID := DWORD_TO_DINT(16#8000_0001); // //no legal FHPP+ configuration
+	        END_CASE;
+	    END_FOR;
+	    
+	    CASE #FHPPplusSize OF
+	        0:(* 0 Byte FHPP+ *)
+	            (* NO FHPP+ Data configured *)
+	            #tmpStatus.Err := TRUE;
+	            #tmpStatus.Cat := 1; // functionblock           
+	            #tmpStatus.ID := DWORD_TO_DINT(16#8000_0001); // function is called without legal FHPP+ configuration
+	            
+	        64: // 8 Byte FHPP+ (64bit)
+	            // copy data to FML_REF
+	            FOR #i := 1 TO 8 DO
+	                #FHPPplus8[#i] := #FHPPplus24[#i];
+	            END_FOR;
+	            
+	            #tmpStatus.ID := INT_TO_WORD(DPWR_DAT(LADDR := #HW_IO_FHPPplus, RECORD := #FHPPplus8));
+	            IF #tmpStatus.ID <> 0 THEN
+	                #tmpStatus.Err := TRUE;
+	                #tmpStatus.Cat := 4; // SIEMENS
+	            END_IF;
+	        128:// 16 Byte FHPP+ (128bit)
+	            // copy data to FML_REF
+	            FOR #i := 1 TO 16 DO
+	                #FHPPplus16[#i] := #FHPPplus24[#i];
+	            END_FOR;
+	            
+	            #tmpStatus.ID := INT_TO_WORD(DPWR_DAT(LADDR := #HW_IO_FHPPplus, RECORD := #FHPPplus16));
+	            IF #tmpStatus.ID <> 0 THEN
+	                #tmpStatus.Err := TRUE;
+	                #tmpStatus.Cat := 4; // SIEMENS
+	            END_IF;
+	            
+	        192: // 24 Byte FHPP+ (192bit)
+	            #tmpStatus.ID := INT_TO_WORD(DPWR_DAT(LADDR := #HW_IO_FHPPplus, RECORD := #FHPPplus24));
+	            IF #tmpStatus.ID <> 0 THEN
+	                #tmpStatus.Err := TRUE;
+	                #tmpStatus.Cat := 4; // SIEMENS
+	            END_IF;
+	        ELSE
+	            #tmpStatus.Err := TRUE;
+	            #tmpStatus.Cat := 1;
+	            #tmpStatus.ID := DWORD_TO_DINT(16#8000_0001); // function is called without legal FHPP+ configuration
+	    END_CASE;
+	END_IF;
+	
+	// ### EXIT ROUTINE ############################################################
+	IF NOT #tmpStatus.Err THEN
+	    ENO := TRUE;      // Set ENO-Bit to true
+	    #Status := #tmpStatus;
+	    #Error := #tmpStatus.Err;
+	ELSE
+	    ENO := FALSE;     // Set ENO-Bit to false
+	    #Status := #tmpStatus;
+	    #Error := #tmpStatus.Err;
+	END_IF;
+END_FUNCTION_BLOCK
+

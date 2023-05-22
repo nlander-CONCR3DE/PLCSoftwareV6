@@ -1,0 +1,951 @@
+﻿FUNCTION_BLOCK "Festo_PtP_Drives_PN"
+{ S7_Optimized_Access := 'TRUE' }
+AUTHOR : Festo
+FAMILY : 'E-.Drives'
+VERSION : 1.5
+   VAR_INPUT 
+      ModePos : Int := 0;
+      EnableAxis : Bool := 0;
+      CancelTraversing : Bool := 1;
+      IntermediateStop : Bool := 1;
+      Positive : Bool := 0;
+      Negative : Bool := 0;
+      Jog1 : Bool := 0;
+      Jog2 : Bool := 0;
+      AckError : Bool := 0;
+      ExecuteMode : Bool := 0;
+      ReleaseBrake : Bool := 0;
+      TravelToFixStop : Bool := 0;
+      Position : DInt := 0;
+      Velocity : DInt := 0;
+      OverV : Int := 100;
+      OverAcc : Int := 100;
+      OverDec : Int := 100;
+      ConfigEPos : DWord := 16#0000_000F;
+      BaseSpeedValue : Real;
+      HardwareId : HW_IO := 0;
+   END_VAR
+
+   VAR_OUTPUT 
+      AxisEnabled : Bool := 0;
+      AxisPosOk : Bool := 0;
+      AxisSpFixed : Bool := 0;
+      AxisAckSetpoint : Bool := 0;
+      ClampTorqueReached : Bool;
+      AxisRef : Bool := 0;
+      AxisWarn : Bool := 0;
+      AxisError : Bool := 0;
+      Lockout : Bool := 0;
+      ActVelocity : Real := 0.0;
+      ActPosition : DInt := 0;
+      ActMode : Int := 0;
+      EPosZSW1 : Word := 0;
+      EPosZSW2 : Word := 0;
+      ActWarn : Word := 0;
+      ActFault : Word := 0;
+      Error : Bool := 0;
+      Status : Word := 0;
+      DiagID : Word := 0;
+   END_VAR
+
+   VAR 
+      stat_Ready4Motion : Bool := 0;
+      stat_ExecuteIntern : Bool := 0;
+      stat_StepHome : UInt;
+      stat_RetDPRD : Int;
+      stat_RetDPWR : Int;
+      stat_CycWrite : Struct
+         STW1 : Struct
+            jog1 : Bool;
+            jog2 : Bool;
+            controlByPlc : Bool := TRUE;
+            StartHoming : Bool;
+            ReleaseBrake : Bool;
+            ExternalBlockChange : Bool;
+            reserved14 : Bool;
+            reserved15 : Bool;
+            on : Bool;
+            noCoastStop : Bool := TRUE;
+            noQuickStop : Bool := TRUE;
+            enableOperation : Bool := TRUE;
+            cancelTraversing : Bool;
+            intermediateStop : Bool;
+            activateTraversing : Bool;
+            acknowledgeFault : Bool;
+         END_STRUCT;
+         POS_STW1 : Struct
+            MDI_MOD : Bool;
+            PosModulo : Bool;
+            NegModulo : Bool;
+            reserved11 : Bool;
+            reserved12 : Bool;
+            reserved13 : Bool;
+            SetupMode : Bool;
+            MDI_Activate : Bool;
+            travBlockBit0 : Bool;
+            travBlockBit1 : Bool;
+            travBlockBit2 : Bool;
+            travBlockBit3 : Bool;
+            travBlockBit4 : Bool;
+            travBlockBit5 : Bool;
+            travBlockBit6 : Bool;
+            reserved7 : Bool;
+         END_STRUCT;
+         POS_STW2 : Struct
+            FlyingRef : Bool;
+            reserved9 : Bool;
+            SelectProbe : Bool;
+            ProbeEdgeEval : Bool;
+            reserved12 : Bool;
+            reserved13 : Bool;
+            "SW-Limit" : Bool;
+            "HW-Limit" : Bool;
+            Trackingmode : Bool;
+            SetReferencePoint : Bool;
+            reserved2 : Bool;
+            reserved3 : Bool;
+            reserved4 : Bool;
+            jog_inc : Bool;
+            reserved6 : Bool;
+            reserved7 : Bool;
+         END_STRUCT;
+         STW2 : Struct
+            TravelToFixStop : Bool;
+            reserved9 : Bool;
+            reserved10 : Bool;
+            reserved11 : Bool;
+            signOfLifeBit0 : Bool;
+            signOfLifeBit1 : Bool;
+            signOfLifeBit2 : Bool;
+            signOfLifeBit3 : Bool;
+            reserved0 : Bool;
+            reserved1 : Bool;
+            reserved2 : Bool;
+            reserved3 : Bool;
+            reserved4 : Bool;
+            reserved5 : Bool;
+            reserved6 : Bool;
+            reserved7 : Bool;
+         END_STRUCT;
+         Override : Word;
+         MDI_TARPOS : DInt;
+         MDI_VELOCITY : DInt;
+         MDI_ACC : UInt;
+         MDI_DEC : UInt;
+         reserved11 : Word;
+      END_STRUCT;
+      stat_CycRead : Struct
+         ZSW1 : Struct
+            followingErrorInTolerance : Bool;
+            controlRequest : Bool;
+            targetPosReached : Bool;
+            homePosSet : Bool;
+            acknowledgeTraversingBlockActivated : Bool;
+            driveStopped : Bool;
+            axisAccelerates : Bool;
+            axisDecelerates : Bool;
+            readyForSwitchOn : Bool;
+            ready : Bool;
+            operationEnabled : Bool;
+            faultPresent : Bool;
+            noCoastingActive : Bool;
+            noQuickStopActive : Bool;
+            switchingOnInhibitedActive : Bool;
+            warningActive : Bool;
+         END_STRUCT;
+         POS_ZSW1 : Word;
+         POS_ZSW2 : Word;
+         ZSW2 : Struct
+            deviceSpecificBit8 : Bool;
+            deviceSpecificBit9 : Bool;
+            deviceSpecificBit10 : Bool;
+            deviceSpecificBit11 : Bool;
+            doSignOfLifeBit0 : Bool;
+            doSignOfLifeBit1 : Bool;
+            doSignOfLifeBit2 : Bool;
+            doSignOfLifeBit3 : Bool;
+            deviceSpecificBit0 : Bool;
+            deviceSpecificBit1 : Bool;
+            deviceSpecificBit2 : Bool;
+            deviceSpecificBit3 : Bool;
+            deviceSpecificBit4 : Bool;
+            deviceSpecificBit5 : Bool;
+            deviceSpecificBit6 : Bool;
+            deviceSpecificBit7 : Bool;
+         END_STRUCT;
+         MELDW : Word;
+         XIST_A : DInt;
+         NIST_B : DInt;
+         Fault_Code : Word;
+         Warn_Code : Word;
+         Reserved : Word;
+      END_STRUCT;
+      stat_ExecAux : Bool;
+      stat_ExecR_Trig : Bool;
+      stat_Jog1PAux : Bool;
+      stat_Jog1PR_trig : Bool;
+      stat_Jog2PAux : Bool;
+      stat_Jog2PR_trig : Bool;
+      stat_Jog1PMode8Aux : Bool;
+      stat_Jog1PMode8R_trig : Bool;
+      stat_Jog2PMode8Aux : Bool;
+      stat_Jog2PMode8R_trig : Bool;
+      stat_Status : Word;
+      statStartCounter : Int;
+      stat_ActMode : Int;
+      stat_MaxCounterRetries { ExternalAccessible := 'False'; ExternalVisible := 'False'; ExternalWritable := 'False'} : Int;
+   END_VAR
+
+   VAR_TEMP 
+      tempDWord : DWord;
+      tmpSendBuffer : Array[0..11] of Word;
+      tmpReadBuffer : Array[0..11] of Word;
+   END_VAR
+
+   VAR CONSTANT 
+      MaxCounterStart : Int := 50;
+      MAXMODE : Int := 8;
+      STATUS_IN_OPERATION : Word := 16#7002;
+      ERROR_INVALID_MODE : Word := 16#8202;
+      ERROR_OVERRIDE : Word := 16#8203;
+      ERROR_INVALID_TRV_BLOCK : Word := 16#8204;
+      ERROR_DRIVE_ERROR : Word := 16#8401;
+      ERROR_SWITCH_ON_INHIBITED : Word := 16#8402;
+      ERROR_DPRD_DAT : Word := 16#8600;
+      ERROR_DPWR_DAT : Word := 16#8601;
+   END_VAR
+
+
+BEGIN
+	(*############################################################
+	    FESTO SE & Co. KG, Esslingen
+	    Copyright (c) 2020. All rights reserved.    
+	
+	    NAME OF FUNCTION BLOCK:         Festo_PTP_Drives_PN
+	    VERSION NUMBER:                 V1.5
+	    COMPOSER:                       Festo
+	    
+	    -----------------------------------------------------
+	   Date        Name                Activity                                                                              
+	   19.03.2020  bkle                created (V1.0)
+	   09.03.2021  bkle                name changed
+	   18.03.2021  bkle                changed jog behaviour
+	   30.07.2021  bkle                Send the StartTask again if ACK is not received - not released
+	   06.08.2021  bkle                StartTask is TRUE until ExecuteMode will switch to FALSE
+	   22.09.2021  bkle                Added ConfigEpos bits for ReleaseBrake and TravelToFixStop 
+	############################################################*)
+	
+	REGION Check OPM and Override Values
+	    // Check the Mode of Operation
+	    IF #ModePos > #MAXMODE THEN
+	        #Error := True;
+	        #stat_Status := #ERROR_INVALID_MODE;
+	        #stat_ExecuteIntern := false;
+	    ELSIF #ModePos < 1 THEN
+	        #Error := True;
+	        #stat_Status := #ERROR_INVALID_MODE;
+	        #stat_ExecuteIntern := false;
+	    ELSE
+	        IF #stat_Status = #ERROR_INVALID_MODE THEN
+	            #stat_Status := #STATUS_IN_OPERATION;
+	            #Error := False;
+	        END_IF;
+	    END_IF;
+	    
+	    
+	    //Check the Velocity Override 
+	    IF (#OverV < 0) OR (#OverV > 199) THEN
+	        #stat_Status := #ERROR_OVERRIDE;
+	        #Error := True;
+	    ELSE
+	        // Write Velocity Override into Send Buffer
+	        #stat_CycWrite.Override := INT_TO_WORD(REAL_TO_INT(16384.0 * (INT_TO_REAL(#OverV) / 100.0)));
+	        IF #stat_Status = #ERROR_OVERRIDE THEN
+	            #stat_Status := #STATUS_IN_OPERATION;
+	            #Error := False;
+	        END_IF;
+	    END_IF;
+	    
+	    //Check the Acceleration Override  (0% - 100%, 100% => W#16#4000)
+	    IF (#OverAcc < 0) OR (#OverAcc > 100) THEN
+	        #stat_Status := #ERROR_OVERRIDE;
+	        #Error := True;
+	    ELSE
+	        // Write Acceleration Override into Send Buffer
+	        #stat_CycWrite.MDI_ACC := INT_TO_WORD(REAL_TO_INT(16384.0 * (INT_TO_REAL(#OverAcc) / 100.0)));
+	        IF #stat_Status = #ERROR_OVERRIDE THEN
+	            #stat_Status := #STATUS_IN_OPERATION;
+	            #Error := False;
+	        END_IF;
+	    END_IF;
+	    
+	    //Check the Deceleration Override  (0% - 100%, 100% => W#16#4000)
+	    IF (#OverDec < 0) OR (#OverDec > 100) THEN
+	        #stat_Status := #ERROR_OVERRIDE;
+	        #Error := True;
+	    ELSE
+	        // Write Deceleration Override into Send Buffer
+	        #stat_CycWrite.MDI_DEC := INT_TO_WORD(REAL_TO_INT(16384.0 * (INT_TO_REAL(#OverDec) / 100.0)));
+	        IF #stat_Status = #ERROR_OVERRIDE THEN
+	            #stat_Status := #STATUS_IN_OPERATION;
+	            #Error := False;
+	        END_IF;
+	    END_IF;
+	END_REGION ;
+	
+	REGION Read Cyclic Data of Telegramm111
+	    // Read cyclic telegram 111
+	    #stat_RetDPRD := DPRD_DAT(LADDR := #HardwareId,
+	                              RECORD => #tmpReadBuffer);
+	    
+	    //check if the return code is unequal zero -> error occured
+	    IF #stat_RetDPRD <> 0 THEN
+	        #Error := true;
+	        #stat_Status := #ERROR_DPRD_DAT;
+	        #DiagID := INT_TO_WORD(#stat_RetDPRD);
+	    ELSE
+	        
+	        // set the Diag status back "in operation"
+	        IF #stat_Status = #ERROR_DPRD_DAT THEN
+	            #stat_Status := #STATUS_IN_OPERATION;
+	            #DiagID := 0;
+	            #Error := False;
+	        END_IF;
+	    END_IF;
+	    
+	END_REGION ;
+	
+	
+	REGION Read Input from temp data
+	    // copy all values from tmp buffer to static data
+	    // ZSW1
+	    #stat_CycRead.ZSW1.followingErrorInTolerance := #tmpReadBuffer[0].%X8;
+	    #stat_CycRead.ZSW1.controlRequest := #tmpReadBuffer[0].%X9;
+	    #stat_CycRead.ZSW1.targetPosReached := #tmpReadBuffer[0].%X10;
+	    #stat_CycRead.ZSW1.homePosSet := #tmpReadBuffer[0].%X11;
+	    #stat_CycRead.ZSW1.acknowledgeTraversingBlockActivated := #tmpReadBuffer[0].%X12;
+	    #stat_CycRead.ZSW1.driveStopped := #tmpReadBuffer[0].%X13;
+	    #stat_CycRead.ZSW1.axisAccelerates := #tmpReadBuffer[0].%X14;
+	    #stat_CycRead.ZSW1.axisDecelerates := #tmpReadBuffer[0].%X15;
+	    #stat_CycRead.ZSW1.readyForSwitchOn := #tmpReadBuffer[0].%X0;
+	    #stat_CycRead.ZSW1.ready := #tmpReadBuffer[0].%X1;
+	    #stat_CycRead.ZSW1.operationEnabled := #tmpReadBuffer[0].%X2;
+	    #stat_CycRead.ZSW1.faultPresent := #tmpReadBuffer[0].%X3;
+	    #stat_CycRead.ZSW1.noCoastingActive := #tmpReadBuffer[0].%X4;
+	    #stat_CycRead.ZSW1.noQuickStopActive := #tmpReadBuffer[0].%X5;
+	    #stat_CycRead.ZSW1.switchingOnInhibitedActive := #tmpReadBuffer[0].%X6;
+	    #stat_CycRead.ZSW1.warningActive := #tmpReadBuffer[0].%X7;
+	    
+	    //POS_ZSW1
+	    #stat_CycRead.POS_ZSW1 := #tmpReadBuffer[1];
+	    #EPosZSW1 := #stat_CycRead.POS_ZSW1;
+	    
+	    //POS_ZSW2
+	    #stat_CycRead.POS_ZSW2 := #tmpReadBuffer[2];
+	    #EPosZSW2 := #stat_CycRead.POS_ZSW2;
+	    
+	    // ZSW2
+	    #stat_CycRead.ZSW2.deviceSpecificBit8 := #tmpReadBuffer[3].%X8;
+	    #stat_CycRead.ZSW2.deviceSpecificBit9 := #tmpReadBuffer[3].%X9;
+	    #stat_CycRead.ZSW2.deviceSpecificBit10 := #tmpReadBuffer[3].%X10;
+	    #stat_CycRead.ZSW2.deviceSpecificBit11 := #tmpReadBuffer[3].%X11;
+	    #stat_CycRead.ZSW2.doSignOfLifeBit0 := #tmpReadBuffer[3].%X12;
+	    #stat_CycRead.ZSW2.doSignOfLifeBit1 := #tmpReadBuffer[3].%X13;
+	    #stat_CycRead.ZSW2.doSignOfLifeBit2 := #tmpReadBuffer[3].%X14;
+	    #stat_CycRead.ZSW2.doSignOfLifeBit3 := #tmpReadBuffer[3].%X15;
+	    #stat_CycRead.ZSW2.deviceSpecificBit0 := #tmpReadBuffer[3].%X0;
+	    #stat_CycRead.ZSW2.deviceSpecificBit1 := #tmpReadBuffer[3].%X1;
+	    #stat_CycRead.ZSW2.deviceSpecificBit2 := #tmpReadBuffer[3].%X2;
+	    #stat_CycRead.ZSW2.deviceSpecificBit3 := #tmpReadBuffer[3].%X3;
+	    #stat_CycRead.ZSW2.deviceSpecificBit4 := #tmpReadBuffer[3].%X4;
+	    #stat_CycRead.ZSW2.deviceSpecificBit5 := #tmpReadBuffer[3].%X5;
+	    #stat_CycRead.ZSW2.deviceSpecificBit6 := #tmpReadBuffer[3].%X6;
+	    #stat_CycRead.ZSW2.deviceSpecificBit7 := #tmpReadBuffer[3].%X7;
+	    
+	    //MELDW
+	    #stat_CycRead.MELDW := #tmpReadBuffer[4];
+	    
+	    //XIST_A
+	    #stat_CycRead.XIST_A.%W0 := #tmpReadBuffer[6];
+	    #stat_CycRead.XIST_A.%W1 := #tmpReadBuffer[5];
+	    
+	    //NIST_B
+	    #stat_CycRead.NIST_B.%W0 := #tmpReadBuffer[8];
+	    #stat_CycRead.NIST_B.%W1 := #tmpReadBuffer[7];
+	    
+	    //Fault_Code
+	    #stat_CycRead.Fault_Code := #tmpReadBuffer[9];
+	    
+	    //Warn_Code
+	    #stat_CycRead.Warn_Code := #tmpReadBuffer[10];
+	    
+	    //Reserved
+	    #stat_CycRead.Reserved := #tmpReadBuffer[11];
+	END_REGION ;
+	
+	// Mapping of the FB Outputs
+	#AxisEnabled := #stat_CycRead.ZSW1.operationEnabled;
+	#AxisError := #stat_CycRead.ZSW1.faultPresent;
+	#AxisWarn := #stat_CycRead.ZSW1.warningActive;
+	#AxisPosOk := #stat_CycRead.ZSW1.targetPosReached;
+	#AxisRef := #stat_CycRead.ZSW1.homePosSet;
+	#AxisAckSetpoint := #stat_CycRead.ZSW1.acknowledgeTraversingBlockActivated;
+	#ClampTorqueReached := #stat_CycRead.POS_ZSW2.%X13;
+	#AxisSpFixed := #stat_CycRead.ZSW1.driveStopped;
+	#ActVelocity := #stat_CycRead.NIST_B;
+	
+	
+	//scaling the ActVelocity output
+	IF #BaseSpeedValue <> 0 THEN
+	    #ActVelocity := #ActVelocity * ((#BaseSpeedValue / 1073741824.0));
+	END_IF;
+	
+	#ActPosition := #stat_CycRead.XIST_A;
+	#ActWarn := #stat_CycRead.Warn_Code;
+	#ActFault := #stat_CycRead.Fault_Code;
+	#Lockout := #stat_CycRead.ZSW1.switchingOnInhibitedActive;
+	
+	//Check the drive error and Lockout status
+	IF #AxisError THEN
+	    #stat_Status := #ERROR_DRIVE_ERROR;
+	    #Error := True;
+	ELSIF #Lockout THEN
+	    #stat_Status := #ERROR_SWITCH_ON_INHIBITED;
+	    #Error := True;
+	ELSE
+	    // error is gone -> set status in operational
+	    IF (#stat_Status = #ERROR_DRIVE_ERROR) OR #stat_Status = #ERROR_SWITCH_ON_INHIBITED THEN
+	        #stat_Status := #STATUS_IN_OPERATION;
+	        #Error := False;
+	    END_IF;
+	END_IF;
+	
+	//Enable the Axis
+	#stat_CycWrite.STW1.on := #EnableAxis;                       //STW1.0
+	
+	//fix values for STW1 data
+	#stat_CycWrite.STW1.cancelTraversing := #CancelTraversing;   //STW1.4
+	#stat_CycWrite.STW1.intermediateStop := #IntermediateStop;   //STW1.5
+	#stat_CycWrite.STW1.acknowledgeFault := #AckError;           //STW1.7
+	#stat_CycWrite.STW1.controlByPlc := TRUE;                    //STW1.10
+	#stat_CycWrite.STW1.enableOperation := TRUE;                 //STW1.3
+	
+	// copy the position set value into the send struct
+	IF #ModePos <> 4 OR #ModePos <> 5 OR #ModePos <> 6 OR #ModePos <> 7 OR #ModePos <> 8 THEN
+	    #stat_CycWrite.MDI_TARPOS := #Position;
+	ELSE
+	    #stat_CycWrite.MDI_TARPOS := 0;
+	END_IF;
+	
+	//copy the velocity set value into the send struct
+	#stat_CycWrite.MDI_VELOCITY := #Velocity;
+	
+	//Jog bits
+	// Mode 7
+	//Generate the Jog1 Edge
+	#stat_Jog1PR_trig := #Jog1 AND NOT #stat_Jog1PAux;
+	//Reset the Auxiliary flag 
+	#stat_Jog1PAux := #Jog1;
+	
+	//Generate the Jog2 Edge
+	#stat_Jog2PR_trig := #Jog2 AND NOT #stat_Jog2PAux;
+	//Reset the Auxiliary flag 
+	#stat_Jog2PAux := #Jog2;
+	
+	//Mode 8
+	//Generate the Jog1 Edge
+	#stat_Jog1PMode8R_trig := #Jog1 AND NOT #stat_Jog1PMode8Aux;
+	//Reset the Auxiliary flag 
+	#stat_Jog1PMode8Aux := #Jog1;
+	
+	//Generate the Jog2 Edge
+	#stat_Jog2PMode8R_trig := #Jog2 AND NOT #stat_Jog2PMode8Aux;
+	//Reset the Auxiliary flag 
+	#stat_Jog2PMode8Aux := #Jog2;
+	
+	IF #ModePos <> 4 THEN
+	    //Start homing
+	    #stat_CycWrite.STW1.StartHoming := false;
+	END_IF;
+	
+	//Relative - Absolute
+	#stat_CycWrite.POS_STW1.MDI_MOD := false;
+	
+	//Positive - Negative direction
+	#stat_CycWrite.POS_STW1.PosModulo := false;
+	#stat_CycWrite.POS_STW1.NegModulo := false;
+	
+	// setup mode 
+	#stat_CycWrite.POS_STW1.SetupMode := false;
+	
+	// MDI Active
+	#stat_CycWrite.POS_STW1.MDI_Activate := false;
+	
+	//Trackingmode
+	#stat_CycWrite.POS_STW2.Trackingmode := false;
+	
+	//Jog increment
+	#stat_CycWrite.POS_STW2.jog_inc := false;
+	
+	//delete all the record bits
+	#stat_CycWrite.POS_STW1.travBlockBit0 := false;
+	#stat_CycWrite.POS_STW1.travBlockBit1 := false;
+	#stat_CycWrite.POS_STW1.travBlockBit2 := false;
+	#stat_CycWrite.POS_STW1.travBlockBit3 := false;
+	#stat_CycWrite.POS_STW1.travBlockBit4 := false;
+	#stat_CycWrite.POS_STW1.travBlockBit5 := false;
+	#stat_CycWrite.POS_STW1.travBlockBit6 := false;
+	
+	//Check if the drive is ready for a motion
+	IF #stat_CycRead.ZSW1.operationEnabled THEN
+	    #stat_Ready4Motion := true;
+	ELSE
+	    #stat_Ready4Motion := false;
+	END_IF;
+	
+	//Generate the Execute Edge for Mode = 4 and 5
+	#stat_ExecR_Trig := #ExecuteMode AND NOT #stat_ExecAux;
+	//Reset the Auxiliary flag 
+	#stat_ExecAux := #ExecuteMode;
+	
+	// Set the Execute command according to the ModePos
+	IF NOT #ExecuteMode THEN
+	    #stat_ExecuteIntern := FALSE;
+	    #stat_StepHome := 0;
+	ELSIF #ExecuteMode AND #stat_Ready4Motion AND NOT (#ModePos = 4 OR #ModePos = 5 OR #ModePos = 7 OR #ModePos = 8) THEN
+	    #stat_ExecuteIntern := TRUE;
+	    #stat_ActMode := #ModePos;
+	    #stat_StepHome := 0;
+	ELSIF #stat_ExecR_Trig AND (#ModePos = 4 OR #ModePos = 5) THEN
+	    #stat_ActMode := #ModePos;
+	    #stat_StepHome := 0;
+	ELSIF #ExecuteMode AND (#stat_ActMode = 7 OR #stat_ActMode = 8) THEN
+	    #stat_ExecuteIntern := FALSE;
+	    #stat_StepHome := 0;
+	ELSIF #ExecuteMode AND #ModePos = 4 THEN
+	    
+	    CASE #stat_StepHome OF
+	            
+	        0: // homing is active
+	            IF NOT #AxisRef THEN
+	                #stat_StepHome := 10;
+	            ELSIF #AxisError OR (NOT #AxisSpFixed AND #ModePos = 4) THEN
+	                #stat_ExecuteIntern := FALSE;
+	            END_IF;
+	            
+	        10: // wait for homing done
+	            IF #AxisRef OR #AxisError OR (NOT #stat_Ready4Motion AND #ModePos = 4) OR #ModePos <> #stat_ActMode OR NOT #ExecuteMode THEN
+	                #stat_ExecuteIntern := FALSE;
+	                #stat_StepHome := 0;
+	            END_IF;
+	    END_CASE;
+	ELSIF #stat_ExecuteIntern AND #ModePos <> #stat_ActMode THEN
+	    #stat_ExecuteIntern := false;
+	    #stat_StepHome := 0;
+	END_IF;
+	
+	//Reset the jog bits if the ModePos has changed
+	IF (#stat_CycWrite.STW1.jog1 OR #stat_CycWrite.STW1.jog2) AND #ModePos <> #stat_ActMode THEN
+	    //Set the jog bits to zero
+	    #stat_CycWrite.STW1.jog1 := false;
+	    #stat_CycWrite.STW1.jog2 := false;
+	END_IF;
+	
+	// Positionig mode with relative movement (MDI)
+	IF #ModePos = 1 THEN
+	    
+	    // Set the MDI bit
+	    #stat_CycWrite.POS_STW1.MDI_Activate := true;
+	    
+	    // positive direction
+	    #stat_CycWrite.POS_STW1.PosModulo := #Positive;
+	    
+	    // #negative direction
+	    #stat_CycWrite.POS_STW1.NegModulo := #Negative;
+	    
+	    // Check if the drive is enabled for a new motion command
+	    IF #stat_Ready4Motion THEN
+	        
+	        IF NOT #stat_CycWrite.STW1.activateTraversing THEN
+	            #stat_ExecuteIntern := #stat_ExecR_Trig;
+	        END_IF;
+	        
+	        //Start Traversing Task
+	        #stat_CycWrite.STW1.activateTraversing := #stat_ExecuteIntern;
+	        
+	    END_IF;
+	    
+	    // Positionig mode with absolute movement (MDI)
+	ELSIF #ModePos = 2 THEN
+	    
+	    // Set the MDI bit
+	    #stat_CycWrite.POS_STW1.MDI_Activate := true;
+	    
+	    //set the Absolute bit
+	    #stat_CycWrite.POS_STW1.MDI_MOD := true;
+	    
+	    // positive direction
+	    #stat_CycWrite.POS_STW1.PosModulo := #Positive;
+	    
+	    // #negative direction
+	    #stat_CycWrite.POS_STW1.NegModulo := #Negative;
+	    
+	    // Check if the drive is enabled for a new motion command
+	    IF #stat_Ready4Motion THEN
+	        
+	        IF NOT #stat_CycWrite.STW1.activateTraversing THEN
+	            #stat_ExecuteIntern := #stat_ExecR_Trig;
+	        END_IF;
+	        
+	        //Start Traversing Task
+	        #stat_CycWrite.STW1.activateTraversing := #stat_ExecuteIntern;
+	        
+	    END_IF;
+	    
+	    // Positioning with setup mode for endless motion
+	ELSIF #ModePos = 3 THEN
+	    // Set the MDI bit
+	    #stat_CycWrite.POS_STW1.MDI_Activate := true;
+	    
+	    //set the Absolute bit
+	    #stat_CycWrite.POS_STW1.MDI_MOD := true;
+	    
+	    //setup mode
+	    #stat_CycWrite.POS_STW1.SetupMode := true;
+	    
+	    // positive direction
+	    #stat_CycWrite.POS_STW1.PosModulo := #Positive;
+	    
+	    // #negative direction
+	    #stat_CycWrite.POS_STW1.NegModulo := #Negative;
+	    
+	    // Check if the drive is enabled for a new motion command
+	    IF #stat_Ready4Motion THEN
+	        
+	        IF NOT #stat_CycWrite.STW1.activateTraversing THEN
+	            #stat_ExecuteIntern := #stat_ExecR_Trig;
+	        END_IF;
+	        
+	        //Start Traversing Task
+	        #stat_CycWrite.STW1.activateTraversing := #stat_ExecuteIntern;
+	        
+	    END_IF;
+	    
+	    //Homing mode done by the drive due to the parametrized homing method
+	ELSIF #ModePos = 4 THEN
+	    // positive direction
+	    #stat_CycWrite.POS_STW1.PosModulo := #Positive;
+	    
+	    // #negative direction
+	    #stat_CycWrite.POS_STW1.NegModulo := #Negative;
+	    
+	    // Check if the drive is enabled for a new motion command
+	    IF #stat_Ready4Motion THEN
+	        
+	        //Start homing
+	        IF NOT #stat_CycWrite.STW1.StartHoming THEN
+	            #stat_ExecuteIntern := #stat_ExecR_Trig;
+	        END_IF;
+	        
+	        #stat_CycWrite.STW1.StartHoming := #stat_ExecuteIntern;
+	    END_IF;
+	    
+	    //set the reference point (actual position)
+	ELSIF #ModePos = 5 THEN
+	    
+	    // check if there is no error in the drive - this function works also when drive is not enabled
+	    IF NOT #AxisError THEN
+	        
+	        //Start homing
+	        IF NOT #stat_CycWrite.POS_STW2.SetReferencePoint THEN
+	            #stat_ExecuteIntern := #stat_ExecR_Trig;
+	        END_IF;
+	        //Set the axis zero point
+	        #stat_CycWrite.POS_STW2.SetReferencePoint := #stat_ExecuteIntern;
+	        
+	    END_IF;
+	    
+	    //Record mode - parametrized records in the drive can be used
+	ELSIF #ModePos = 6 THEN
+	    
+	    //set the position number into the record bits 
+	    IF (DINT_TO_INT(#Position) < 0) OR (DINT_TO_INT(#Position) > 127) THEN
+	        // Error, wrong record number
+	        #stat_Status := #ERROR_INVALID_TRV_BLOCK;
+	        #Error := True;
+	    ELSE
+	        // error is gone -> set status in operational
+	        IF #stat_Status = #ERROR_INVALID_TRV_BLOCK THEN
+	            #stat_Status := #STATUS_IN_OPERATION;
+	            #Error := False;
+	        END_IF;
+	        
+	        // Record bit 0
+	        IF (DINT_TO_WORD(#Position) AND W#16#01) = W#16#01 THEN
+	            #stat_CycWrite.POS_STW1.travBlockBit0 := true;
+	        END_IF;
+	        
+	        // Record bit 1
+	        IF (DINT_TO_WORD(#Position) AND W#16#02) = W#16#02 THEN
+	            #stat_CycWrite.POS_STW1.travBlockBit1 := true;
+	        END_IF;
+	        
+	        // Record bit 2
+	        IF (DINT_TO_WORD(#Position) AND W#16#04) = W#16#04 THEN
+	            #stat_CycWrite.POS_STW1.travBlockBit2 := true;
+	        END_IF;
+	        
+	        // Record bit 3
+	        IF (DINT_TO_WORD(#Position) AND W#16#08) = W#16#08 THEN
+	            #stat_CycWrite.POS_STW1.travBlockBit3 := true;
+	        END_IF;
+	        
+	        // Record bit 4
+	        IF (DINT_TO_WORD(#Position) AND W#16#10) = W#16#10 THEN
+	            #stat_CycWrite.POS_STW1.travBlockBit4 := true;
+	        END_IF;
+	        
+	        // Record bit 5
+	        IF (DINT_TO_WORD(#Position) AND W#16#20) = W#16#20 THEN
+	            #stat_CycWrite.POS_STW1.travBlockBit5 := true;
+	        END_IF;
+	        
+	        // Record bit 6
+	        IF (DINT_TO_WORD(#Position) AND W#16#40) = W#16#40 THEN
+	            #stat_CycWrite.POS_STW1.travBlockBit6 := true;
+	        END_IF;
+	        
+	        // Check if the drive is enabled for a new motion command
+	        IF #stat_Ready4Motion THEN
+	            
+	            IF NOT #stat_CycWrite.STW1.activateTraversing THEN
+	                #stat_ExecuteIntern := #stat_ExecR_Trig;
+	            END_IF;
+	            
+	            //Start Traversing Task
+	            #stat_CycWrite.STW1.activateTraversing := #stat_ExecuteIntern;
+	            
+	        END_IF;
+	    END_IF;
+	    
+	    //Jog mode - positive or negative
+	ELSIF #ModePos = 7 THEN
+	    
+	    // Check if the drive is enabled for a new motion command
+	    IF #stat_Ready4Motion THEN
+	        
+	        IF #stat_Jog1PR_trig AND NOT #Jog2 THEN
+	            #stat_CycWrite.STW1.jog1 := TRUE;
+	            #stat_ActMode := #ModePos;
+	        ELSIF NOT #Jog1 THEN
+	            #stat_CycWrite.STW1.jog1 := false;
+	        END_IF;
+	        
+	        IF #stat_Jog2PR_trig AND NOT #Jog1 THEN
+	            #stat_CycWrite.STW1.jog2 := TRUE;
+	            #stat_ActMode := #ModePos;
+	        ELSIF NOT #Jog2 THEN
+	            #stat_CycWrite.STW1.jog2 := false;
+	        END_IF;
+	    ELSE
+	        #stat_CycWrite.STW1.jog1 := false;
+	        #stat_CycWrite.STW1.jog2 := false;
+	        
+	    END_IF;
+	    
+	    // jog incremental mode
+	ELSIF #ModePos = 8 THEN
+	    
+	    // Check if the drive is enabled for a new motion command
+	    IF #stat_Ready4Motion THEN
+	        
+	        //Jog increment
+	        #stat_CycWrite.POS_STW2.jog_inc := true;
+	        
+	        IF #stat_Jog1PMode8R_trig THEN
+	            #stat_CycWrite.STW1.jog1 := TRUE;
+	            #stat_ActMode := #ModePos;
+	        ELSIF NOT #Jog1 THEN
+	            #stat_CycWrite.STW1.jog1 := false;
+	        END_IF;
+	        
+	        IF #stat_Jog2PMode8R_trig THEN
+	            #stat_CycWrite.STW1.jog2 := TRUE;
+	            #stat_ActMode := #ModePos;
+	        ELSIF NOT #Jog2 THEN
+	            #stat_CycWrite.STW1.jog2 := false;
+	        END_IF;
+	        
+	        IF #stat_Jog1PMode8R_trig AND #stat_Jog2PMode8R_trig THEN
+	            #stat_CycWrite.STW1.jog1 := false;
+	            #stat_CycWrite.STW1.jog2 := FALSE;
+	        END_IF;
+	        
+	    ELSE
+	        #stat_CycWrite.STW1.jog1 := false;
+	        #stat_CycWrite.STW1.jog2 := false;
+	        
+	    END_IF;
+	ELSE
+	    // modepos < 1 or > 8
+	    #stat_ExecuteIntern := false;
+	    #stat_CycWrite.STW1.activateTraversing := false;
+	    #stat_CycWrite.STW1.StartHoming := false;
+	    #stat_CycWrite.POS_STW2.SetReferencePoint := false;
+	    #stat_StepHome := 0;
+	    #statStartCounter := 0;
+	END_IF;
+	
+	
+	REGION ConfigEPos
+	    //Maping of the ConfigEPos to the Telegram
+	    #stat_CycWrite.STW1.noCoastStop := #ConfigEPos.%X0;         //STW1.1
+	    #stat_CycWrite.STW1.noQuickStop := #ConfigEPos.%X1;         //STW1.2
+	    #stat_CycWrite.POS_STW2."SW-Limit" := #ConfigEPos.%X2;
+	    #stat_CycWrite.POS_STW2."HW-Limit" := #ConfigEPos.%X3;
+	    #stat_CycWrite.POS_STW2.ProbeEdgeEval := #ConfigEPos.%X4;
+	    #stat_CycWrite.POS_STW2.SelectProbe := #ConfigEPos.%X5;
+	    #stat_CycWrite.STW1.ExternalBlockChange := #ConfigEPos.%X6;
+	    #stat_CycWrite.POS_STW2.reserved2 := #ConfigEPos.%X7;
+	    #stat_CycWrite.POS_STW1.reserved12 := #ConfigEPos.%X8;
+	    #stat_CycWrite.STW2.reserved0 := #ConfigEPos.%X9;
+	    #stat_CycWrite.STW2.reserved1 := #ConfigEPos.%X10;
+	    #stat_CycWrite.STW2.reserved2 := #ConfigEPos.%X11;
+	    #stat_CycWrite.STW2.reserved3 := #ConfigEPos.%X12;
+	    #stat_CycWrite.STW2.reserved4 := #ConfigEPos.%X13;
+	    #stat_CycWrite.STW2.reserved7 := #ConfigEPos.%X14;
+	    #stat_CycWrite.STW1.ReleaseBrake := #ReleaseBrake OR #ConfigEPos.%X15;           //STW1.12
+	    #stat_CycWrite.STW1.reserved14 := #ConfigEPos.%X16;
+	    #stat_CycWrite.STW1.reserved15 := #ConfigEPos.%X17;
+	    #stat_CycWrite.POS_STW2.Trackingmode := #ConfigEPos.%X18;    // different mapping to SINA_POS
+	    #stat_CycWrite.POS_STW1.reserved7 := #ConfigEPos.%X19;                // reserved
+	    #stat_CycWrite.POS_STW1.reserved11 := #ConfigEPos.%X20;               // reserved
+	    #stat_CycWrite.POS_STW1.reserved13 := #ConfigEPos.%X21;               // reserved
+	    #stat_CycWrite.POS_STW2.reserved13 := #ConfigEPos.%X22;
+	    #stat_CycWrite.POS_STW2.reserved4 := #ConfigEPos.%X23;
+	    #stat_CycWrite.POS_STW2.reserved6 := #ConfigEPos.%X24;
+	    #stat_CycWrite.POS_STW2.reserved7 := #ConfigEPos.%X25;
+	    #stat_CycWrite.POS_STW2.reserved12 := #ConfigEPos.%X26;
+	    #stat_CycWrite.POS_STW2.reserved13 := #ConfigEPos.%X27;
+	    #stat_CycWrite.STW2.reserved5 := #ConfigEPos.%X28;
+	    #stat_CycWrite.STW2.reserved6 := #ConfigEPos.%X29;
+	    #stat_CycWrite.STW2.TravelToFixStop := #TravelToFixStop OR #ConfigEPos.%X30;     //STW2.8
+	    #stat_CycWrite.STW2.reserved9 := #ConfigEPos.%X31;
+	END_REGION ;
+	
+	REGION Write Output to temp data
+	    // copy all cyclic data from stat data to tmp buffer
+	    ////STW1
+	    #tmpSendBuffer[0].%X0 := #stat_CycWrite.STW1.on;
+	    #tmpSendBuffer[0].%X1 := #stat_CycWrite.STW1.noCoastStop;
+	    #tmpSendBuffer[0].%X2 := #stat_CycWrite.STW1.noQuickStop;
+	    #tmpSendBuffer[0].%X3 := #stat_CycWrite.STW1.enableOperation;
+	    #tmpSendBuffer[0].%X4 := #stat_CycWrite.STW1.cancelTraversing;
+	    #tmpSendBuffer[0].%X5 := #stat_CycWrite.STW1.intermediateStop;
+	    #tmpSendBuffer[0].%X6 := #stat_CycWrite.STW1.activateTraversing;
+	    #tmpSendBuffer[0].%X7 := #stat_CycWrite.STW1.acknowledgeFault;
+	    #tmpSendBuffer[0].%X8 := #stat_CycWrite.STW1.jog1;
+	    #tmpSendBuffer[0].%X9 := #stat_CycWrite.STW1.jog2;
+	    #tmpSendBuffer[0].%X10 := #stat_CycWrite.STW1.controlByPlc;
+	    #tmpSendBuffer[0].%X11 := #stat_CycWrite.STW1.StartHoming;
+	    #tmpSendBuffer[0].%X12 := #stat_CycWrite.STW1.ReleaseBrake;
+	    #tmpSendBuffer[0].%X13 := #stat_CycWrite.STW1.ExternalBlockChange;
+	    #tmpSendBuffer[0].%X14 := #stat_CycWrite.STW1.reserved14;
+	    #tmpSendBuffer[0].%X15 := #stat_CycWrite.STW1.reserved15;
+	    //POS_STW1
+	    #tmpSendBuffer[1].%X0 := #stat_CycWrite.POS_STW1.travBlockBit0;
+	    #tmpSendBuffer[1].%X1 := #stat_CycWrite.POS_STW1.travBlockBit1;
+	    #tmpSendBuffer[1].%X2 := #stat_CycWrite.POS_STW1.travBlockBit2;
+	    #tmpSendBuffer[1].%X3 := #stat_CycWrite.POS_STW1.travBlockBit3;
+	    #tmpSendBuffer[1].%X4 := #stat_CycWrite.POS_STW1.travBlockBit4;
+	    #tmpSendBuffer[1].%X5 := #stat_CycWrite.POS_STW1.travBlockBit5;
+	    #tmpSendBuffer[1].%X6 := #stat_CycWrite.POS_STW1.travBlockBit6;
+	    #tmpSendBuffer[1].%X7 := #stat_CycWrite.POS_STW1.reserved7;
+	    #tmpSendBuffer[1].%X8 := #stat_CycWrite.POS_STW1.MDI_MOD;
+	    #tmpSendBuffer[1].%X9 := #stat_CycWrite.POS_STW1.PosModulo;
+	    #tmpSendBuffer[1].%X10 := #stat_CycWrite.POS_STW1.NegModulo;
+	    #tmpSendBuffer[1].%X11 := #stat_CycWrite.POS_STW1.reserved11;
+	    #tmpSendBuffer[1].%X12 := #stat_CycWrite.POS_STW1.reserved12;
+	    #tmpSendBuffer[1].%X13 := #stat_CycWrite.POS_STW1.reserved13;
+	    #tmpSendBuffer[1].%X14 := #stat_CycWrite.POS_STW1.SetupMode;
+	    #tmpSendBuffer[1].%X15 := #stat_CycWrite.POS_STW1.MDI_Activate;
+	    //POS_STW2
+	    #tmpSendBuffer[2].%X0 := #stat_CycWrite.POS_STW2.Trackingmode;
+	    #tmpSendBuffer[2].%X1 := #stat_CycWrite.POS_STW2.SetReferencePoint;
+	    #tmpSendBuffer[2].%X2 := #stat_CycWrite.POS_STW2.reserved2;
+	    #tmpSendBuffer[2].%X3 := #stat_CycWrite.POS_STW2.reserved3;
+	    #tmpSendBuffer[2].%X4 := #stat_CycWrite.POS_STW2.reserved4;
+	    #tmpSendBuffer[2].%X5 := #stat_CycWrite.POS_STW2.jog_inc;
+	    #tmpSendBuffer[2].%X6 := #stat_CycWrite.POS_STW2.reserved6;
+	    #tmpSendBuffer[2].%X7 := #stat_CycWrite.POS_STW2.reserved7;
+	    #tmpSendBuffer[2].%X8 := #stat_CycWrite.POS_STW2.FlyingRef;
+	    #tmpSendBuffer[2].%X9 := #stat_CycWrite.POS_STW2.reserved9;
+	    #tmpSendBuffer[2].%X10 := #stat_CycWrite.POS_STW2.SelectProbe;
+	    #tmpSendBuffer[2].%X11 := #stat_CycWrite.POS_STW2.ProbeEdgeEval;
+	    #tmpSendBuffer[2].%X12 := #stat_CycWrite.POS_STW2.reserved12;
+	    #tmpSendBuffer[2].%X13 := #stat_CycWrite.POS_STW2.reserved13;
+	    #tmpSendBuffer[2].%X14 := #stat_CycWrite.POS_STW2."SW-Limit";
+	    #tmpSendBuffer[2].%X15 := #stat_CycWrite.POS_STW2."HW-Limit";
+	    //STW2
+	    #tmpSendBuffer[3].%X0 := #stat_CycWrite.STW2.reserved0;
+	    #tmpSendBuffer[3].%X1 := #stat_CycWrite.STW2.reserved1;
+	    #tmpSendBuffer[3].%X2 := #stat_CycWrite.STW2.reserved2;
+	    #tmpSendBuffer[3].%X3 := #stat_CycWrite.STW2.reserved3;
+	    #tmpSendBuffer[3].%X4 := #stat_CycWrite.STW2.reserved4;
+	    #tmpSendBuffer[3].%X5 := #stat_CycWrite.STW2.reserved5;
+	    #tmpSendBuffer[3].%X6 := #stat_CycWrite.STW2.reserved6;
+	    #tmpSendBuffer[3].%X7 := #stat_CycWrite.STW2.reserved7;
+	    #tmpSendBuffer[3].%X8 := #stat_CycWrite.STW2.TravelToFixStop;
+	    #tmpSendBuffer[3].%X9 := #stat_CycWrite.STW2.reserved9;
+	    #tmpSendBuffer[3].%X10 := #stat_CycWrite.STW2.reserved10;
+	    #tmpSendBuffer[3].%X11 := #stat_CycWrite.STW2.reserved11;
+	    #tmpSendBuffer[3].%X12 := #stat_CycWrite.STW2.signOfLifeBit0;
+	    #tmpSendBuffer[3].%X13 := #stat_CycWrite.STW2.signOfLifeBit1;
+	    #tmpSendBuffer[3].%X14 := #stat_CycWrite.STW2.signOfLifeBit2;
+	    #tmpSendBuffer[3].%X15 := #stat_CycWrite.STW2.signOfLifeBit3;
+	    
+	    //Override
+	    #tmpSendBuffer[4] := #stat_CycWrite.Override;
+	    
+	    //TargetPos
+	    #tempDWord := DINT_TO_DWORD(#stat_CycWrite.MDI_TARPOS);
+	    #tmpSendBuffer[5] := #tempDWord.%W1;
+	    #tmpSendBuffer[6] := #tempDWord.%W0;
+	    
+	    //TargetVelocity
+	    #tempDWord := DINT_TO_DWORD(#stat_CycWrite.MDI_VELOCITY);
+	    #tmpSendBuffer[7] := #tempDWord.%W1;
+	    #tmpSendBuffer[8] := #tempDWord.%W0;
+	    
+	    // ACC, DEC
+	    #tmpSendBuffer[9] := #stat_CycWrite.MDI_ACC;
+	    #tmpSendBuffer[10] := #stat_CycWrite.MDI_DEC;
+	    #tmpSendBuffer[11] := #stat_CycWrite.reserved11;
+	END_REGION ;
+	
+	REGION Write Cyclic Data of Telegramm 111
+	    // Write cyclic telegram 111
+	    #stat_RetDPWR := DPWR_DAT(LADDR := #HardwareId,
+	                              RECORD := #tmpSendBuffer);
+	    
+	    // write SETIO status to diagId
+	    IF #stat_RetDPWR <> 0 THEN
+	        #Error := true;
+	        #stat_Status := #ERROR_DPWR_DAT;
+	        #DiagID := INT_TO_WORD(#stat_RetDPWR);
+	    ELSE
+	        // set the Diag status back "in operation"
+	        IF #stat_Status = #ERROR_DPWR_DAT THEN
+	            #stat_Status := #STATUS_IN_OPERATION;
+	            #DiagID := 0;
+	            #Error := False;
+	        END_IF;
+	        
+	    END_IF;
+	    //Set the Status Output
+	    #Status := #stat_Status;
+	    #ActMode := #stat_ActMode;
+	END_REGION
+	
+END_FUNCTION_BLOCK
+

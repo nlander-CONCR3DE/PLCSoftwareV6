@@ -1,0 +1,181 @@
+﻿FUNCTION_BLOCK "FPC_PNU"
+{ S7_Optimized_Access := 'TRUE' }
+AUTHOR : FESTO
+FAMILY : 'E-DRIVE'
+VERSION : 5.1
+   VAR_INPUT 
+      Execute : Bool;
+      Write : Bool;
+      DatatypeWR : Int;
+      PNU : Word;
+      Subindex : Byte;
+      Value : DInt;
+   END_VAR
+
+   VAR_OUTPUT 
+      Done : Bool;
+      Error : Bool;
+      ActPNU : Word;
+      ActSubindex : Byte;
+      ActValue : DInt;
+   END_VAR
+   VAR_OUTPUT DB_SPECIFIC
+      DatatypeRD : Int;
+   END_VAR
+   VAR_OUTPUT 
+      Status : "DT_FML_STATUS";
+   END_VAR
+
+   VAR_IN_OUT 
+      FML_REF : "DT_FML_REF";
+   END_VAR
+
+   VAR 
+      bInit : Bool := FALSE;
+      TimeStart : Bool;
+      lMemberID : Int := 0;
+      tmpDevice : String[16];
+      TONInst {InstructionName := 'TON_TIME'; LibVersion := '1.0'} : TON_TIME;
+      tmpStatus : "DT_FML_STATUS";
+   END_VAR
+
+   VAR CONSTANT 
+      TimeoutTime : Time := T#3S;
+   END_VAR
+
+
+BEGIN
+	(*############################################################
+	   FESTO AG  Co., Esslingen
+	   Copyright (c) 2015. All rights reserved.    
+	
+	   NAME OF FUNCTION BLOCK:         FPC_PNU
+	   VERSION NUMBER:                 V5.1
+	   COMPOSER:                       bejk
+	  
+	  
+	   -----------------------------------------------------
+	   Date        Name                Activity                                                                              
+	   06.08.2015  Benjamin Kilgus     created (V1.0)
+	   20.08.2015  Benjamin Kilgus     Timeout logic added (V1.1)
+	   07.09.2015  Benjamin Kilgus     error handling changed (V1.2)
+	   28.10.2015  Benjamin Kilgus     Timeout beim wegnehmen von Execute nicht abprüfen wegen bug im CMMP (V1.3)
+	   16.11.2015  Benjamin Kilgus     Zeile 36 --> #Status.Err := TRUE;
+	                                   Zeile 97 --> #TimeStart := FALSE;
+	                                   Option optimierter Baustein Zugriff entfernt (V1.4)      
+	   29.08.2016  Benjamin Klein      version changed (V4.1)
+	   19.10.2016  Benjamin Klein      Set ActValue in case of error to 0, tmpStatus Error fixed (V4.2)
+	   18.04.2017  Benjamin Klein      optimized access (V5.1)
+	   04.10.2017  Benjamin Klein      devicetype MTR_DCI and SFC_DC added
+	   20.11.2017  Benjamin Klein      copy the DataypeRD and DataypeWR(MTR and SFC only)
+	############################################################*)
+	
+	(* ====== initial block routine ===================================== *)
+	(* ----- get MemberID for this function block ------------------------*)
+	IF NOT #bInit THEN
+	    #FML_REF.MemberIDmax := #FML_REF.MemberIDmax + 1;
+	    #lMemberID := #FML_REF.MemberIDmax;
+	    #bInit := TRUE;
+	    #Status.Err := False;
+	    #Status.Cat := 1;
+	    #Status.ID := 1; // init active     
+	    RETURN;
+	END_IF;
+	
+	(* ====== supervision of timeout ==================================== *)
+	(* ----- timer to monitor a timeout of the function block ------------*)
+	// Timout Timer
+	#TONInst(IN := #TimeStart,
+	         PT := #TimeoutTime);
+	
+	IF #TONInst.Q THEN
+	    #Done := TRUE;
+	    #tmpStatus.Err := TRUE;
+	    #tmpStatus.Cat := 1;
+	    #tmpStatus.ID := DWORD_TO_DINT(16#8000_0014); // FB timeout         
+	END_IF;
+	
+	(* ===== logic part ================================================= *)
+	(* ----- ASSIGNMENT OF STATUS --------------------------------------- *)
+	IF #FML_REF.MemberID = #lMemberID THEN
+	    IF #FML_REF.Done AND NOT #tmpStatus.Err THEN
+	        #TimeStart := False;
+	        #Done := True;
+	        #ActSubindex := #FML_REF.ActSubindex;
+	        #ActPNU := #FML_REF.ActPNU;
+	        #ActValue := #FML_REF.ParamValueRD;
+	        #DatatypeRD := #FML_REF.DatatypeRD;
+	        #tmpStatus.Err := False;
+	        #tmpStatus.Cat := 0;
+	        #tmpStatus.ID := 0; // none    
+	        IF #FML_REF.Err THEN
+	            #tmpStatus.Err := TRUE;
+	            #tmpStatus.Cat := 3;
+	            #tmpStatus.ID := #FML_REF.ParamValueRD; // FPC error
+	            #ActValue := 0;
+	        END_IF;
+	    END_IF;
+	END_IF;
+	
+	(* ----- ASSIGNMENT OF CONTROL at rising edge of execute ----------- *)
+	IF (#FML_REF.MemberID = 0) AND #Execute THEN
+	    #FML_REF.MemberID := #lMemberID;
+	    #TimeStart := TRUE;
+	    #tmpStatus.Err := FALSE;
+	    #tmpStatus.Cat := 1;
+	    #tmpStatus.ID := 16#0000_00002; // busy 
+	    
+	    #FML_REF.PNU := #PNU;
+	    #FML_REF.Subindex := #Subindex;
+	    #FML_REF.ParamValueWR := #Value;
+	    
+	    IF #Write THEN
+	        #FML_REF.DatatypeWR := INT_TO_BYTE(#DatatypeWR);
+	        #FML_REF.ReqID := 8; // write array dword        
+	    ELSE
+	        #FML_REF.ReqID := 6; //read array 
+	    END_IF;
+	    
+	    #tmpDevice := #FML_REF.DeviceType;
+	    IF #tmpDevice = 'EMCA_EC' OR #tmpDevice = 'CMMO_ST' THEN
+	        #FML_REF.FPCC_Modus := 1; // EFPC enhanced
+	    ELSE
+	        #FML_REF.FPCC_Modus := 0; // FPC Standard
+	    END_IF;
+	    
+	ELSIF (#FML_REF.MemberID = #lMemberID) AND NOT #Execute THEN
+	    #FML_REF.ReqID := 0;
+	    #FML_REF.FPCC_Modus := 0;
+	    #FML_REF.PNU := 0;
+	    #FML_REF.Subindex := 0;
+	    #FML_REF.ParamValueWR := 0;
+	    #ActSubindex := 0;
+	    #ActPNU := 0;
+	    #ActValue := 0;
+	    //TimeStart         := TRUE;            (* BUG IN FIRMWARE CMMP_AS (V4.0.10.1501.13.61) --> Zeile in Lib derzeit nicht umsetzbar --> Problem am 14.09.2015 gemeldet (CHMM) *)
+	    IF NOT #FML_REF.Done THEN
+	        #FML_REF.FPCC_Modus := 0;
+	        #FML_REF.MemberID := 0;
+	        #Done := FALSE;
+	        #TimeStart := FALSE;
+	        #tmpStatus.Err := FALSE;
+	        #tmpStatus.Cat := 0;
+	        #tmpStatus.ID := 16#0000_00000; // none 
+	    END_IF;
+	    
+	ELSIF (#FML_REF.MemberID <> #lMemberID) THEN
+	    IF #Execute THEN
+	        #tmpStatus.Err := FALSE;
+	        #tmpStatus.Cat := 1;
+	        #tmpStatus.ID := 16#0000_0000A; // other FB active
+	    ELSE
+	        #tmpStatus.Err := FALSE;
+	        #tmpStatus.Cat := 0;
+	        #tmpStatus.ID := 0; // none
+	    END_IF;
+	END_IF;
+	
+	#Error := #tmpStatus.Err;
+	#Status := #tmpStatus;
+END_FUNCTION_BLOCK
+

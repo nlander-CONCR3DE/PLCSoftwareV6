@@ -1,0 +1,107 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Document>
+  <Engineering version="V18" />
+  <SW.Blocks.InstanceDB ID="0">
+    <AttributeList>
+      <AutoNumber>true</AutoNumber>
+      <DBAccessibleFromOPCUA>true</DBAccessibleFromOPCUA>
+      <HeaderAuthor />
+      <HeaderFamily />
+      <HeaderName />
+      <HeaderVersion>0.1</HeaderVersion>
+      <InstanceOfName>CMMS_Z2_Movement</InstanceOfName>
+      <InstanceOfType>FB</InstanceOfType>
+      <Interface><Sections xmlns="http://www.siemens.com/automation/Openness/SW/Interface/v5">
+  <Section Name="Input" />
+  <Section Name="Output" />
+  <Section Name="InOut" />
+  <Section Name="Static">
+    <Member Name="FML_REF" Datatype="&quot;DT_FML_REF&quot;" Remanence="NonRetain" Accessibility="Public">
+      <AttributeList>
+        <BooleanAttribute Name="ExternalAccessible" SystemDefined="true">true</BooleanAttribute>
+        <BooleanAttribute Name="ExternalVisible" SystemDefined="true">true</BooleanAttribute>
+        <BooleanAttribute Name="ExternalWritable" SystemDefined="true">true</BooleanAttribute>
+        <BooleanAttribute Name="SetPoint" SystemDefined="true">true</BooleanAttribute>
+      </AttributeList>
+      <Sections>
+        <Section Name="None">
+          <Member Name="InData" Datatype="Struct">
+            <Member Name="FHPP" Datatype="Array[1..16] of Byte" />
+            <Member Name="FPC" Datatype="Array[1..8] of Byte" />
+            <Member Name="FHPPplus" Datatype="Array[1..10] of DInt" />
+          </Member>
+          <Member Name="OutData" Datatype="Struct">
+            <Member Name="FHPP" Datatype="Array[1..16] of Byte" />
+            <Member Name="FPC" Datatype="Array[1..8] of Byte" />
+            <Member Name="FHPPplus" Datatype="Array[1..10] of DInt" />
+          </Member>
+          <Member Name="Modbus" Datatype="Bool" />
+          <Member Name="DeviceType" Datatype="String[16]" />
+          <Member Name="MemberID" Datatype="Int" />
+          <Member Name="MemberIDmax" Datatype="Int" />
+          <Member Name="Done" Datatype="Bool" />
+          <Member Name="Err" Datatype="Bool" />
+          <Member Name="PNU" Datatype="Word" />
+          <Member Name="ActPNU" Datatype="Word" />
+          <Member Name="ReqID" Datatype="Int" />
+          <Member Name="RespID" Datatype="Int" />
+          <Member Name="FPCC_Modus" Datatype="Byte" />
+          <Member Name="FPCS_Modus" Datatype="Byte" />
+          <Member Name="FPCC_Packet" Datatype="&quot;DT_FML_PRM_FILE&quot;">
+            <Sections>
+              <Section Name="None">
+                <Member Name="Control" Datatype="Int" />
+                <Member Name="BitSequenceNr" Datatype="Int" />
+                <Member Name="Data" Datatype="Array[1..6] of Byte" />
+              </Section>
+            </Sections>
+          </Member>
+          <Member Name="FPCS_Packet" Datatype="&quot;DT_FML_PRM_FILE&quot;">
+            <Sections>
+              <Section Name="None">
+                <Member Name="Control" Datatype="Int" />
+                <Member Name="BitSequenceNr" Datatype="Int" />
+                <Member Name="Data" Datatype="Array[1..6] of Byte" />
+              </Section>
+            </Sections>
+          </Member>
+          <Member Name="Subindex" Datatype="Byte" />
+          <Member Name="ActSubindex" Datatype="Byte" />
+          <Member Name="DatatypeWR" Datatype="Byte" />
+          <Member Name="DatatypeRD" Datatype="Byte" />
+          <Member Name="ParamValueWR" Datatype="DInt" />
+          <Member Name="ParamValueRD" Datatype="DInt" />
+        </Section>
+      </Sections>
+    </Member>
+  </Section>
+</Sections></Interface>
+      <Name>CMMS_Z2_Movement_DB</Name>
+      <Namespace />
+      <Number>77</Number>
+      <ProgrammingLanguage>DB</ProgrammingLanguage>
+    </AttributeList>
+    <ObjectList>
+      <MultilingualText ID="1" CompositionName="Comment">
+        <ObjectList>
+          <MultilingualTextItem ID="2" CompositionName="Items">
+            <AttributeList>
+              <Culture>en-US</Culture>
+              <Text />
+            </AttributeList>
+          </MultilingualTextItem>
+        </ObjectList>
+      </MultilingualText>
+      <MultilingualText ID="3" CompositionName="Title">
+        <ObjectList>
+          <MultilingualTextItem ID="4" CompositionName="Items">
+            <AttributeList>
+              <Culture>en-US</Culture>
+              <Text />
+            </AttributeList>
+          </MultilingualTextItem>
+        </ObjectList>
+      </MultilingualText>
+    </ObjectList>
+  </SW.Blocks.InstanceDB>
+</Document>

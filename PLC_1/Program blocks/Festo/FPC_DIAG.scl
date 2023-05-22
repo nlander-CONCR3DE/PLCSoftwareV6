@@ -1,0 +1,177 @@
+﻿FUNCTION_BLOCK "FPC_DIAG"
+{ S7_Optimized_Access := 'TRUE' }
+AUTHOR : FESTO
+FAMILY : 'E-DRIVE'
+VERSION : 5.3
+   VAR_INPUT 
+      Execute : Bool;
+   END_VAR
+
+   VAR_OUTPUT 
+      Done : Bool;
+      Error : Bool;
+      MessageNumber : DInt;
+      Status : "DT_FML_STATUS";
+   END_VAR
+
+   VAR_IN_OUT 
+      FML_REF : "DT_FML_REF";
+   END_VAR
+
+   VAR 
+      bInit : Bool := FALSE;
+      TimeStart : Bool;
+      lMemberID : Int := 0;
+      tmpDevice : String[16];
+      TONinst {InstructionName := 'TON_TIME'; LibVersion := '1.0'} : TON_TIME;
+      tmpStatus { ExternalAccessible := 'False'; ExternalVisible := 'False'; ExternalWritable := 'False'} : "DT_FML_STATUS";
+   END_VAR
+
+   VAR CONSTANT 
+      TimeoutTime : Time := T#3S;
+   END_VAR
+
+
+BEGIN
+	(*############################################################
+	   FESTO AG  Co., Essling
+	   
+	   Copyright (c) 2015. All rights reserved.    
+	
+	   NAME OF FUNCTION BLOCK:         FPC_DIAG
+	   VERSION NUMBER:                 V5.3
+	   COMPOSER:                       bejk
+	   
+	   -----------------------------------------------------
+	   Date        Name                Activity                                                                              
+	   06.08.2015  Benjamin Kilgus     created (V1.0)
+	   20.08.2015  Benjamin Kilgus     Timeout logic added (V1.1)
+	   14.09.2015  Benjamin Kilgus     error handling changed (V1.2)
+	   16.11.2015  Benjamin Kilgus     Option optimierter Baustein Zugriff entfernt (V1.3)
+	   29.08.2016  Benjamin Klein      version changed (V4.1)
+	   17.01.2017  Christian Hammer    bugfix: reset variable "tmpStatus" at beginning
+	                                   changed condition in ASSIGNMENT OF STATUS from "Status.Err" to "tmpStatus.Err"
+	   21.02.2017  Benjamin Klein      added GoTo Error if Error occurs, Labels added
+	   05.07.2017  Benjamin Klein      optimized access added (V5.1)
+	   04.10.2017  Benjamin Klein      devicetype MTR_DCI and SFC_DC added
+	   18.10.2017  Benjamin Klein      "tmpStatus" at beginning deleted, labels deleted
+	   16.04.2018  Benjamin Klein      CMXH-ST added (V5.3)
+	############################################################*)
+	
+	(* ====== initial block routine ===================================== *)
+	(* ----- get MemberID for this function block ------------------------*)
+	IF NOT #bInit THEN
+	    #FML_REF.MemberIDmax := #FML_REF.MemberIDmax + 1;
+	    #lMemberID := #FML_REF.MemberIDmax;
+	    #Status.Err := FALSE;
+	    #Status.Cat := 1; // Functionblock
+	    #Status.ID := 16#0000_0001;
+	    #bInit := TRUE;
+	    RETURN;
+	END_IF;
+	
+	(* ====== supervision of timeout ==================================== *)
+	(* ----- timer to monitor a timeout of the function block ------------*)
+	#TONinst(IN := #TimeStart,
+	         PT := #TimeoutTime);
+	IF #TONinst.Q THEN
+	    #Done := TRUE;
+	    #tmpStatus.Err := TRUE;
+	    #tmpStatus.Cat := 1;
+	    #tmpStatus.ID := DWORD_TO_DINT(16#8000_0014); // FB timeout
+	END_IF;
+	
+	(* ===== logic part ================================================= *)
+	(* ----- ASSIGNMENT OF STATUS --------------------------------------- *)
+	IF #FML_REF.MemberID = #lMemberID AND #tmpStatus.ID <> DWORD_TO_DINT(16#8000_001E) THEN
+	    IF #FML_REF.Done AND NOT #FML_REF.Err AND NOT #tmpStatus.Err THEN
+	        #Done := TRUE;
+	        #TimeStart := FALSE;
+	        IF #FML_REF.ParamValueRD = 65535 THEN // special: -1 to 0
+	            #MessageNumber := 0;
+	        ELSE
+	            #MessageNumber := #FML_REF.ParamValueRD;
+	        END_IF;
+	        
+	        #tmpStatus.Err := FALSE;
+	        #tmpStatus.Cat := 0;
+	        #tmpStatus.ID := 16#0000_0000;
+	        
+	    ELSIF #FML_REF.Err THEN
+	        #tmpStatus.Err := TRUE;
+	        #tmpStatus.Cat := 3;
+	        #tmpStatus.ID := #FML_REF.ParamValueRD;
+	    END_IF;
+	END_IF;
+	
+	(* ----- ASSIGNMENT OF CONTROL at rising edge of Execute ------------ *)
+	IF (#FML_REF.MemberID = 0) AND #Execute AND NOT #tmpStatus.Err THEN
+	    #FML_REF.MemberID := #lMemberID;
+	    #FML_REF.ReqID := 6; // read array dword
+	    #TimeStart := TRUE;
+	    #tmpStatus.Err := FALSE;
+	    #tmpStatus.Cat := 1; // Functionblock
+	    #tmpStatus.ID := 16#0000_0002; // FB busy    
+	    
+	    #tmpDevice := #FML_REF.DeviceType;
+	    
+	    IF #tmpDevice = 'EMCA_EC' OR #tmpDevice = 'CMMO_ST' OR #tmpDevice = 'CMXH_ST' THEN
+	        #FML_REF.FPCC_Modus := 1; // EFPC enhanced
+	        #FML_REF.PNU := 205;
+	        #FML_REF.Subindex := 1;
+	    ELSIF #tmpDevice = 'SFC_DC' OR #tmpDevice = 'MTR_DCI' THEN
+	        #Done := TRUE;
+	        #tmpStatus.Err := TRUE;
+	        #tmpStatus.Cat := 1;
+	        #tmpStatus.ID := DWORD_TO_DINT(16#8000_001E); // wrong Device Type
+	        #TimeStart := FALSE;
+	    ELSE
+	        #FML_REF.FPCC_Modus := 0; // FPC Standard
+	        #FML_REF.PNU := 201;
+	        #FML_REF.Subindex := 1;
+	    END_IF;
+	    
+	ELSIF (#FML_REF.MemberID = #lMemberID) AND NOT #Execute THEN
+	    #FML_REF.ReqID := 0; // none request
+	    #FML_REF.FPCC_Modus := 0;
+	    #FML_REF.PNU := 0;
+	    #FML_REF.Subindex := 0;
+	    #FML_REF.ParamValueWR := 0;
+	    #TimeStart := TRUE;
+	    #MessageNumber := 0;
+	    
+	    // release access if done is false
+	    IF NOT #FML_REF.Done THEN
+	        #FML_REF.MemberID := 0;
+	        #Done := FALSE;
+	        #TimeStart := FALSE;
+	        #tmpStatus.Err := FALSE;
+	        #tmpStatus.Cat := 0;
+	        #tmpStatus.ID := 16#0000_0000;
+	    END_IF;
+	    
+	ELSIF (#FML_REF.MemberID <> #lMemberID) AND NOT #tmpStatus.Err THEN
+	    IF #Execute THEN
+	        #tmpStatus.Err := FALSE;
+	        #tmpStatus.Cat := 1;
+	        #tmpStatus.ID := 16#0000_000A; // other FB active
+	    ELSE
+	        #tmpStatus.Err := FALSE;
+	        #tmpStatus.Cat := 0;
+	        #tmpStatus.ID := 16#0000_0000;
+	    END_IF;
+	END_IF;
+	
+	// ### EXIT ROUTINE ############################################################
+	IF NOT #tmpStatus.Err THEN
+	    ENO := TRUE;      // Set ENO-Bit to true
+	    #Status := #tmpStatus;
+	    #Error := #tmpStatus.Err;
+	ELSE
+	    ENO := FALSE;     // Set ENO-Bit to false
+	    #Status := #tmpStatus;
+	    #Error := #tmpStatus.Err;
+	END_IF;
+	
+END_FUNCTION_BLOCK
+

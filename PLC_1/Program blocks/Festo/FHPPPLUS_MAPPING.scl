@@ -1,0 +1,86 @@
+﻿FUNCTION "FHPPPLUS_MAPPING" : DInt
+{ S7_Optimized_Access := 'TRUE' }
+AUTHOR : FESTO
+FAMILY : 'E-DRIVES'
+VERSION : 5.1
+   VAR_INPUT 
+      cfgFHPPplus : DInt;
+   END_VAR
+
+   VAR_OUTPUT 
+      FHPPplusElementSize : Array[1..9] of DInt;
+      FHPPplusSize : DInt;
+   END_VAR
+
+   VAR_TEMP 
+      i : Int;
+      n : Int;
+      tmpTeiler : DInt;
+      tmpCfgFHPPplus : DInt;
+      tmpElementSize : DInt;
+      tmpFHPPplusSize : DInt;
+   END_VAR
+
+   VAR CONSTANT 
+      constTeiler : DInt := 100_000_000;
+   END_VAR
+
+
+BEGIN
+	(*############################################################
+	   FESTO AG  Co., Esslingen
+	   Copyright (c) 2015. All rights reserved.    
+	
+	   NAME OF FUNCTION BLOCK:         FHPPPLUS_MAPPING
+	   VERSION NUMBER:                 V5.1
+	   COMPOSER:                       bejk
+	   
+	       
+	   -----------------------------------------------------
+	   Date        Name                Activity                                                                              
+	   06.08.2015  Benjamin Kilgus     created (V1.0)
+	   29.08.2016  Benjamin Klein      version changed (V4.1)
+	   05.07.2017  Benjamin Klein      changed to optimized access (V5.1)
+	 
+	############################################################*)
+	
+	#tmpTeiler := #constTeiler;
+	#tmpCfgFHPPplus := #cfgFHPPplus;
+	#tmpFHPPplusSize := 0;
+	#n := 1;
+	
+	// configuration 0 is not legal
+	IF #cfgFHPPplus = 0 THEN
+	    #FHPPPLUS_MAPPING := DWORD_TO_DINT(16#8000_0001);
+	    RETURN;
+	END_IF;
+	
+	FOR #i := 1 TO 9 DO
+	    #tmpElementSize := #tmpCfgFHPPplus / #tmpTeiler;
+	    IF #tmpElementSize = 1 OR #tmpElementSize = 2 OR #tmpElementSize = 4 THEN
+	        #FHPPplusElementSize[#n] := #tmpElementSize * 8; // Byte *8 = Bit
+	        #tmpFHPPplusSize := #tmpFHPPplusSize + #FHPPplusElementSize[#n];
+	        #tmpCfgFHPPplus := #tmpCfgFHPPplus - (#tmpElementSize * #tmpTeiler);
+	        #n := #n + 1;
+	    ELSIF #tmpElementSize = 0 AND #n = 1 THEN // digit empty
+	        #FHPPplusElementSize[10 - #i] := 0;
+	    ELSE
+	        #FHPPPLUS_MAPPING := DWORD_TO_DINT(16#8000_0001); // wrong configuration
+	        RETURN;
+	    END_IF;
+	    #tmpTeiler := #tmpTeiler / 10;
+	END_FOR;
+	
+	IF #tmpFHPPplusSize = 64 OR #tmpFHPPplusSize = 128 OR #tmpFHPPplusSize = 192 THEN
+	    ;// o.k.
+	    
+	ELSE // wrong size
+	    #FHPPPLUS_MAPPING := DWORD_TO_DINT(16#8000_0001); // function is called without legal FHPP+ configuration
+	    RETURN;
+	END_IF;
+	
+	#FHPPplusSize := #tmpFHPPplusSize;
+	#FHPPPLUS_MAPPING := 0; // o.k.
+	
+END_FUNCTION
+

@@ -1,0 +1,19 @@
+﻿FUNCTION "Heater_MathFunction" : Void
+{ S7_Optimized_Access := 'TRUE' }
+VERSION : 0.1
+   VAR_INPUT 
+      Setpoint : Real;
+      Velocity : Real;
+   END_VAR
+
+   VAR_OUTPUT 
+      Value : Real;
+   END_VAR
+
+
+BEGIN
+	// Math Function Implementation for IR Heater
+	#Value := (#Velocity / 100000) * #Setpoint;
+	
+END_FUNCTION
+

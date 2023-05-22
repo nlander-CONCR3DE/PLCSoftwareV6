@@ -1,0 +1,613 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Document>
+  <Engineering version="V18" />
+  <SW.Blocks.FB ID="0">
+    <AttributeList>
+      <AutoNumber>true</AutoNumber>
+      <HeaderAuthor />
+      <HeaderFamily />
+      <HeaderName />
+      <HeaderVersion>0.1</HeaderVersion>
+      <Interface><Sections xmlns="http://www.siemens.com/automation/Openness/SW/Interface/v5">
+  <Section Name="Input" />
+  <Section Name="Output" />
+  <Section Name="InOut" />
+  <Section Name="Static">
+    <Member Name="FML_REF" Datatype="&quot;DT_FML_REF&quot;" Remanence="NonRetain" Accessibility="Public">
+      <AttributeList>
+        <BooleanAttribute Name="ExternalAccessible" SystemDefined="true">true</BooleanAttribute>
+        <BooleanAttribute Name="ExternalVisible" SystemDefined="true">true</BooleanAttribute>
+        <BooleanAttribute Name="ExternalWritable" SystemDefined="true">true</BooleanAttribute>
+        <BooleanAttribute Name="SetPoint" SystemDefined="true">true</BooleanAttribute>
+      </AttributeList>
+      <Sections>
+        <Section Name="None">
+          <Member Name="InData" Datatype="Struct">
+            <Member Name="FHPP" Datatype="Array[1..16] of Byte" />
+            <Member Name="FPC" Datatype="Array[1..8] of Byte" />
+            <Member Name="FHPPplus" Datatype="Array[1..10] of DInt" />
+          </Member>
+          <Member Name="OutData" Datatype="Struct">
+            <Member Name="FHPP" Datatype="Array[1..16] of Byte" />
+            <Member Name="FPC" Datatype="Array[1..8] of Byte" />
+            <Member Name="FHPPplus" Datatype="Array[1..10] of DInt" />
+          </Member>
+          <Member Name="Modbus" Datatype="Bool" />
+          <Member Name="DeviceType" Datatype="String[16]">
+            <StartValue>'CMMS'</StartValue>
+          </Member>
+          <Member Name="MemberID" Datatype="Int" />
+          <Member Name="MemberIDmax" Datatype="Int" />
+          <Member Name="Done" Datatype="Bool" />
+          <Member Name="Err" Datatype="Bool" />
+          <Member Name="PNU" Datatype="Word" />
+          <Member Name="ActPNU" Datatype="Word" />
+          <Member Name="ReqID" Datatype="Int" />
+          <Member Name="RespID" Datatype="Int" />
+          <Member Name="FPCC_Modus" Datatype="Byte" />
+          <Member Name="FPCS_Modus" Datatype="Byte" />
+          <Member Name="FPCC_Packet" Datatype="&quot;DT_FML_PRM_FILE&quot;">
+            <Sections>
+              <Section Name="None">
+                <Member Name="Control" Datatype="Int" />
+                <Member Name="BitSequenceNr" Datatype="Int" />
+                <Member Name="Data" Datatype="Array[1..6] of Byte" />
+              </Section>
+            </Sections>
+          </Member>
+          <Member Name="FPCS_Packet" Datatype="&quot;DT_FML_PRM_FILE&quot;">
+            <Sections>
+              <Section Name="None">
+                <Member Name="Control" Datatype="Int" />
+                <Member Name="BitSequenceNr" Datatype="Int" />
+                <Member Name="Data" Datatype="Array[1..6] of Byte" />
+              </Section>
+            </Sections>
+          </Member>
+          <Member Name="Subindex" Datatype="Byte" />
+          <Member Name="ActSubindex" Datatype="Byte" />
+          <Member Name="DatatypeWR" Datatype="Byte" />
+          <Member Name="DatatypeRD" Datatype="Byte" />
+          <Member Name="ParamValueWR" Datatype="DInt" />
+          <Member Name="ParamValueRD" Datatype="DInt" />
+        </Section>
+      </Sections>
+    </Member>
+  </Section>
+  <Section Name="Temp" />
+  <Section Name="Constant" />
+</Sections></Interface>
+      <IsIECCheckEnabled>false</IsIECCheckEnabled>
+      <IsRetainMemResEnabled>false</IsRetainMemResEnabled>
+      <MemoryLayout>Optimized</MemoryLayout>
+      <MemoryReserve>100</MemoryReserve>
+      <Name>CMMS_Z1_Movement</Name>
+      <Namespace />
+      <Number>14</Number>
+      <ProgrammingLanguage>LAD</ProgrammingLanguage>
+      <SetENOAutomatically>false</SetENOAutomatically>
+      <UDABlockProperties />
+      <UDAEnableTagReadback>false</UDAEnableTagReadback>
+    </AttributeList>
+    <ObjectList>
+      <MultilingualText ID="1" CompositionName="Comment">
+        <ObjectList>
+          <MultilingualTextItem ID="2" CompositionName="Items">
+            <AttributeList>
+              <Culture>en-US</Culture>
+              <Text />
+            </AttributeList>
+          </MultilingualTextItem>
+        </ObjectList>
+      </MultilingualText>
+      <SW.Blocks.CompileUnit ID="3" CompositionName="CompileUnits">
+        <AttributeList>
+          <NetworkSource><FlgNet xmlns="http://www.siemens.com/automation/Openness/SW/NetworkSource/FlgNet/v4">
+  <Parts>
+    <Access Scope="LiteralConstant" UId="21">
+      <Constant>
+        <ConstantType>HW_IO</ConstantType>
+        <ConstantValue>321</ConstantValue>
+      </Constant>
+    </Access>
+    <Access Scope="LiteralConstant" UId="22">
+      <Constant>
+        <ConstantType>HW_IO</ConstantType>
+        <ConstantValue>322</ConstantValue>
+      </Constant>
+    </Access>
+    <Access Scope="LiteralConstant" UId="23">
+      <Constant>
+        <ConstantType>String</ConstantType>
+        <ConstantValue>'CMMS'</ConstantValue>
+      </Constant>
+    </Access>
+    <Access Scope="LocalVariable" UId="24">
+      <Symbol>
+        <Component Name="FML_REF" />
+      </Symbol>
+    </Access>
+    <Access Scope="LiteralConstant" UId="25">
+      <Constant>
+        <ConstantType>Int</ConstantType>
+        <ConstantValue>1</ConstantValue>
+      </Constant>
+    </Access>
+    <Access Scope="LocalVariable" UId="26">
+      <Symbol>
+        <Component Name="FML_REF" />
+      </Symbol>
+    </Access>
+    <Access Scope="GlobalVariable" UId="27">
+      <Symbol>
+        <Component Name="WebDB" />
+        <Component Name="Z1Output" />
+        <Component Name="DriveEnabled" />
+      </Symbol>
+    </Access>
+    <Access Scope="GlobalVariable" UId="28">
+      <Symbol>
+        <Component Name="WebDB" />
+        <Component Name="Z1Output" />
+        <Component Name="Warning" />
+      </Symbol>
+    </Access>
+    <Access Scope="GlobalVariable" UId="29">
+      <Symbol>
+        <Component Name="WebDB" />
+        <Component Name="Z1Output" />
+        <Component Name="Fault" />
+      </Symbol>
+    </Access>
+    <Access Scope="GlobalVariable" UId="30">
+      <Symbol>
+        <Component Name="WebDB" />
+        <Component Name="Z1Output" />
+        <Component Name="HomingValid" />
+      </Symbol>
+    </Access>
+    <Access Scope="GlobalVariable" UId="31">
+      <Symbol>
+        <Component Name="WebDB" />
+        <Component Name="Z1Output" />
+        <Component Name="ActualPosition" />
+      </Symbol>
+    </Access>
+    <Access Scope="GlobalVariable" UId="32">
+      <Symbol>
+        <Component Name="WebDB" />
+        <Component Name="Z1Output" />
+        <Component Name="ActualVelocity" />
+      </Symbol>
+    </Access>
+    <Access Scope="LiteralConstant" UId="33">
+      <Constant>
+        <ConstantType>HW_IO</ConstantType>
+        <ConstantValue>321</ConstantValue>
+      </Constant>
+    </Access>
+    <Access Scope="LiteralConstant" UId="34">
+      <Constant>
+        <ConstantType>HW_IO</ConstantType>
+        <ConstantValue>322</ConstantValue>
+      </Constant>
+    </Access>
+    <Access Scope="LocalVariable" UId="35">
+      <Symbol>
+        <Component Name="FML_REF" />
+      </Symbol>
+    </Access>
+    <Call UId="36">
+      <CallInfo Name="FHPP_DPRD_DAT" BlockType="FB">
+        <Instance Scope="GlobalVariable" UId="37">
+          <Component Name="CMMS_Z1_FHPP_DPRD_DAT_DB" />
+        </Instance>
+        <Parameter Name="HW_IO_FHPP" Section="Input" Type="HW_IO" />
+        <Parameter Name="HW_IO_FPC" Section="Input" Type="HW_IO" />
+        <Parameter Name="HW_IO_FHPPplus" Section="Input" Type="HW_IO" />
+        <Parameter Name="cfgFHPPplusIn" Section="Input" Type="DInt" />
+        <Parameter Name="DeviceType" Section="Input" Type="String[16]" />
+        <Parameter Name="Error" Section="Output" Type="Bool" />
+        <Parameter Name="Status" Section="Output" Type="&quot;DT_FML_STATUS&quot;" />
+        <Parameter Name="FML_REF" Section="InOut" Type="&quot;DT_FML_REF&quot;" />
+      </CallInfo>
+    </Call>
+    <Call UId="38">
+      <CallInfo Name="FHPP_CTRL" BlockType="FB">
+        <Instance Scope="GlobalVariable" UId="39">
+          <Component Name="CMMS_Z1_FHPP_CTRL_DB" />
+        </Instance>
+        <Parameter Name="EnableDrive" Section="Input" Type="Bool" />
+        <Parameter Name="Stop" Section="Input" Type="Bool" />
+        <Parameter Name="Halt" Section="Input" Type="Bool" />
+        <Parameter Name="Brake" Section="Input" Type="Bool" />
+        <Parameter Name="ResetFault" Section="Input" Type="Bool" />
+        <Parameter Name="HMIAccessLocked" Section="Input" Type="Bool" />
+        <Parameter Name="OPM" Section="Input" Type="Int" />
+        <Parameter Name="StartTask" Section="Input" Type="Bool" />
+        <Parameter Name="StartHoming" Section="Input" Type="Bool" />
+        <Parameter Name="JogPos" Section="Input" Type="Bool" />
+        <Parameter Name="JogNeg" Section="Input" Type="Bool" />
+        <Parameter Name="TeachActValue" Section="Input" Type="Bool" />
+        <Parameter Name="ClearRemPos" Section="Input" Type="Bool" />
+        <Parameter Name="Relative" Section="Input" Type="Bool" />
+        <Parameter Name="DeactivateStrokeLimit" Section="Input" Type="Bool" />
+        <Parameter Name="ExecuteFunction" Section="Input" Type="Bool" />
+        <Parameter Name="RecordNo" Section="Input" Type="Int" />
+        <Parameter Name="SetFunctionNumber" Section="Input" Type="Int" />
+        <Parameter Name="SetFunctionGroup" Section="Input" Type="Int" />
+        <Parameter Name="SetValueVelocity" Section="Input" Type="DInt" />
+        <Parameter Name="SetValuePosition" Section="Input" Type="DInt" />
+        <Parameter Name="SetValueForceRamp" Section="Input" Type="DInt" />
+        <Parameter Name="SetValueForce" Section="Input" Type="DInt" />
+        <Parameter Name="SetValueRotRamp" Section="Input" Type="DInt" />
+        <Parameter Name="SetValueRotSpeed" Section="Input" Type="DInt" />
+        <Parameter Name="DriveEnabled" Section="Output" Type="Bool" />
+        <Parameter Name="Ready" Section="Output" Type="Bool" />
+        <Parameter Name="Warning" Section="Output" Type="Bool" />
+        <Parameter Name="Fault" Section="Output" Type="Bool" />
+        <Parameter Name="SupplyVoltPresent" Section="Output" Type="Bool" />
+        <Parameter Name="ControlFCT_HMI" Section="Output" Type="Bool" />
+        <Parameter Name="StateOPM" Section="Output" Type="Int" />
+        <Parameter Name="HaltNotActive" Section="Output" Type="Bool" />
+        <Parameter Name="AckStart" Section="Output" Type="Bool" />
+        <Parameter Name="MC" Section="Output" Type="Bool" />
+        <Parameter Name="AckTeach" Section="Output" Type="Bool" />
+        <Parameter Name="DriveMoving" Section="Output" Type="Bool" />
+        <Parameter Name="DragError" Section="Output" Type="Bool" />
+        <Parameter Name="StandStillControl" Section="Output" Type="Bool" />
+        <Parameter Name="HomingValid" Section="Output" Type="Bool" />
+        <Parameter Name="ActualRecordNo" Section="Output" Type="Int" />
+        <Parameter Name="RC1" Section="Output" Type="Bool" />
+        <Parameter Name="RCC" Section="Output" Type="Bool" />
+        <Parameter Name="VelocityLimitReached" Section="Output" Type="Bool" />
+        <Parameter Name="StrokeLimitReached" Section="Output" Type="Bool" />
+        <Parameter Name="FunctionIsActive" Section="Output" Type="Bool" />
+        <Parameter Name="ActualFunctionNumber" Section="Output" Type="Int" />
+        <Parameter Name="ActualFunctionGroup" Section="Output" Type="Int" />
+        <Parameter Name="ActualPosition" Section="Output" Type="DInt" />
+        <Parameter Name="ActualVelocity" Section="Output" Type="DInt" />
+        <Parameter Name="ActualForce" Section="Output" Type="DInt" />
+        <Parameter Name="ActualRotRamp" Section="Output" Type="DInt" />
+        <Parameter Name="ActualRotSpeed" Section="Output" Type="DInt" />
+        <Parameter Name="FML_REF" Section="InOut" Type="&quot;DT_FML_REF&quot;" />
+      </CallInfo>
+    </Call>
+    <Call UId="40">
+      <CallInfo Name="FHPP_DPWR_DAT" BlockType="FB">
+        <Instance Scope="GlobalVariable" UId="41">
+          <Component Name="CMMS_Z1_FHPP_DPWR_DAT_DB" />
+        </Instance>
+        <Parameter Name="HW_IO_FHPP" Section="Input" Type="HW_IO" />
+        <Parameter Name="HW_IO_FPC" Section="Input" Type="HW_IO" />
+        <Parameter Name="HW_IO_FHPPplus" Section="Input" Type="HW_IO" />
+        <Parameter Name="cfgFHPPplusOut" Section="Input" Type="DInt" />
+        <Parameter Name="Error" Section="Output" Type="Bool" />
+        <Parameter Name="Status" Section="Output" Type="&quot;DT_FML_STATUS&quot;" />
+        <Parameter Name="FML_REF" Section="InOut" Type="&quot;DT_FML_REF&quot;" />
+      </CallInfo>
+    </Call>
+  </Parts>
+  <Wires>
+    <Wire UId="96">
+      <Powerrail />
+      <NameCon UId="36" Name="en" />
+      <NameCon UId="38" Name="en" />
+      <NameCon UId="40" Name="en" />
+    </Wire>
+    <Wire UId="97">
+      <IdentCon UId="21" />
+      <NameCon UId="36" Name="HW_IO_FHPP" />
+    </Wire>
+    <Wire UId="98">
+      <IdentCon UId="22" />
+      <NameCon UId="36" Name="HW_IO_FPC" />
+    </Wire>
+    <Wire UId="99">
+      <OpenCon UId="42" />
+      <NameCon UId="36" Name="HW_IO_FHPPplus" />
+    </Wire>
+    <Wire UId="100">
+      <OpenCon UId="43" />
+      <NameCon UId="36" Name="cfgFHPPplusIn" />
+    </Wire>
+    <Wire UId="101">
+      <IdentCon UId="23" />
+      <NameCon UId="36" Name="DeviceType" />
+    </Wire>
+    <Wire UId="102">
+      <IdentCon UId="24" />
+      <NameCon UId="36" Name="FML_REF" />
+    </Wire>
+    <Wire UId="103">
+      <NameCon UId="36" Name="Error" />
+      <OpenCon UId="44" />
+    </Wire>
+    <Wire UId="104">
+      <NameCon UId="36" Name="Status" />
+      <OpenCon UId="45" />
+    </Wire>
+    <Wire UId="105">
+      <OpenCon UId="46" />
+      <NameCon UId="38" Name="EnableDrive" />
+    </Wire>
+    <Wire UId="106">
+      <OpenCon UId="47" />
+      <NameCon UId="38" Name="Stop" />
+    </Wire>
+    <Wire UId="107">
+      <OpenCon UId="48" />
+      <NameCon UId="38" Name="Halt" />
+    </Wire>
+    <Wire UId="108">
+      <OpenCon UId="49" />
+      <NameCon UId="38" Name="Brake" />
+    </Wire>
+    <Wire UId="109">
+      <OpenCon UId="50" />
+      <NameCon UId="38" Name="ResetFault" />
+    </Wire>
+    <Wire UId="110">
+      <OpenCon UId="51" />
+      <NameCon UId="38" Name="HMIAccessLocked" />
+    </Wire>
+    <Wire UId="111">
+      <IdentCon UId="25" />
+      <NameCon UId="38" Name="OPM" />
+    </Wire>
+    <Wire UId="112">
+      <OpenCon UId="52" />
+      <NameCon UId="38" Name="StartTask" />
+    </Wire>
+    <Wire UId="113">
+      <OpenCon UId="53" />
+      <NameCon UId="38" Name="StartHoming" />
+    </Wire>
+    <Wire UId="114">
+      <OpenCon UId="54" />
+      <NameCon UId="38" Name="JogPos" />
+    </Wire>
+    <Wire UId="115">
+      <OpenCon UId="55" />
+      <NameCon UId="38" Name="JogNeg" />
+    </Wire>
+    <Wire UId="116">
+      <OpenCon UId="56" />
+      <NameCon UId="38" Name="TeachActValue" />
+    </Wire>
+    <Wire UId="117">
+      <OpenCon UId="57" />
+      <NameCon UId="38" Name="ClearRemPos" />
+    </Wire>
+    <Wire UId="118">
+      <OpenCon UId="58" />
+      <NameCon UId="38" Name="Relative" />
+    </Wire>
+    <Wire UId="119">
+      <OpenCon UId="59" />
+      <NameCon UId="38" Name="DeactivateStrokeLimit" />
+    </Wire>
+    <Wire UId="120">
+      <OpenCon UId="60" />
+      <NameCon UId="38" Name="ExecuteFunction" />
+    </Wire>
+    <Wire UId="121">
+      <OpenCon UId="61" />
+      <NameCon UId="38" Name="RecordNo" />
+    </Wire>
+    <Wire UId="122">
+      <OpenCon UId="62" />
+      <NameCon UId="38" Name="SetFunctionNumber" />
+    </Wire>
+    <Wire UId="123">
+      <OpenCon UId="63" />
+      <NameCon UId="38" Name="SetFunctionGroup" />
+    </Wire>
+    <Wire UId="124">
+      <OpenCon UId="64" />
+      <NameCon UId="38" Name="SetValueVelocity" />
+    </Wire>
+    <Wire UId="125">
+      <OpenCon UId="65" />
+      <NameCon UId="38" Name="SetValuePosition" />
+    </Wire>
+    <Wire UId="126">
+      <OpenCon UId="66" />
+      <NameCon UId="38" Name="SetValueForceRamp" />
+    </Wire>
+    <Wire UId="127">
+      <OpenCon UId="67" />
+      <NameCon UId="38" Name="SetValueForce" />
+    </Wire>
+    <Wire UId="128">
+      <OpenCon UId="68" />
+      <NameCon UId="38" Name="SetValueRotRamp" />
+    </Wire>
+    <Wire UId="129">
+      <OpenCon UId="69" />
+      <NameCon UId="38" Name="SetValueRotSpeed" />
+    </Wire>
+    <Wire UId="130">
+      <IdentCon UId="26" />
+      <NameCon UId="38" Name="FML_REF" />
+    </Wire>
+    <Wire UId="131">
+      <NameCon UId="38" Name="DriveEnabled" />
+      <IdentCon UId="27" />
+    </Wire>
+    <Wire UId="132">
+      <NameCon UId="38" Name="Ready" />
+      <OpenCon UId="70" />
+    </Wire>
+    <Wire UId="133">
+      <NameCon UId="38" Name="Warning" />
+      <IdentCon UId="28" />
+    </Wire>
+    <Wire UId="134">
+      <NameCon UId="38" Name="Fault" />
+      <IdentCon UId="29" />
+    </Wire>
+    <Wire UId="135">
+      <NameCon UId="38" Name="SupplyVoltPresent" />
+      <OpenCon UId="71" />
+    </Wire>
+    <Wire UId="136">
+      <NameCon UId="38" Name="ControlFCT_HMI" />
+      <OpenCon UId="72" />
+    </Wire>
+    <Wire UId="137">
+      <NameCon UId="38" Name="StateOPM" />
+      <OpenCon UId="73" />
+    </Wire>
+    <Wire UId="138">
+      <NameCon UId="38" Name="HaltNotActive" />
+      <OpenCon UId="74" />
+    </Wire>
+    <Wire UId="139">
+      <NameCon UId="38" Name="AckStart" />
+      <OpenCon UId="75" />
+    </Wire>
+    <Wire UId="140">
+      <NameCon UId="38" Name="MC" />
+      <OpenCon UId="76" />
+    </Wire>
+    <Wire UId="141">
+      <NameCon UId="38" Name="AckTeach" />
+      <OpenCon UId="77" />
+    </Wire>
+    <Wire UId="142">
+      <NameCon UId="38" Name="DriveMoving" />
+      <OpenCon UId="78" />
+    </Wire>
+    <Wire UId="143">
+      <NameCon UId="38" Name="DragError" />
+      <OpenCon UId="79" />
+    </Wire>
+    <Wire UId="144">
+      <NameCon UId="38" Name="StandStillControl" />
+      <OpenCon UId="80" />
+    </Wire>
+    <Wire UId="145">
+      <NameCon UId="38" Name="HomingValid" />
+      <IdentCon UId="30" />
+    </Wire>
+    <Wire UId="146">
+      <NameCon UId="38" Name="ActualRecordNo" />
+      <OpenCon UId="81" />
+    </Wire>
+    <Wire UId="147">
+      <NameCon UId="38" Name="RC1" />
+      <OpenCon UId="82" />
+    </Wire>
+    <Wire UId="148">
+      <NameCon UId="38" Name="RCC" />
+      <OpenCon UId="83" />
+    </Wire>
+    <Wire UId="149">
+      <NameCon UId="38" Name="VelocityLimitReached" />
+      <OpenCon UId="84" />
+    </Wire>
+    <Wire UId="150">
+      <NameCon UId="38" Name="StrokeLimitReached" />
+      <OpenCon UId="85" />
+    </Wire>
+    <Wire UId="151">
+      <NameCon UId="38" Name="FunctionIsActive" />
+      <OpenCon UId="86" />
+    </Wire>
+    <Wire UId="152">
+      <NameCon UId="38" Name="ActualFunctionNumber" />
+      <OpenCon UId="87" />
+    </Wire>
+    <Wire UId="153">
+      <NameCon UId="38" Name="ActualFunctionGroup" />
+      <OpenCon UId="88" />
+    </Wire>
+    <Wire UId="154">
+      <NameCon UId="38" Name="ActualPosition" />
+      <IdentCon UId="31" />
+    </Wire>
+    <Wire UId="155">
+      <NameCon UId="38" Name="ActualVelocity" />
+      <IdentCon UId="32" />
+    </Wire>
+    <Wire UId="156">
+      <NameCon UId="38" Name="ActualForce" />
+      <OpenCon UId="89" />
+    </Wire>
+    <Wire UId="157">
+      <NameCon UId="38" Name="ActualRotRamp" />
+      <OpenCon UId="90" />
+    </Wire>
+    <Wire UId="158">
+      <NameCon UId="38" Name="ActualRotSpeed" />
+      <OpenCon UId="91" />
+    </Wire>
+    <Wire UId="159">
+      <IdentCon UId="33" />
+      <NameCon UId="40" Name="HW_IO_FHPP" />
+    </Wire>
+    <Wire UId="160">
+      <IdentCon UId="34" />
+      <NameCon UId="40" Name="HW_IO_FPC" />
+    </Wire>
+    <Wire UId="161">
+      <OpenCon UId="92" />
+      <NameCon UId="40" Name="HW_IO_FHPPplus" />
+    </Wire>
+    <Wire UId="162">
+      <OpenCon UId="93" />
+      <NameCon UId="40" Name="cfgFHPPplusOut" />
+    </Wire>
+    <Wire UId="163">
+      <IdentCon UId="35" />
+      <NameCon UId="40" Name="FML_REF" />
+    </Wire>
+    <Wire UId="164">
+      <NameCon UId="40" Name="Error" />
+      <OpenCon UId="94" />
+    </Wire>
+    <Wire UId="165">
+      <NameCon UId="40" Name="Status" />
+      <OpenCon UId="95" />
+    </Wire>
+  </Wires>
+</FlgNet></NetworkSource>
+          <ProgrammingLanguage>LAD</ProgrammingLanguage>
+        </AttributeList>
+        <ObjectList>
+          <MultilingualText ID="4" CompositionName="Comment">
+            <ObjectList>
+              <MultilingualTextItem ID="5" CompositionName="Items">
+                <AttributeList>
+                  <Culture>en-US</Culture>
+                  <Text />
+                </AttributeList>
+              </MultilingualTextItem>
+            </ObjectList>
+          </MultilingualText>
+          <MultilingualText ID="6" CompositionName="Title">
+            <ObjectList>
+              <MultilingualTextItem ID="7" CompositionName="Items">
+                <AttributeList>
+                  <Culture>en-US</Culture>
+                  <Text />
+                </AttributeList>
+              </MultilingualTextItem>
+            </ObjectList>
+          </MultilingualText>
+        </ObjectList>
+      </SW.Blocks.CompileUnit>
+      <MultilingualText ID="8" CompositionName="Title">
+        <ObjectList>
+          <MultilingualTextItem ID="9" CompositionName="Items">
+            <AttributeList>
+              <Culture>en-US</Culture>
+              <Text />
+            </AttributeList>
+          </MultilingualTextItem>
+        </ObjectList>
+      </MultilingualText>
+    </ObjectList>
+  </SW.Blocks.FB>
+</Document>

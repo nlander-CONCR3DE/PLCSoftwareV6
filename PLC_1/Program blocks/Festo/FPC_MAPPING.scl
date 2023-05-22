@@ -1,0 +1,317 @@
+﻿FUNCTION "FPC_MAPPING" : Bool
+{ S7_Optimized_Access := 'FALSE' }
+AUTHOR : FESTO
+FAMILY : 'E-DRIVE'
+VERSION : 5.1
+   VAR_INPUT 
+      Mode : Bool;
+   END_VAR
+
+   VAR_IN_OUT 
+      FML_REF : "DT_FML_REF";
+   END_VAR
+
+   VAR_TEMP 
+      _Word : Word;
+      BByte2 AT _Word : Array[1..2] of Byte;
+      _DINT : DInt;
+      BByte4 AT _DINT : Array[1..4] of Byte;
+      Req_Identifier : Int;
+      Resp_Identifier : Int;
+   END_VAR
+
+   VAR CONSTANT 
+      Const_1 : Byte := 1;
+      Const_4 : Byte := 4;
+   END_VAR
+
+
+BEGIN
+	(*############################################################
+	   FESTO AG  Co., Esslingen
+	   Copyright (c) 2015. All rights reserved.    
+	
+	   NAME OF FUNCTION BLOCK:         FPC_MAPPING
+	   VERSION NUMBER:                 V5.1
+	   COMPOSER:                       bejk
+	   
+	-----------------------------------------------------
+	   Date        Name                Activity                                                                              
+	   06.08.2015  Benjamin Kilgus     created (V1.0)
+	   07.07.2017  Benjamin Klein      version changed (V5.1)
+	   17.11.2017  Benjamin Klein      resp_identifier enhanced for SFC and MTR
+	############################################################*)
+	
+	(* MAP INPUTS *)
+	IF NOT #Mode THEN
+	    
+	    // Byte1 FPCS            
+	    #FML_REF.FPCS_Modus := SHR(IN := (#FML_REF.InData.FPC[1] AND 2#11110000), N := 4);
+	    
+	    // decoding of EFPC modus
+	    CASE BYTE_TO_INT(#FML_REF.FPCS_Modus) OF
+	        0: (* old style *)
+	            (* 
+	            -------------- Byte 1 --------------- Byte 2 ---------------------- Byte 3/4 ------------------- Byte 5..8 ----
+	            |  8  7  6  5  4  |  3  2  1  0  |              | 15 14 13 12 |  11  | 10 9 8 7 6 5 4 3 2 1 0 |               |
+	            |    FPCS Modus   |     res      |   Subindex   |      AK     |  SPM |        PNU             |     Value     |
+	            ---------------------------------------------------------------------------------------------------------------     
+	            AK:  Response Identifier (Antwortkennung)
+	            SPM: NOT used
+	            PNU: Parameternummer / Parameter-Number 
+	            *)
+	            // Byte1
+	            // zero in this CASE
+	            // Byte2  
+	            #FML_REF.ActSubindex := #FML_REF.InData.FPC[2];
+	            
+	            // Byte3/4
+	            #BByte2[1] := #FML_REF.InData.FPC[3];
+	            #BByte2[2] := #FML_REF.InData.FPC[4];
+	            #Resp_Identifier := WORD_TO_INT(SHR(IN := (#_Word AND 2#1111000000000000), N := 12));
+	            #FML_REF.ActPNU := #_Word AND 2#0000011111111111;
+	            
+	            // Byte 5..8 parameter value
+	            #BByte4[1] := #FML_REF.InData.FPC[5];
+	            #BByte4[2] := #FML_REF.InData.FPC[6];
+	            #BByte4[3] := #FML_REF.InData.FPC[7];
+	            #BByte4[4] := #FML_REF.InData.FPC[8];
+	            #FML_REF.ParamValueRD := #_DINT;
+	            
+	        1, 2, 3:(* modus: 1 = PNU extended; 2 = KO; 3 = CAN Objects *)
+	            (* 
+	            -------------- Byte 1 --------------- Byte 2 ------------------- Byte 3/4----------------- Byte 5..8 ----
+	            |   7  6  5  4  |  3  2  1  0  |              | 15 14 13 12 11 10 9 8 7 6 5 4 3 2 1 0 |               |
+	            |  FPCS Modus   |     AK       |   Subindex   |   PNU extended or KO or CAN Object    |     Value     |
+	            -------------------------------------------------------------------------------------------------------       
+	            AK:  Response Identifier (Antwortkennung)
+	            *)
+	            
+	            // Byte 1 FPCS
+	            #Resp_Identifier := WORD_TO_INT(#FML_REF.InData.FPC[1] AND 2#00001111);
+	            
+	            // Byte 2 Subindex
+	            #FML_REF.ActSubindex := #FML_REF.InData.FPC[2];
+	            
+	            // Byte 3+4 **PKE/ PNU/ KO/ CAN**
+	            #BByte2[1] := #FML_REF.InData.FPC[3];
+	            #BByte2[2] := #FML_REF.InData.FPC[4];
+	            #FML_REF.ActPNU := #_Word;
+	            
+	            // Byte 5..8 parameter value
+	            #BByte4[1] := #FML_REF.InData.FPC[5];
+	            #BByte4[2] := #FML_REF.InData.FPC[6];
+	            #BByte4[3] := #FML_REF.InData.FPC[7];
+	            #BByte4[4] := #FML_REF.InData.FPC[8];
+	            #FML_REF.ParamValueRD := #_DINT;
+	            
+	        4, 5:(* FPCS_Modus 4=Parameter File; 5=Firmware File *)
+	            (*
+	            ------ BYTE 1 ------------|-- BYTE 2 -|--BYTE 3..8 ---|
+	            | 7  6  5  4 | 3  2  1  0 |           |               |
+	            | FPCS Modus |   res      | Packet-ID |  6 BYTE Data  |
+	            -------------------------------------------------------        
+	              Packet-ID: -------------- BYTE 2 ----------
+	                         | 7    6    5  | 4  3  2  1  0 |
+	                         | Control Bits |   Sequence-Nr |
+	                         -------------------------------- 
+	            *)
+	            // Byte 1 FPCS
+	            #Resp_Identifier := WORD_TO_INT(#FML_REF.InData.FPC[1] AND 2#00001111);
+	            #FML_REF.RespID := #Resp_Identifier;
+	            
+	            //---- Byte 2 Packet-ID ----    
+	            #FML_REF.FPCS_Packet.BitSequenceNr := WORD_TO_INT(#FML_REF.InData.FPC[2] AND 2#00011111);
+	            #FML_REF.FPCS_Packet.Control := WORD_TO_INT(SHR(IN := (#FML_REF.InData.FPC[2] AND 2#11100000), N := 5));
+	            //---- Byte 3..8 Data ----
+	            #FML_REF.FPCS_Packet.Data[1] := #FML_REF.InData.FPC[3];
+	            #FML_REF.FPCS_Packet.Data[2] := #FML_REF.InData.FPC[4];
+	            #FML_REF.FPCS_Packet.Data[3] := #FML_REF.InData.FPC[5];
+	            #FML_REF.FPCS_Packet.Data[4] := #FML_REF.InData.FPC[6];
+	            #FML_REF.FPCS_Packet.Data[5] := #FML_REF.InData.FPC[7];
+	            #FML_REF.FPCS_Packet.Data[6] := #FML_REF.InData.FPC[8];
+	            
+	            
+	        ELSE (* not implemented *)
+	            #FPC_MAPPING := FALSE; (* Execution was not correct *)
+	            RETURN;
+	    END_CASE;
+	    
+	    CASE #Resp_Identifier OF
+	        0, 3:(* No Transmission or Active*)
+	            #FML_REF.Done := FALSE;
+	            #FML_REF.Err := FALSE;
+	            #FML_REF.ActPNU := 0;
+	            #FML_REF.ActSubindex := 0;
+	            #FML_REF.ParamValueRD := 0;
+	            #FML_REF.DatatypeRD := 0;
+	            
+	            
+	        1, 4:(* Word Parameter transmittead*)
+	            #FML_REF.Done := TRUE;
+	            #FML_REF.Err := FALSE;
+	            #FML_REF.ParamValueRD := #_DINT;
+	            #FML_REF.DatatypeRD := 2;
+	            
+	        2, 5: (*DWord Parameter transmitted*)
+	            #FML_REF.Done := true;
+	            #FML_REF.Err := FALSE;
+	            #FML_REF.ParamValueRD := #_DINT;
+	            #FML_REF.DatatypeRD := 4;
+	            
+	        7:(* Transmission Failed*)
+	            #FML_REF.Done := TRUE;
+	            #FML_REF.Err := TRUE;
+	            #FML_REF.DatatypeRD := 0;
+	            #FML_REF.ParamValueRD := 0;
+	            #FML_REF.ActPNU := 0;
+	            
+	            
+	        11, 12: (*BYTE Parameter transmitted*)
+	            #FML_REF.Done := TRUE;
+	            #FML_REF.Err := False;
+	            #FML_REF.DatatypeRD := 1;
+	            #FML_REF.ParamValueRD := #_DINT;
+	            
+	        ELSE (* not specified*)
+	            #FML_REF.Done := false;
+	            #FML_REF.Err := TRUE;
+	            #FML_REF.ParamValueRD := 0;
+	    END_CASE;
+	    
+	    #FPC_MAPPING := TRUE; (* Execution was correct *)
+	    RETURN;
+	    
+	(* MAP OUTPUTS *)
+	ELSE
+	    
+	    IF #FML_REF.DeviceType = 'SFC_DC' OR #FML_REF.DeviceType = 'MTR_DCI' THEN
+	        IF #FML_REF.ReqID = 8 THEN // write
+	            IF BYTE_TO_INT(#FML_REF.Subindex) > 0 THEN
+	                CASE BYTE_TO_INT(#FML_REF.DatatypeWR) OF
+	                    1:
+	                        #FML_REF.ReqID := 12;     //Array-Byte
+	                    2:
+	                        #FML_REF.ReqID := 7;      //Array-Wort
+	                    4:
+	                        #FML_REF.ReqID := 8;      //Array-Doppelwort
+	                    ELSE
+	                        #FPC_MAPPING := FALSE; (* wrong data type*)
+	                        RETURN;
+	                END_CASE;
+	            END_IF;
+	            (*WRITE SINGLE PARAMETER*)
+	            IF #FML_REF.Subindex = 0 THEN
+	                CASE BYTE_TO_INT(#FML_REF.DatatypeWR) OF
+	                    1:
+	                        #FML_REF.ReqID := 11;       // Single-Byte
+	                    2:
+	                        #FML_REF.ReqID := 2;        // Single-Wort
+	                    4:
+	                        #FML_REF.ReqID := 3;        // Single-Doppelwort
+	                    ELSE
+	                        #FPC_MAPPING := FALSE; (* wrong data type*)
+	                        RETURN;
+	                END_CASE;
+	            END_IF;
+	            
+	        ELSIF #FML_REF.ReqID = 6 THEN
+	            (* READ ARRAY PARAMETER *)
+	            IF BYTE_TO_INT(#FML_REF.Subindex) > 0 THEN
+	                #FML_REF.ReqID := 6;
+	            END_IF;
+	            (* READ SINGLE PARAMETER *)
+	            IF #FML_REF.Subindex = 0 THEN
+	                #FML_REF.ReqID := 1;
+	            END_IF;
+	        ELSE
+	            ;// not specified
+	        END_IF;
+	    END_IF;
+	    (* create request identifier *)
+	    #Req_Identifier := #FML_REF.ReqID;
+	    
+	    CASE BYTE_TO_INT(#FML_REF.FPCC_Modus) OF
+	        0: (* old style *)
+	            (* 
+	            -------------- Byte 1 --------------- Byte 2 ---------------------- Byte 3 --------------------- Byte 5..8 ----
+	            |  8  7  6  5  4  |  3  2  1  0  |              | 15 14 13 12 |  11  | 10 9 8 7 6 5 4 3 2 1 0 |               |
+	            |    FPCS Modus   |     res      |   Subindex   |      AK     |  SPM |        PNU             |     Value     |
+	            ---------------------------------------------------------------------------------------------------------------     
+	            AK:  Request Identifier (Auftragskennung)
+	            SPM: NOT used
+	            PNU: Parameternummer / Parameter-Number 
+	            *)
+	            (* Byte 1 *)
+	            #FML_REF.OutData.FPC[1] := SHL(IN := #FML_REF.FPCC_Modus, N := 4);
+	            (* Byte 2 Subindex *)
+	            #FML_REF.OutData.FPC[2] := #FML_REF.Subindex;
+	            (* Byte 3+4 *)
+	            #_Word := SHL(IN := INT_TO_WORD(#Req_Identifier), N := 12) OR (#FML_REF.PNU AND 16#07_FF);
+	            
+	            (* Byte 5..8 *)
+	            #_DINT := #FML_REF.ParamValueWR;
+	            #FML_REF.OutData.FPC[3] := #BByte2[1]; //Convert PKE to Byte
+	            #FML_REF.OutData.FPC[4] := #BByte2[2];
+	            
+	            (* Set Output DATA OF DRIVE *)
+	            #FML_REF.OutData.FPC[5] := #BByte4[1]; //Convert PWE to Byte
+	            #FML_REF.OutData.FPC[6] := #BByte4[2];
+	            #FML_REF.OutData.FPC[7] := #BByte4[3];
+	            #FML_REF.OutData.FPC[8] := #BByte4[4];
+	            
+	        1, 2, 3:(* modus: 1 = PNU extended; 2 = KO; 3 = CAN Objects *)
+	            (* 
+	            -------------- Byte 1 --------------- Byte 2 ------------------- Byte 3 ------------------ Byte 5..8 ----
+	            |  8  7  6  5  4  |  3  2  1  0  |              | 15 14 13 12 11 10 9 8 7 6 5 4 3 2 1 0 |               |
+	            |    FPCS Modus   |     AK       |   Subindex   |   PNU extended or KO or CAN Object    |     Value     |
+	            ---------------------------------------------------------------------------------------------------------       
+	            AK:  Request Identifier (Auftragskennung)
+	            *)
+	            (* Byte 1 *)
+	            #FML_REF.OutData.FPC[1] := WORD_TO_BYTE(SHL(IN := #FML_REF.FPCC_Modus, N := 4) OR INT_TO_WORD(#Req_Identifier));
+	            (* Byte 2 Subindex *)
+	            #FML_REF.OutData.FPC[2] := #FML_REF.Subindex;
+	            (* Byte 3+4 *)
+	            #_Word := #FML_REF.PNU;
+	            (* Byte 5..8 *)
+	            #_DINT := #FML_REF.ParamValueWR;
+	            #FML_REF.OutData.FPC[3] := #BByte2[1]; //Convert PKE to Byte
+	            #FML_REF.OutData.FPC[4] := #BByte2[2];
+	            
+	            (* Set Output DATA OF DRIVE *)
+	            #FML_REF.OutData.FPC[5] := #BByte4[1]; //Convert PWE to Byte
+	            #FML_REF.OutData.FPC[6] := #BByte4[2];
+	            #FML_REF.OutData.FPC[7] := #BByte4[3];
+	            #FML_REF.OutData.FPC[8] := #BByte4[4];
+	            
+	        4, 5:(* FPCC_Modus 4=parameter file; 5=firmware file     
+	        |---------- byte 1 --------|-- byte 2 --|-- byte 3..8 ---|
+	        | 7  6  5  4  | 3  2  1  0 |            |                |
+	        |   FPCC modus |   res      | packet-ID  |  6 byte data  |
+	        ---------------------------------------------------------       
+	        Packet-ID:  | 7    6    5  | 4  3  2  1  0  |
+	                    | control bits |  sequence-nr   |
+	                    --------------------------------- *)
+	                    //---- byte 1 ----
+	                    #FML_REF.OutData.FPC[1] := WORD_TO_BYTE(SHL(IN := #FML_REF.FPCC_Modus, N := 4) OR INT_TO_WORD(#Req_Identifier));
+	                    //----byte 2 packet-ID ---- 
+	                    #FML_REF.OutData.FPC[2] := (SHL(IN := INT_TO_BYTE(#FML_REF.FPCC_Packet.Control), N := 5) OR (INT_TO_BYTE(#FML_REF.FPCC_Packet.BitSequenceNr) AND 16#1F));
+	                    //---- byte 3..8 data ----
+	                    #FML_REF.OutData.FPC[3] := #FML_REF.FPCC_Packet.Data[1];         // byte swapping for modbus data 
+	                    #FML_REF.OutData.FPC[4] := #FML_REF.FPCC_Packet.Data[2];
+	                    #FML_REF.OutData.FPC[5] := #FML_REF.FPCC_Packet.Data[3];
+	                    #FML_REF.OutData.FPC[6] := #FML_REF.FPCC_Packet.Data[4];
+	                    #FML_REF.OutData.FPC[7] := #FML_REF.FPCC_Packet.Data[5];
+	                    #FML_REF.OutData.FPC[8] := #FML_REF.FPCC_Packet.Data[6];
+	                    
+	                ELSE (* not implemented *)
+	                    #FPC_MAPPING := FALSE; (* Execution was not correct *)
+	                    RETURN;
+	            END_CASE;
+	            
+	            #FPC_MAPPING := TRUE; (* Execution was correct *)
+	        END_IF;
+	        
+END_FUNCTION
+

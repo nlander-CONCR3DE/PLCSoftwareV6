@@ -1,0 +1,170 @@
+﻿FUNCTION_BLOCK "FHPP_DATA_POKE"
+{ S7_Optimized_Access := 'TRUE' }
+AUTHOR : FESTO
+FAMILY : 'E-DRIVE'
+VERSION : 5.3
+   VAR_INPUT 
+      OAddress_FHPP : Int;
+      OAddress_FPC : Int;
+      OAddress_FHPPplus : Int;
+      cfgFHPPplusOut : DInt;
+      SwapBytes : Bool;
+   END_VAR
+
+   VAR_OUTPUT 
+      Error : Bool;
+      Status : "DT_FML_STATUS";
+   END_VAR
+
+   VAR_IN_OUT 
+      FML_REF : "DT_FML_REF";
+   END_VAR
+
+   VAR 
+      FHPPplusElementSize : Array[1..9] of DInt;
+      FHPPplusSize : DInt;
+      tmpStatus : "DT_FML_STATUS";
+   END_VAR
+
+   VAR_TEMP 
+      tmp_bRetVal : Bool;
+      iByteCount : Int;
+      i : Int;
+      tmpSize : DInt;
+      FHPPplus24 : Array[1..24] of Byte;
+      tmpFHPPOut : Array[1..16] of Byte;
+   END_VAR
+
+
+BEGIN
+	(*############################################################
+	    FESTO AG  Co., Esslingen
+	    Copyright (c) 2015. All rights reserved.    
+	
+	    NAME OF FUNCTION BLOCK:         FHPP_DATA_POKE
+	    VERSION NUMBER:                 V5.3
+	    COMPOSER:                       bejk
+	    
+	    -----------------------------------------------------
+	   Date        Name                Activity                                                                              
+	   06.08.2015  Benjamin Kilgus     created (V1.0)
+	   15.09.2015  Benjamin Kilgus     errorhandling changed (V1.1)
+	   11.08.2016  Benjamin Klein      bugfix in copy data, first copy then write to output (V1.2)
+	   29.08.2016  Benjamin Klein      version changed (V4.1)
+	   20.09.2016  Benjamin Klein      Bugfix: byteorder in FML_REF changed and FHPPPlus (V4.2)
+	   17.01.2017  Christian Hammer    bugfix: reset variable "tmpStatus" at beginning, label "L_Error" and "L_NO_Error" unified
+	   05.07.2017  Benjamin Klein      optimized function block with Slice access instead of AT (V5.1)
+	   18.10.2017  Benjamin Klein      "tmpStatus" at beginning deleted, labels deleted
+	   23.10.2017  Benjamin Klein      SwapBytes Input added for CPX-CM-HPP
+	   27.02.2018  Benjamin Klein      Bugfix: Negation of FPC_Mapping in line 78 
+	   16.11.2018  Benjamin Klein      Bugfix: Changed tmpFHPPIn from[1..8] to [1..16] (V5.3)
+	############################################################*)
+	
+	// function block (FB) is busy
+	#tmpStatus.Err := FALSE;
+	#tmpStatus.Cat := 1;
+	#tmpStatus.ID := 16#0000_0002; // FB busy
+	
+	// CM-HPP Byte SWAP
+	IF #SwapBytes THEN
+	    #tmpFHPPOut[1] := #FML_REF.OutData.FHPP[1];
+	    #tmpFHPPOut[2] := #FML_REF.OutData.FHPP[2];
+	    #tmpFHPPOut[3] := #FML_REF.OutData.FHPP[3];
+	    #tmpFHPPOut[4] := #FML_REF.OutData.FHPP[4];
+	    #tmpFHPPOut[5] := #FML_REF.OutData.FHPP[8];
+	    #tmpFHPPOut[6] := #FML_REF.OutData.FHPP[7];
+	    #tmpFHPPOut[7] := #FML_REF.OutData.FHPP[6];
+	    #tmpFHPPOut[8] := #FML_REF.OutData.FHPP[5];
+	    
+	    #FML_REF.OutData.FHPP := #tmpFHPPOut;
+	END_IF;
+	
+	
+	// copy data into FML_REF
+	#iByteCount := 1;
+	FOR #i := 1 TO 9 DO
+	    CASE #FHPPplusElementSize[#i] OF
+	        0:(* Element is empty *)
+	            #FML_REF.OutData.FHPPplus[#i] := 0;
+	            #iByteCount := #iByteCount + 1;
+	        8:(* Element is a BYTE *)
+	            #FHPPplus24[#iByteCount] := #FML_REF.OutData.FHPPplus[#i];
+	            #iByteCount := #iByteCount + 1;
+	        16:(* Element is a WORD *)
+	            #FHPPplus24[#iByteCount] := #FML_REF.OutData.FHPPplus[#i].%B1;
+	            #FHPPplus24[#iByteCount + 1] := #FML_REF.OutData.FHPPplus[#i].%B0;
+	            #iByteCount := #iByteCount + 2;
+	        32:(* Element is a DWORD *)
+	            #FHPPplus24[#iByteCount] := #FML_REF.OutData.FHPPplus[#i].%B3;
+	            #FHPPplus24[#iByteCount + 1] := #FML_REF.OutData.FHPPplus[#i].%B2;
+	            #FHPPplus24[#iByteCount + 2] := #FML_REF.OutData.FHPPplus[#i].%B1;
+	            #FHPPplus24[#iByteCount + 3] := #FML_REF.OutData.FHPPplus[#i].%B0;
+	            #iByteCount := #iByteCount + 4;
+	    END_CASE;
+	END_FOR;
+	
+	
+	// ### FHPP Data
+	FOR #i := 1 TO 8 DO
+	    POKE(area := 16#82,
+	         dbNumber := 0,
+	         byteOffset := #i - 1 + #OAddress_FHPP,
+	         value := #FML_REF.OutData.FHPP[#i]);
+	END_FOR;
+	
+	// ### FPC Data
+	IF #OAddress_FPC <> 0 AND #tmpStatus.Err = FALSE THEN
+	    // mapping of FPC data 
+	    #tmp_bRetVal := NOT "FPC_MAPPING"(FML_REF := #FML_REF, Mode := TRUE);
+	    IF #tmp_bRetVal THEN
+	        #tmpStatus.Err := TRUE;
+	        #tmpStatus.Cat := 3; // FPC
+	        #tmpStatus.ID := 18;
+	    END_IF;
+	    
+	    FOR #i := 1 TO 8 DO
+	        POKE(area := 16#82,
+	             dbNumber := 0,
+	             byteOffset := #i - 1 + #OAddress_FPC,
+	             value := #FML_REF.OutData.FPC[#i]);
+	    END_FOR;
+	END_IF;
+	
+	
+	// ### FHPP PLUS Data
+	
+	
+	IF #OAddress_FHPPplus <> 0 AND #tmpStatus.Err = FALSE THEN
+	    
+	    // check configuration  
+	    IF #cfgFHPPplusOut <> 0 THEN
+	        #tmpStatus.ID := "FHPPPLUS_MAPPING"(cfgFHPPplus := #cfgFHPPplusOut, FHPPplusElementSize => #FHPPplusElementSize, FHPPplusSize => #FHPPplusSize);
+	        // FHPP+ Berechnung fehlerhaft beendet
+	        IF #tmpStatus.ID <> 0 THEN
+	            #tmpStatus.Err := TRUE;
+	            #tmpStatus.Cat := 1; // functionblock
+	        END_IF;
+	    END_IF;
+	    
+	    #FHPPplusSize := #FHPPplusSize / 8;
+	    
+	    FOR #i := 1 TO #FHPPplusSize DO
+	        POKE(area := 16#82,
+	             dbNumber := 0,
+	             byteOffset := #i - 1 + #OAddress_FHPPplus,
+	             value := #FHPPplus24[#i]);
+	    END_FOR;
+	END_IF;
+	
+	// ### EXIT ROUTINE ############################################################
+	IF NOT #tmpStatus.Err THEN
+	    ENO := TRUE;      // Set ENO-Bit to true
+	    #Status := #tmpStatus;
+	    #Error := #tmpStatus.Err;
+	ELSE
+	    ENO := FALSE;     // Set ENO-Bit to false
+	    #Status := #tmpStatus;
+	    #Error := #tmpStatus.Err;
+	END_IF;
+END_FUNCTION_BLOCK
+

@@ -1,0 +1,582 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Document>
+  <Engineering version="V18" />
+  <SW.Blocks.InstanceDB ID="0">
+    <AttributeList>
+      <AutoNumber>true</AutoNumber>
+      <DBAccessibleFromOPCUA>true</DBAccessibleFromOPCUA>
+      <InstanceOfName>MC_MoveRelative</InstanceOfName>
+      <Interface><Sections xmlns="http://www.siemens.com/automation/Openness/SW/Interface/v5">
+  <Section Name="Input">
+    <Member Name="Axis" Datatype="TO_PositioningAxis" Version="7.0" Accessibility="Public">
+      <Sections>
+        <Section Name="Base">
+          <Sections Datatype="TO_SpeedAxis" Version="6.0">
+            <Section Name="Base">
+              <Sections Datatype="TO_Axis" Version="5.0">
+                <Section Name="Base">
+                  <Sections Datatype="TO_AnyMotionObject" Version="5.0">
+                    <Section Name="Input" />
+                    <Section Name="Output" />
+                    <Section Name="InOut" />
+                    <Section Name="Static">
+                      <Member Name="Header" Datatype="TO_Struct_Header" Version="5.0">
+                        <Sections>
+                          <Section Name="None">
+                            <Member Name="VersionMaj" Datatype="Int" />
+                            <Member Name="VersionMin" Datatype="Int" />
+                            <Member Name="Type" Datatype="Int" />
+                            <Member Name="Reserved1" Datatype="Int" />
+                            <Member Name="Reserved2" Datatype="Int" />
+                          </Section>
+                        </Sections>
+                      </Member>
+                    </Section>
+                  </Sections>
+                </Section>
+                <Section Name="Input" />
+                <Section Name="Output" />
+                <Section Name="InOut" />
+                <Section Name="Static" />
+              </Sections>
+            </Section>
+            <Section Name="Input" />
+            <Section Name="Output" />
+            <Section Name="InOut" />
+            <Section Name="Static" />
+          </Sections>
+        </Section>
+        <Section Name="Input" />
+        <Section Name="Output" />
+        <Section Name="InOut" />
+        <Section Name="Static">
+          <Member Name="Position" Datatype="Real" />
+          <Member Name="Velocity" Datatype="Real" />
+          <Member Name="ActualPosition" Datatype="Real" />
+          <Member Name="ActualVelocity" Datatype="Real" />
+          <Member Name="Actor" Datatype="TO_Struct_Actor" Version="7.0">
+            <Sections>
+              <Section Name="None">
+                <Member Name="Type" Datatype="DInt" />
+                <Member Name="InverseDirection" Datatype="Bool" />
+                <Member Name="DirectionMode" Datatype="Int" />
+                <Member Name="DataAdaption" Datatype="DInt" />
+                <Member Name="PTOSliceTime" Datatype="Int" />
+                <Member Name="Interface" Datatype="TO_Struct_ActorInterface" Version="5.0">
+                  <Sections>
+                    <Section Name="None">
+                      <Member Name="AddressIn" Datatype="VREF" Version="1.0">
+                        <Sections>
+                          <Section Name="None">
+                            <Member Name="RID" Datatype="DWord" />
+                            <Member Name="AREA" Datatype="Byte" />
+                            <Member Name="DB_NUMBER" Datatype="UInt" />
+                            <Member Name="OFFSET" Datatype="UDInt" />
+                          </Section>
+                        </Sections>
+                      </Member>
+                      <Member Name="AddressOut" Datatype="VREF" Version="1.0">
+                        <Sections>
+                          <Section Name="None">
+                            <Member Name="RID" Datatype="DWord" />
+                            <Member Name="AREA" Datatype="Byte" />
+                            <Member Name="DB_NUMBER" Datatype="UInt" />
+                            <Member Name="OFFSET" Datatype="UDInt" />
+                          </Section>
+                        </Sections>
+                      </Member>
+                      <Member Name="EnableDriveOutput" Datatype="VREF" Version="1.0">
+                        <Sections>
+                          <Section Name="None">
+                            <Member Name="RID" Datatype="DWord" />
+                            <Member Name="AREA" Datatype="Byte" />
+                            <Member Name="DB_NUMBER" Datatype="UInt" />
+                            <Member Name="OFFSET" Datatype="UDInt" />
+                          </Section>
+                        </Sections>
+                      </Member>
+                      <Member Name="DriveReadyInput" Datatype="VREF" Version="1.0">
+                        <Sections>
+                          <Section Name="None">
+                            <Member Name="RID" Datatype="DWord" />
+                            <Member Name="AREA" Datatype="Byte" />
+                            <Member Name="DB_NUMBER" Datatype="UInt" />
+                            <Member Name="OFFSET" Datatype="UDInt" />
+                          </Section>
+                        </Sections>
+                      </Member>
+                      <Member Name="PTO" Datatype="DWord" />
+                    </Section>
+                  </Sections>
+                </Member>
+                <Member Name="DriveParameter" Datatype="TO_Struct_ActorDriveParameter" Version="5.0">
+                  <Sections>
+                    <Section Name="None">
+                      <Member Name="ReferenceSpeed" Datatype="Real" />
+                      <Member Name="MaxSpeed" Datatype="Real" />
+                      <Member Name="PulsesPerDriveRevolution" Datatype="DInt" />
+                    </Section>
+                  </Sections>
+                </Member>
+              </Section>
+            </Sections>
+          </Member>
+          <Member Name="Sensor" Datatype="Array[1..1] of TO_Struct_Sensor" Version="7.0">
+            <Sections>
+              <Section Name="None">
+                <Member Name="Type" Datatype="DInt" />
+                <Member Name="InverseDirection" Datatype="Bool" />
+                <Member Name="System" Datatype="DInt" />
+                <Member Name="MountingMode" Datatype="DInt" />
+                <Member Name="DataAdaption" Datatype="DInt" />
+                <Member Name="Interface" Datatype="TO_Struct_SensorInterface" Version="7.0">
+                  <Sections>
+                    <Section Name="None">
+                      <Member Name="AddressIn" Datatype="VREF" Version="1.0">
+                        <Sections>
+                          <Section Name="None">
+                            <Member Name="RID" Datatype="DWord" />
+                            <Member Name="AREA" Datatype="Byte" />
+                            <Member Name="DB_NUMBER" Datatype="UInt" />
+                            <Member Name="OFFSET" Datatype="UDInt" />
+                          </Section>
+                        </Sections>
+                      </Member>
+                      <Member Name="AddressOut" Datatype="VREF" Version="1.0">
+                        <Sections>
+                          <Section Name="None">
+                            <Member Name="RID" Datatype="DWord" />
+                            <Member Name="AREA" Datatype="Byte" />
+                            <Member Name="DB_NUMBER" Datatype="UInt" />
+                            <Member Name="OFFSET" Datatype="UDInt" />
+                          </Section>
+                        </Sections>
+                      </Member>
+                      <Member Name="Type" Datatype="DInt" />
+                      <Member Name="HSC" Datatype="DWord" />
+                      <Member Name="Number" Datatype="UDInt" />
+                    </Section>
+                  </Sections>
+                </Member>
+                <Member Name="Parameter" Datatype="TO_Struct_SensorParameter" Version="7.0">
+                  <Sections>
+                    <Section Name="None">
+                      <Member Name="Resolution" Datatype="Real" />
+                      <Member Name="StepsPerRevolution" Datatype="UDInt" />
+                      <Member Name="FineResolutionXist1" Datatype="UDInt" />
+                      <Member Name="FineResolutionXist2" Datatype="UDInt" />
+                      <Member Name="DeterminableRevolutions" Datatype="UDInt" />
+                      <Member Name="DistancePerRevolution" Datatype="Real" />
+                      <Member Name="BehaviourGx_XIST1" Datatype="DInt" />
+                    </Section>
+                  </Sections>
+                </Member>
+                <Member Name="ActiveHoming" Datatype="TO_Struct_SensorActiveHoming" Version="7.0">
+                  <Sections>
+                    <Section Name="None">
+                      <Member Name="Mode" Datatype="DInt" />
+                      <Member Name="SideInput" Datatype="Bool" />
+                      <Member Name="DigitalInputAddress" Datatype="VREF" Version="1.0">
+                        <Sections>
+                          <Section Name="None">
+                            <Member Name="RID" Datatype="DWord" />
+                            <Member Name="AREA" Datatype="Byte" />
+                            <Member Name="DB_NUMBER" Datatype="UInt" />
+                            <Member Name="OFFSET" Datatype="UDInt" />
+                          </Section>
+                        </Sections>
+                      </Member>
+                      <Member Name="HomePositionOffset" Datatype="Real" />
+                      <Member Name="SwitchLevel" Datatype="Bool" />
+                    </Section>
+                  </Sections>
+                </Member>
+                <Member Name="PassiveHoming" Datatype="TO_Struct_SensorPassiveHoming" Version="7.0">
+                  <Sections>
+                    <Section Name="None">
+                      <Member Name="Mode" Datatype="DInt" />
+                      <Member Name="SideInput" Datatype="Bool" />
+                      <Member Name="DigitalInputAddress" Datatype="VREF" Version="1.0">
+                        <Sections>
+                          <Section Name="None">
+                            <Member Name="RID" Datatype="DWord" />
+                            <Member Name="AREA" Datatype="Byte" />
+                            <Member Name="DB_NUMBER" Datatype="UInt" />
+                            <Member Name="OFFSET" Datatype="UDInt" />
+                          </Section>
+                        </Sections>
+                      </Member>
+                      <Member Name="SwitchLevel" Datatype="Bool" />
+                    </Section>
+                  </Sections>
+                </Member>
+              </Section>
+            </Sections>
+          </Member>
+          <Member Name="Units" Datatype="TO_Struct_Units" Version="7.0">
+            <Sections>
+              <Section Name="None">
+                <Member Name="LengthUnit" Datatype="Int" />
+              </Section>
+            </Sections>
+          </Member>
+          <Member Name="Mechanics" Datatype="TO_Struct_Mechanics" Version="5.0">
+            <Sections>
+              <Section Name="None">
+                <Member Name="LeadScrew" Datatype="Real" />
+              </Section>
+            </Sections>
+          </Member>
+          <Member Name="DynamicLimits" Datatype="TO_Struct_DynamicLimits" Version="5.0">
+            <Sections>
+              <Section Name="None">
+                <Member Name="MaxVelocity" Datatype="Real" />
+                <Member Name="MinVelocity" Datatype="Real" />
+              </Section>
+            </Sections>
+          </Member>
+          <Member Name="DynamicDefaults" Datatype="TO_Struct_DynamicDefaults" Version="4.0">
+            <Sections>
+              <Section Name="None">
+                <Member Name="Acceleration" Datatype="Real" />
+                <Member Name="Deceleration" Datatype="Real" />
+                <Member Name="EmergencyDeceleration" Datatype="Real" />
+                <Member Name="Jerk" Datatype="Real" />
+              </Section>
+            </Sections>
+          </Member>
+          <Member Name="Modulo" Datatype="TO_Struct_Modulo" Version="5.0">
+            <Sections>
+              <Section Name="None">
+                <Member Name="Enable" Datatype="Bool" />
+                <Member Name="StartValue" Datatype="Real" />
+                <Member Name="Length" Datatype="Real" />
+              </Section>
+            </Sections>
+          </Member>
+          <Member Name="PositionLimits_SW" Datatype="TO_Struct_PositionLimitsSW" Version="4.0">
+            <Sections>
+              <Section Name="None">
+                <Member Name="Active" Datatype="Bool" />
+                <Member Name="MinPosition" Datatype="Real" />
+                <Member Name="MaxPosition" Datatype="Real" />
+              </Section>
+            </Sections>
+          </Member>
+          <Member Name="PositionLimits_HW" Datatype="TO_Struct_PositionLimitsHW" Version="5.0">
+            <Sections>
+              <Section Name="None">
+                <Member Name="Active" Datatype="Bool" />
+                <Member Name="MinSwitchLevel" Datatype="Bool" />
+                <Member Name="MinSwitchAddress" Datatype="VREF" Version="1.0">
+                  <Sections>
+                    <Section Name="None">
+                      <Member Name="RID" Datatype="DWord" />
+                      <Member Name="AREA" Datatype="Byte" />
+                      <Member Name="DB_NUMBER" Datatype="UInt" />
+                      <Member Name="OFFSET" Datatype="UDInt" />
+                    </Section>
+                  </Sections>
+                </Member>
+                <Member Name="MaxSwitchLevel" Datatype="Bool" />
+                <Member Name="MaxSwitchAddress" Datatype="VREF" Version="1.0">
+                  <Sections>
+                    <Section Name="None">
+                      <Member Name="RID" Datatype="DWord" />
+                      <Member Name="AREA" Datatype="Byte" />
+                      <Member Name="DB_NUMBER" Datatype="UInt" />
+                      <Member Name="OFFSET" Datatype="UDInt" />
+                    </Section>
+                  </Sections>
+                </Member>
+              </Section>
+            </Sections>
+          </Member>
+          <Member Name="Homing" Datatype="TO_Struct_Homing" Version="5.0">
+            <Sections>
+              <Section Name="None">
+                <Member Name="AutoReversal" Datatype="Bool" />
+                <Member Name="ApproachDirection" Datatype="Bool" />
+                <Member Name="ApproachVelocity" Datatype="Real" />
+                <Member Name="ReferencingVelocity" Datatype="Real" />
+              </Section>
+            </Sections>
+          </Member>
+          <Member Name="PositionControl" Datatype="TO_Struct_PositionControl" Version="5.0">
+            <Sections>
+              <Section Name="None">
+                <Member Name="Kv" Datatype="Real" />
+                <Member Name="Kpc" Datatype="Real" />
+              </Section>
+            </Sections>
+          </Member>
+          <Member Name="FollowingError" Datatype="TO_Struct_FollowingError" Version="5.0">
+            <Sections>
+              <Section Name="None">
+                <Member Name="EnableMonitoring" Datatype="Bool" />
+                <Member Name="MinValue" Datatype="Real" />
+                <Member Name="MaxValue" Datatype="Real" />
+                <Member Name="MinVelocity" Datatype="Real" />
+              </Section>
+            </Sections>
+          </Member>
+          <Member Name="PositioningMonitoring" Datatype="TO_Struct_PositioningMonitoring" Version="6.0">
+            <Sections>
+              <Section Name="None">
+                <Member Name="ToleranceTime" Datatype="Real" />
+                <Member Name="MinDwellTime" Datatype="Real" />
+                <Member Name="Window" Datatype="Real" />
+              </Section>
+            </Sections>
+          </Member>
+          <Member Name="StandstillSignal" Datatype="TO_Struct_StandstillSignal" Version="5.0">
+            <Sections>
+              <Section Name="None">
+                <Member Name="VelocityThreshold" Datatype="Real" />
+                <Member Name="MinDwellTime" Datatype="Real" />
+              </Section>
+            </Sections>
+          </Member>
+          <Member Name="Simulation" Datatype="TO_Struct_Simulation" Version="6.0">
+            <Sections>
+              <Section Name="None">
+                <Member Name="Mode" Datatype="UDInt" />
+              </Section>
+            </Sections>
+          </Member>
+          <Member Name="StatusPositioning" Datatype="TO_Struct_StatusPositioning" Version="5.0">
+            <Sections>
+              <Section Name="None">
+                <Member Name="Distance" Datatype="Real" />
+                <Member Name="TargetPosition" Datatype="Real" />
+                <Member Name="FollowingError" Datatype="Real" />
+              </Section>
+            </Sections>
+          </Member>
+          <Member Name="StatusDrive" Datatype="TO_Struct_StatusDrive" Version="6.0">
+            <Sections>
+              <Section Name="None">
+                <Member Name="InOperation" Datatype="Bool" />
+                <Member Name="CommunicationOK" Datatype="Bool" />
+                <Member Name="AdaptionState" Datatype="DInt" />
+              </Section>
+            </Sections>
+          </Member>
+          <Member Name="StatusSensor" Datatype="Array[1..1] of TO_Struct_StatusSensor" Version="6.0">
+            <Sections>
+              <Section Name="None">
+                <Member Name="State" Datatype="DInt" />
+                <Member Name="CommunicationOK" Datatype="Bool" />
+                <Member Name="AbsEncoderOffset" Datatype="Real" />
+                <Member Name="AdaptionState" Datatype="DInt" />
+              </Section>
+            </Sections>
+          </Member>
+          <Member Name="StatusBits" Datatype="TO_Struct_StatusBits" Version="6.0">
+            <Sections>
+              <Section Name="None">
+                <Member Name="Activated" Datatype="Bool" />
+                <Member Name="Enable" Datatype="Bool" />
+                <Member Name="AxisSimulation" Datatype="Bool" />
+                <Member Name="NonPositionControlled" Datatype="Bool" />
+                <Member Name="HomingDone" Datatype="Bool" />
+                <Member Name="Done" Datatype="Bool" />
+                <Member Name="Error" Datatype="Bool" />
+                <Member Name="Standstill" Datatype="Bool" />
+                <Member Name="PositioningCommand" Datatype="Bool" />
+                <Member Name="VelocityCommand" Datatype="Bool" />
+                <Member Name="HomingCommand" Datatype="Bool" />
+                <Member Name="CommandTableActive" Datatype="Bool" />
+                <Member Name="ConstantVelocity" Datatype="Bool" />
+                <Member Name="Accelerating" Datatype="Bool" />
+                <Member Name="Decelerating" Datatype="Bool" />
+                <Member Name="ControlPanelActive" Datatype="Bool" />
+                <Member Name="DriveReady" Datatype="Bool" />
+                <Member Name="RestartRequired" Datatype="Bool" />
+                <Member Name="SWLimitMinActive" Datatype="Bool" />
+                <Member Name="SWLimitMaxActive" Datatype="Bool" />
+                <Member Name="HWLimitMinActive" Datatype="Bool" />
+                <Member Name="HWLimitMaxActive" Datatype="Bool" />
+              </Section>
+            </Sections>
+          </Member>
+          <Member Name="ErrorBits" Datatype="TO_Struct_ErrorBits" Version="6.0">
+            <Sections>
+              <Section Name="None">
+                <Member Name="SystemFault" Datatype="Bool" />
+                <Member Name="ConfigFault" Datatype="Bool" />
+                <Member Name="DriveFault" Datatype="Bool" />
+                <Member Name="SWLimit" Datatype="Bool" />
+                <Member Name="HWLimit" Datatype="Bool" />
+                <Member Name="DirectionFault" Datatype="Bool" />
+                <Member Name="HWUsed" Datatype="Bool" />
+                <Member Name="SensorFault" Datatype="Bool" />
+                <Member Name="CommunicationFault" Datatype="Bool" />
+                <Member Name="FollowingError" Datatype="Bool" />
+                <Member Name="PositioningFault" Datatype="Bool" />
+                <Member Name="AdaptionError" Datatype="Bool" />
+              </Section>
+            </Sections>
+          </Member>
+          <Member Name="ControlPanel" Datatype="TO_Struct_ControlPanel" Version="4.0">
+            <Sections>
+              <Section Name="None">
+                <Member Name="Input" Datatype="TO_Struct_ControlPanelInput" Version="4.0">
+                  <Sections>
+                    <Section Name="None">
+                      <Member Name="TimeOut" Datatype="DInt" />
+                      <Member Name="EsLifeSign" Datatype="DInt" />
+                      <Member Name="Command" Datatype="Array[1..1] of TO_Struct_ControlPanelInputCmd" Version="4.0">
+                        <Sections>
+                          <Section Name="None">
+                            <Member Name="ReqCounter" Datatype="DInt" />
+                            <Member Name="Type" Datatype="DInt" />
+                            <Member Name="Position" Datatype="Real" />
+                            <Member Name="Velocity" Datatype="Real" />
+                            <Member Name="Acceleration" Datatype="Real" />
+                            <Member Name="Jerk" Datatype="Real" />
+                            <Member Name="Param" Datatype="DInt" />
+                          </Section>
+                        </Sections>
+                      </Member>
+                    </Section>
+                  </Sections>
+                </Member>
+                <Member Name="Output" Datatype="TO_Struct_ControlPanelOutput" Version="4.0">
+                  <Sections>
+                    <Section Name="None">
+                      <Member Name="RTLifeSign" Datatype="DInt" />
+                      <Member Name="Command" Datatype="Array[1..1] of TO_Struct_ControlPanelOutputCmd" Version="4.0">
+                        <Sections>
+                          <Section Name="None">
+                            <Member Name="AckCounter" Datatype="DInt" />
+                            <Member Name="ErrorID" Datatype="Word" />
+                            <Member Name="ErrorInfo" Datatype="Word" />
+                            <Member Name="Done" Datatype="Bool" />
+                            <Member Name="Aborted" Datatype="Bool" />
+                          </Section>
+                        </Sections>
+                      </Member>
+                    </Section>
+                  </Sections>
+                </Member>
+              </Section>
+            </Sections>
+          </Member>
+          <Member Name="Internal" Datatype="Array[1..4] of TO_Struct_Internal" Version="4.0">
+            <Sections>
+              <Section Name="None">
+                <Member Name="Id" Datatype="Int" />
+                <Member Name="Value" Datatype="Real" />
+              </Section>
+            </Sections>
+          </Member>
+        </Section>
+      </Sections>
+    </Member>
+    <Member Name="Execute" Datatype="Bool" Remanence="NonRetain" Accessibility="Public">
+      <AttributeList>
+        <BooleanAttribute Name="ExternalAccessible" SystemDefined="true">true</BooleanAttribute>
+        <BooleanAttribute Name="ExternalVisible" SystemDefined="true">true</BooleanAttribute>
+        <BooleanAttribute Name="ExternalWritable" SystemDefined="true">true</BooleanAttribute>
+      </AttributeList>
+    </Member>
+    <Member Name="Distance" Datatype="Real" Remanence="NonRetain" Accessibility="Public">
+      <AttributeList>
+        <BooleanAttribute Name="ExternalAccessible" SystemDefined="true">true</BooleanAttribute>
+        <BooleanAttribute Name="ExternalVisible" SystemDefined="true">true</BooleanAttribute>
+        <BooleanAttribute Name="ExternalWritable" SystemDefined="true">true</BooleanAttribute>
+      </AttributeList>
+    </Member>
+    <Member Name="Velocity" Datatype="Real" Remanence="NonRetain" Accessibility="Public">
+      <AttributeList>
+        <BooleanAttribute Name="ExternalAccessible" SystemDefined="true">true</BooleanAttribute>
+        <BooleanAttribute Name="ExternalVisible" SystemDefined="true">true</BooleanAttribute>
+        <BooleanAttribute Name="ExternalWritable" SystemDefined="true">true</BooleanAttribute>
+      </AttributeList>
+    </Member>
+  </Section>
+  <Section Name="Output">
+    <Member Name="Done" Datatype="Bool" Remanence="NonRetain" Accessibility="Public">
+      <AttributeList>
+        <BooleanAttribute Name="ExternalAccessible" SystemDefined="true">true</BooleanAttribute>
+        <BooleanAttribute Name="ExternalVisible" SystemDefined="true">true</BooleanAttribute>
+        <BooleanAttribute Name="ExternalWritable" SystemDefined="true">true</BooleanAttribute>
+      </AttributeList>
+    </Member>
+    <Member Name="Busy" Datatype="Bool" Remanence="NonRetain" Accessibility="Public">
+      <AttributeList>
+        <BooleanAttribute Name="ExternalAccessible" SystemDefined="true">true</BooleanAttribute>
+        <BooleanAttribute Name="ExternalVisible" SystemDefined="true">true</BooleanAttribute>
+        <BooleanAttribute Name="ExternalWritable" SystemDefined="true">true</BooleanAttribute>
+      </AttributeList>
+    </Member>
+    <Member Name="CommandAborted" Datatype="Bool" Remanence="NonRetain" Accessibility="Public">
+      <AttributeList>
+        <BooleanAttribute Name="ExternalAccessible" SystemDefined="true">true</BooleanAttribute>
+        <BooleanAttribute Name="ExternalVisible" SystemDefined="true">true</BooleanAttribute>
+        <BooleanAttribute Name="ExternalWritable" SystemDefined="true">true</BooleanAttribute>
+      </AttributeList>
+    </Member>
+    <Member Name="Error" Datatype="Bool" Remanence="NonRetain" Accessibility="Public">
+      <AttributeList>
+        <BooleanAttribute Name="ExternalAccessible" SystemDefined="true">true</BooleanAttribute>
+        <BooleanAttribute Name="ExternalVisible" SystemDefined="true">true</BooleanAttribute>
+        <BooleanAttribute Name="ExternalWritable" SystemDefined="true">true</BooleanAttribute>
+      </AttributeList>
+    </Member>
+    <Member Name="ErrorID" Datatype="Word" Remanence="NonRetain" Accessibility="Public">
+      <AttributeList>
+        <BooleanAttribute Name="ExternalAccessible" SystemDefined="true">true</BooleanAttribute>
+        <BooleanAttribute Name="ExternalVisible" SystemDefined="true">true</BooleanAttribute>
+        <BooleanAttribute Name="ExternalWritable" SystemDefined="true">true</BooleanAttribute>
+      </AttributeList>
+    </Member>
+    <Member Name="ErrorInfo" Datatype="Word" Remanence="NonRetain" Accessibility="Public">
+      <AttributeList>
+        <BooleanAttribute Name="ExternalAccessible" SystemDefined="true">true</BooleanAttribute>
+        <BooleanAttribute Name="ExternalVisible" SystemDefined="true">true</BooleanAttribute>
+        <BooleanAttribute Name="ExternalWritable" SystemDefined="true">true</BooleanAttribute>
+      </AttributeList>
+    </Member>
+  </Section>
+  <Section Name="InOut" />
+  <Section Name="Static">
+    <Member Name="FB_ID" Datatype="DInt" Remanence="NonRetain" Accessibility="Private">
+      <AttributeList>
+        <BooleanAttribute Name="SetPoint" SystemDefined="true">false</BooleanAttribute>
+      </AttributeList>
+    </Member>
+  </Section>
+</Sections></Interface>
+      <Name>MC_MoveRelative_DB</Name>
+      <Namespace />
+      <Number>42</Number>
+      <OfSystemLibElement>MC_MoveRelative</OfSystemLibElement>
+      <OfSystemLibVersion>7.0</OfSystemLibVersion>
+      <ProgrammingLanguage>DB</ProgrammingLanguage>
+    </AttributeList>
+    <ObjectList>
+      <MultilingualText ID="1" CompositionName="Comment">
+        <ObjectList>
+          <MultilingualTextItem ID="2" CompositionName="Items">
+            <AttributeList>
+              <Culture>en-US</Culture>
+              <Text />
+            </AttributeList>
+          </MultilingualTextItem>
+        </ObjectList>
+      </MultilingualText>
+      <MultilingualText ID="3" CompositionName="Title">
+        <ObjectList>
+          <MultilingualTextItem ID="4" CompositionName="Items">
+            <AttributeList>
+              <Culture>en-US</Culture>
+              <Text />
+            </AttributeList>
+          </MultilingualTextItem>
+        </ObjectList>
+      </MultilingualText>
+    </ObjectList>
+  </SW.Blocks.InstanceDB>
+</Document>

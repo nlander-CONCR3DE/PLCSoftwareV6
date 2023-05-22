@@ -1,0 +1,181 @@
+﻿FUNCTION_BLOCK "FHPP_DATA_PEEK"
+{ S7_Optimized_Access := 'TRUE' }
+AUTHOR : FESTO
+FAMILY : 'E-DRIVE'
+VERSION : 5.3
+   VAR_INPUT 
+      IAddress_FHPP : Int;
+      IAddress_FPC : Int;
+      IAdress_FHPPplus : Int;
+      DeviceType : String[16];
+      cfgFHPPplusIn : DInt;
+      SwapBytes : Bool;
+   END_VAR
+
+   VAR_OUTPUT 
+      Error : Bool;
+      Status : "DT_FML_STATUS";
+   END_VAR
+
+   VAR_IN_OUT 
+      FML_REF : "DT_FML_REF";
+   END_VAR
+
+   VAR 
+      FHPPplusElementSize : Array[1..9] of DInt;
+      FHPPplusSize : DInt;
+   END_VAR
+
+   VAR_TEMP 
+      tmp_bRetVal : Bool;
+      iByteCount : Int;
+      i : Int;
+      tmpStatus : "DT_FML_STATUS";
+      FHPPplus24 : Array[1..24] of Byte;
+      tmpFHPPIn : Array[1..16] of Byte;
+   END_VAR
+
+
+BEGIN
+	(*############################################################
+	    FESTO AG  Co., Esslingen
+	    Copyright (c) 2015. All rights reserved.    
+	
+	    NAME OF FUNCTION BLOCK:         FHPP_DATA_PEEK
+	    VERSION NUMBER:                 V5.3
+	    COMPOSER:                       bejk
+	    
+	-----------------------------------------------------
+	   Date        Name                Activity                                                                              
+	   06.08.2015  Benjamin Kilgus     created (V1.0)
+	   15.09.2015  Benjamin Kilgus     errorhandling changed (V1.1)
+	   14.10.2015  Benjamin Kilgus     check device type added (V1.2)
+	   29.08.2016  Benjamin Klein      version changed (V4.1)
+	   20.09.2016  Benjamin Klein      bugfix: FHPPplus and byteorder in FML_REF (V4.2)
+	   17.01.2017  Christian Hammer    bugfix: reset variable "tmpStatus" at beginning, label "L_Error" and "L_NO_Error" unified
+	   05.07.2017  Benjamin Klein      optimized function block with Slice access instead of AT (V5.1)
+	   04.10.2017  Benjamin Klein      devicetype MTR_DCI and SFC_DC added
+	   18.10.2017  Benjamin Klein      "tmpStatus" at beginning deleted, labels deleted
+	   23.10.2017  Benjamin Klein      SwapBytes Input added for CPX-CM-HPP
+	   27.02.2018  Benjamin Klein      Bugfix: Negation of FPC_Mapping in line 75   
+	   16.11.2018  Benjamin Klein      Bugfix: Changed tmpFHPPIn from[1..8] to [1..16] (V5.3)
+	############################################################*)
+	
+	// function block (FB) is busy
+	#tmpStatus.Err := FALSE;
+	#tmpStatus.Cat := 1;
+	#tmpStatus.ID := 16#0000_0002; // FB busy
+	
+	// check device type
+	IF #DeviceType = 'CMMO_ST' OR
+	    #DeviceType = 'EMCA_EC' OR
+	    #DeviceType = 'CMMP_AS' OR
+	    #DeviceType = 'CMMS_AS' OR
+	    #DeviceType = 'CMMS_ST' OR
+	    #DeviceType = 'CMMD_AS' OR
+	    #DeviceType = 'SFC_DC' OR
+	    #DeviceType = 'MTR_DCI' THEN
+	    
+	    #FML_REF.DeviceType := #DeviceType;
+	ELSE
+	    #tmpStatus.Err := TRUE;
+	    #tmpStatus.Cat := 1; // functionblock
+	    #tmpStatus.ID := DWORD_TO_DINT(16#8000_001E); // device type not valid
+	END_IF;
+	
+	// ### FHPP Standard
+	FOR #i := 1 TO 8 DO
+	    #FML_REF.InData.FHPP[#i] := PEEK(area := 16#81, dbNumber := 0, byteOffset := #i - 1 + #IAddress_FHPP);
+	END_FOR;
+	
+	// CM-HPP Byte SWAP
+	IF #SwapBytes THEN
+	    // CM-HPP Byte SWAP
+	    #tmpFHPPIn[1] := #FML_REF.InData.FHPP[1];
+	    #tmpFHPPIn[2] := #FML_REF.InData.FHPP[2];
+	    #tmpFHPPIn[3] := #FML_REF.InData.FHPP[3];
+	    #tmpFHPPIn[4] := #FML_REF.InData.FHPP[4];
+	    #tmpFHPPIn[5] := #FML_REF.InData.FHPP[8];
+	    #tmpFHPPIn[6] := #FML_REF.InData.FHPP[7];
+	    #tmpFHPPIn[7] := #FML_REF.InData.FHPP[6];
+	    #tmpFHPPIn[8] := #FML_REF.InData.FHPP[5];
+	    
+	    #FML_REF.InData.FHPP := #tmpFHPPIn;
+	    
+	END_IF;
+	
+	
+	// ### FPC
+	IF #IAddress_FPC <> 0 AND #tmpStatus.Err = FALSE THEN
+	    FOR #i := 1 TO 8 DO
+	        #FML_REF.InData.FPC[#i] := PEEK(area := 16#81, dbNumber := 0, byteOffset := #i - 1 + #IAddress_FPC);
+	    END_FOR;
+	    
+	    // mapping of FPC data 
+	    #tmp_bRetVal := NOT "FPC_MAPPING"(FML_REF := #FML_REF, Mode := FALSE);
+	    IF #tmp_bRetVal THEN
+	        #tmpStatus.Err := TRUE;
+	        #tmpStatus.Cat := 3; // FPC
+	        #tmpStatus.ID := 18;
+	    END_IF;
+	END_IF;
+	
+	// ### FHPPplus
+	IF #IAdress_FHPPplus <> 0 AND #tmpStatus.Err = FALSE THEN
+	    
+	    // ### check configuration
+	    IF #cfgFHPPplusIn <> 0 THEN
+	        
+	        #tmpStatus.ID := "FHPPPLUS_MAPPING"(cfgFHPPplus := #cfgFHPPplusIn, FHPPplusElementSize => #FHPPplusElementSize, FHPPplusSize => #FHPPplusSize);
+	        
+	        // FHPP+ Berechnung fehlerhaft beendet
+	        IF #tmpStatus.ID <> 0 THEN
+	            #tmpStatus.Err := TRUE;
+	            #tmpStatus.Cat := 1; // functionblock
+	        END_IF;
+	    END_IF;
+	    
+	    #FHPPplusSize := #FHPPplusSize / 8;
+	    FOR #i := 1 TO #FHPPplusSize DO
+	        #FHPPplus24[#i] := PEEK(area := 16#81, dbNumber := 0, byteOffset := #i - 1 + #IAdress_FHPPplus);
+	    END_FOR;
+	    
+	    
+	    
+	    // copy data into FML_REF
+	    #iByteCount := 1;
+	    FOR #i := 1 TO 9 DO
+	        CASE #FHPPplusElementSize[#i] OF
+	            0:(* Element is empty *)
+	                #FML_REF.InData.FHPPplus[#i] := 0;
+	                #iByteCount := #iByteCount + 1;
+	            8:(* Element is a BYTE *)
+	                #FML_REF.InData.FHPPplus[#i] := #FHPPplus24[#iByteCount];
+	                #iByteCount := #iByteCount + 1;
+	            16:(* Element is a WORD *)
+	                #FML_REF.InData.FHPPplus[#i].%B1 := #FHPPplus24[#iByteCount];
+	                #FML_REF.InData.FHPPplus[#i].%B0 := #FHPPplus24[#iByteCount + 1];
+	                #iByteCount := #iByteCount + 2;
+	                
+	            32:(* Element is a DWORD *)
+	                #FML_REF.InData.FHPPplus[#i].%B3 := #FHPPplus24[#iByteCount];
+	                #FML_REF.InData.FHPPplus[#i].%B2 := #FHPPplus24[#iByteCount + 1];
+	                #FML_REF.InData.FHPPplus[#i].%B1 := #FHPPplus24[#iByteCount + 2];
+	                #FML_REF.InData.FHPPplus[#i].%B0 := #FHPPplus24[#iByteCount + 3];
+	                #iByteCount := #iByteCount + 4;
+	        END_CASE;
+	    END_FOR;
+	END_IF;
+	
+	// ### EXIT ROUTINE ############################################################
+	IF NOT #tmpStatus.Err THEN
+	    ENO := TRUE;      // Set ENO-Bit to true
+	    #Status := #tmpStatus;
+	    #Error := #tmpStatus.Err;
+	ELSE
+	    ENO := FALSE;     // Set ENO-Bit to false
+	    #Status := #tmpStatus;
+	    #Error := #tmpStatus.Err;
+	END_IF;
+END_FUNCTION_BLOCK
+

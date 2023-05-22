@@ -1,0 +1,2892 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Document>
+  <Engineering version="V18" />
+  <SW.Blocks.OB ID="0">
+    <AttributeList>
+      <AutoNumber>true</AutoNumber>
+      <HeaderAuthor />
+      <HeaderFamily />
+      <HeaderName />
+      <HeaderVersion>0.1</HeaderVersion>
+      <Interface><Sections xmlns="http://www.siemens.com/automation/Openness/SW/Interface/v5">
+  <Section Name="Input">
+    <Member Name="Initial_Call" Datatype="Bool" Accessibility="Public" Informative="true">
+      <Comment>
+        <MultiLanguageText Lang="en-US">Initial call of this OB</MultiLanguageText>
+      </Comment>
+    </Member>
+    <Member Name="Remanence" Datatype="Bool" Accessibility="Public" Informative="true">
+      <Comment>
+        <MultiLanguageText Lang="en-US">=True, if remanent data are available</MultiLanguageText>
+      </Comment>
+    </Member>
+  </Section>
+  <Section Name="Temp" />
+  <Section Name="Constant" />
+</Sections></Interface>
+      <IsIECCheckEnabled>false</IsIECCheckEnabled>
+      <MemoryLayout>Optimized</MemoryLayout>
+      <Name>Work</Name>
+      <Namespace />
+      <Number>123</Number>
+      <ProgrammingLanguage>LAD</ProgrammingLanguage>
+      <SecondaryType>ProgramCycle</SecondaryType>
+      <SetENOAutomatically>false</SetENOAutomatically>
+    </AttributeList>
+    <ObjectList>
+      <MultilingualText ID="1" CompositionName="Comment">
+        <ObjectList>
+          <MultilingualTextItem ID="2" CompositionName="Items">
+            <AttributeList>
+              <Culture>en-US</Culture>
+              <Text />
+            </AttributeList>
+          </MultilingualTextItem>
+        </ObjectList>
+      </MultilingualText>
+      <SW.Blocks.CompileUnit ID="3" CompositionName="CompileUnits">
+        <AttributeList>
+          <NetworkSource><FlgNet xmlns="http://www.siemens.com/automation/Openness/SW/NetworkSource/FlgNet/v4">
+  <Parts>
+    <Call UId="21">
+      <CallInfo Name="Enable_machine" BlockType="FC" />
+    </Call>
+  </Parts>
+  <Wires>
+    <Wire UId="22">
+      <Powerrail />
+      <NameCon UId="21" Name="en" />
+    </Wire>
+  </Wires>
+</FlgNet></NetworkSource>
+          <ProgrammingLanguage>LAD</ProgrammingLanguage>
+        </AttributeList>
+        <ObjectList>
+          <MultilingualText ID="4" CompositionName="Comment">
+            <ObjectList>
+              <MultilingualTextItem ID="5" CompositionName="Items">
+                <AttributeList>
+                  <Culture>en-US</Culture>
+                  <Text />
+                </AttributeList>
+              </MultilingualTextItem>
+            </ObjectList>
+          </MultilingualText>
+          <MultilingualText ID="6" CompositionName="Title">
+            <ObjectList>
+              <MultilingualTextItem ID="7" CompositionName="Items">
+                <AttributeList>
+                  <Culture>en-US</Culture>
+                  <Text>Active machine </Text>
+                </AttributeList>
+              </MultilingualTextItem>
+            </ObjectList>
+          </MultilingualText>
+        </ObjectList>
+      </SW.Blocks.CompileUnit>
+      <SW.Blocks.CompileUnit ID="8" CompositionName="CompileUnits">
+        <AttributeList>
+          <NetworkSource><FlgNet xmlns="http://www.siemens.com/automation/Openness/SW/NetworkSource/FlgNet/v4">
+  <Parts>
+    <Access Scope="GlobalVariable" UId="21">
+      <Symbol>
+        <Component Name="WebDB" />
+        <Component Name="Output_Roller" />
+      </Symbol>
+    </Access>
+    <Access Scope="GlobalVariable" UId="22">
+      <Symbol>
+        <Component Name="Heater_Control_DB" />
+        <Component Name="MaintenanceSkipRoller" />
+      </Symbol>
+    </Access>
+    <Access Scope="GlobalVariable" UId="23">
+      <Symbol>
+        <Component Name="MachineDB" />
+        <Component Name="SerialNumber" />
+      </Symbol>
+    </Access>
+    <Access Scope="GlobalVariable" UId="24">
+      <Symbol>
+        <Component Name="WebDB" />
+        <Component Name="SystemStatus" />
+        <Component Name="DoorSensor" />
+      </Symbol>
+    </Access>
+    <Access Scope="GlobalVariable" UId="25">
+      <Symbol>
+        <Component Name="WebDB" />
+        <Component Name="Heater_PDL" />
+      </Symbol>
+    </Access>
+    <Access Scope="LiteralConstant" UId="26">
+      <Constant>
+        <ConstantType>HW_PWM</ConstantType>
+        <ConstantValue>265</ConstantValue>
+      </Constant>
+    </Access>
+    <Access Scope="GlobalVariable" UId="27">
+      <Symbol>
+        <Component Name="WebDB" />
+        <Component Name="Heater_Setpoint" />
+      </Symbol>
+    </Access>
+    <Access Scope="GlobalVariable" UId="28">
+      <Symbol>
+        <Component Name="ESTOP_Button" />
+      </Symbol>
+    </Access>
+    <Access Scope="GlobalVariable" UId="29">
+      <Symbol>
+        <Component Name="WebDB" />
+        <Component Name="Heater_ON" />
+      </Symbol>
+    </Access>
+    <Access Scope="GlobalVariable" UId="30">
+      <Symbol>
+        <Component Name="Heater_Control_DB" />
+        <Component Name="FeedboxHeatingON" />
+      </Symbol>
+    </Access>
+    <Access Scope="GlobalVariable" UId="31">
+      <Symbol>
+        <Component Name="Heater_Control_DB" />
+        <Component Name="PrintboxHeatingON" />
+      </Symbol>
+    </Access>
+    <Access Scope="GlobalVariable" UId="32">
+      <Symbol>
+        <Component Name="WebDB" />
+        <Component Name="YOutput" />
+        <Component Name="ActualPosition" />
+      </Symbol>
+    </Access>
+    <Access Scope="GlobalVariable" UId="33">
+      <Symbol>
+        <Component Name="WebDB" />
+        <Component Name="YOutput" />
+        <Component Name="ActualVelocity" />
+      </Symbol>
+    </Access>
+    <Access Scope="GlobalVariable" UId="34">
+      <Symbol>
+        <Component Name="MachineDB" />
+        <Component Name="MachineLimit" />
+        <Component Name="Heater" />
+        <Component Name="FeedboxStart" />
+      </Symbol>
+    </Access>
+    <Access Scope="GlobalVariable" UId="35">
+      <Symbol>
+        <Component Name="MachineDB" />
+        <Component Name="MachineLimit" />
+        <Component Name="Heater" />
+        <Component Name="FeedboxEnd" />
+      </Symbol>
+    </Access>
+    <Access Scope="GlobalVariable" UId="36">
+      <Symbol>
+        <Component Name="MachineDB" />
+        <Component Name="MachineLimit" />
+        <Component Name="Heater" />
+        <Component Name="PrintboxStart" />
+      </Symbol>
+    </Access>
+    <Access Scope="GlobalVariable" UId="37">
+      <Symbol>
+        <Component Name="MachineDB" />
+        <Component Name="MachineLimit" />
+        <Component Name="Heater" />
+        <Component Name="PrintboxEnd" />
+      </Symbol>
+    </Access>
+    <Access Scope="GlobalVariable" UId="38">
+      <Symbol>
+        <Component Name="FTON_FirstTurnON" />
+        <Component Name="FTON_IR_Heater_Test" />
+      </Symbol>
+    </Access>
+    <Access Scope="GlobalVariable" UId="39">
+      <Symbol>
+        <Component Name="Heater_Output" />
+      </Symbol>
+    </Access>
+    <Access Scope="GlobalVariable" UId="40">
+      <Symbol>
+        <Component Name="Heater_PWM_pulseduration" />
+      </Symbol>
+    </Access>
+    <Access Scope="GlobalVariable" UId="41">
+      <Symbol>
+        <Component Name="Heater_Control_DB" />
+        <Component Name="Heater_error_code" />
+      </Symbol>
+    </Access>
+    <Access Scope="GlobalVariable" UId="42">
+      <Symbol>
+        <Component Name="Heater_Control_DB" />
+        <Component Name="Heater_Output_Check_1" />
+      </Symbol>
+    </Access>
+    <Part Name="Contact" UId="43" />
+    <Part Name="Contact" UId="44" />
+    <Part Name="O" UId="45">
+      <TemplateValue Name="Card" Type="Cardinality">2</TemplateValue>
+    </Part>
+    <Call UId="46">
+      <CallInfo Name="IR_Heater_Control" BlockType="FB">
+        <Instance Scope="GlobalVariable" UId="47">
+          <Component Name="Heater_Control_DB" />
+        </Instance>
+        <Parameter Name="MachineNumber" Section="Input" Type="Int" />
+        <Parameter Name="Mode" Section="Input" Type="Int" />
+        <Parameter Name="DoorSenor" Section="Input" Type="Bool" />
+        <Parameter Name="RollerON" Section="Input" Type="Bool" />
+        <Parameter Name="Heater_Safety_PDL" Section="Input" Type="Real" />
+        <Parameter Name="Heater_PWM_address" Section="Input" Type="HW_PWM" />
+        <Parameter Name="Heater_Setpoint" Section="Input" Type="Real" />
+        <Parameter Name="E-STOP" Section="Input" Type="Bool" />
+        <Parameter Name="Heater_ON_OFF" Section="Input" Type="Bool" />
+        <Parameter Name="FeedboxHeating" Section="Input" Type="Bool" />
+        <Parameter Name="PrintboxHeating" Section="Input" Type="Bool" />
+        <Parameter Name="AxisYActualPosition" Section="Input" Type="DInt" />
+        <Parameter Name="AxisYActualVelocity" Section="Input" Type="Real" />
+        <Parameter Name="FeedboxStartMachine" Section="Input" Type="DInt" />
+        <Parameter Name="FeedboxEndMachine" Section="Input" Type="DInt" />
+        <Parameter Name="PrintboxStartMachine" Section="Input" Type="DInt" />
+        <Parameter Name="PrintboxEndMachine" Section="Input" Type="DInt" />
+        <Parameter Name="HeaterTest" Section="Input" Type="Bool" />
+        <Parameter Name="Heater_Output" Section="Output" Type="Bool" />
+        <Parameter Name="Heater_Pulse_Duration" Section="Output" Type="Int" />
+        <Parameter Name="Heater_Error" Section="Output" Type="Int" />
+        <Parameter Name="Heater_Output_Check" Section="Output" Type="Int" />
+        <Parameter Name="RollerONWayBack" Section="Output" Type="Bool" />
+        <Parameter Name="WrongPositionInput" Section="Output" Type="Bool" />
+      </CallInfo>
+    </Call>
+  </Parts>
+  <Wires>
+    <Wire UId="51">
+      <Powerrail />
+      <NameCon UId="46" Name="en" />
+      <NameCon UId="43" Name="in" />
+      <NameCon UId="44" Name="in" />
+    </Wire>
+    <Wire UId="52">
+      <IdentCon UId="21" />
+      <NameCon UId="43" Name="operand" />
+    </Wire>
+    <Wire UId="53">
+      <NameCon UId="43" Name="out" />
+      <NameCon UId="45" Name="in1" />
+    </Wire>
+    <Wire UId="54">
+      <IdentCon UId="22" />
+      <NameCon UId="44" Name="operand" />
+    </Wire>
+    <Wire UId="55">
+      <NameCon UId="44" Name="out" />
+      <NameCon UId="45" Name="in2" />
+    </Wire>
+    <Wire UId="56">
+      <NameCon UId="45" Name="out" />
+      <NameCon UId="46" Name="RollerON" />
+    </Wire>
+    <Wire UId="57">
+      <IdentCon UId="23" />
+      <NameCon UId="46" Name="MachineNumber" />
+    </Wire>
+    <Wire UId="58">
+      <OpenCon UId="48" />
+      <NameCon UId="46" Name="Mode" />
+    </Wire>
+    <Wire UId="59">
+      <IdentCon UId="24" />
+      <NameCon UId="46" Name="DoorSenor" />
+    </Wire>
+    <Wire UId="60">
+      <IdentCon UId="25" />
+      <NameCon UId="46" Name="Heater_Safety_PDL" />
+    </Wire>
+    <Wire UId="61">
+      <IdentCon UId="26" />
+      <NameCon UId="46" Name="Heater_PWM_address" />
+    </Wire>
+    <Wire UId="62">
+      <IdentCon UId="27" />
+      <NameCon UId="46" Name="Heater_Setpoint" />
+    </Wire>
+    <Wire UId="63">
+      <IdentCon UId="28" />
+      <NameCon UId="46" Name="E-STOP" />
+    </Wire>
+    <Wire UId="64">
+      <IdentCon UId="29" />
+      <NameCon UId="46" Name="Heater_ON_OFF" />
+    </Wire>
+    <Wire UId="65">
+      <IdentCon UId="30" />
+      <NameCon UId="46" Name="FeedboxHeating" />
+    </Wire>
+    <Wire UId="66">
+      <IdentCon UId="31" />
+      <NameCon UId="46" Name="PrintboxHeating" />
+    </Wire>
+    <Wire UId="67">
+      <IdentCon UId="32" />
+      <NameCon UId="46" Name="AxisYActualPosition" />
+    </Wire>
+    <Wire UId="68">
+      <IdentCon UId="33" />
+      <NameCon UId="46" Name="AxisYActualVelocity" />
+    </Wire>
+    <Wire UId="69">
+      <IdentCon UId="34" />
+      <NameCon UId="46" Name="FeedboxStartMachine" />
+    </Wire>
+    <Wire UId="70">
+      <IdentCon UId="35" />
+      <NameCon UId="46" Name="FeedboxEndMachine" />
+    </Wire>
+    <Wire UId="71">
+      <IdentCon UId="36" />
+      <NameCon UId="46" Name="PrintboxStartMachine" />
+    </Wire>
+    <Wire UId="72">
+      <IdentCon UId="37" />
+      <NameCon UId="46" Name="PrintboxEndMachine" />
+    </Wire>
+    <Wire UId="73">
+      <IdentCon UId="38" />
+      <NameCon UId="46" Name="HeaterTest" />
+    </Wire>
+    <Wire UId="74">
+      <NameCon UId="46" Name="Heater_Output" />
+      <IdentCon UId="39" />
+    </Wire>
+    <Wire UId="75">
+      <NameCon UId="46" Name="Heater_Pulse_Duration" />
+      <IdentCon UId="40" />
+    </Wire>
+    <Wire UId="76">
+      <NameCon UId="46" Name="Heater_Error" />
+      <IdentCon UId="41" />
+    </Wire>
+    <Wire UId="77">
+      <NameCon UId="46" Name="Heater_Output_Check" />
+      <IdentCon UId="42" />
+    </Wire>
+    <Wire UId="78">
+      <NameCon UId="46" Name="RollerONWayBack" />
+      <OpenCon UId="49" />
+    </Wire>
+    <Wire UId="79">
+      <NameCon UId="46" Name="WrongPositionInput" />
+      <OpenCon UId="50" />
+    </Wire>
+  </Wires>
+</FlgNet></NetworkSource>
+          <ProgrammingLanguage>LAD</ProgrammingLanguage>
+        </AttributeList>
+        <ObjectList>
+          <MultilingualText ID="9" CompositionName="Comment">
+            <ObjectList>
+              <MultilingualTextItem ID="A" CompositionName="Items">
+                <AttributeList>
+                  <Culture>en-US</Culture>
+                  <Text />
+                </AttributeList>
+              </MultilingualTextItem>
+            </ObjectList>
+          </MultilingualText>
+          <MultilingualText ID="B" CompositionName="Title">
+            <ObjectList>
+              <MultilingualTextItem ID="C" CompositionName="Items">
+                <AttributeList>
+                  <Culture>en-US</Culture>
+                  <Text>IR Heater</Text>
+                </AttributeList>
+              </MultilingualTextItem>
+            </ObjectList>
+          </MultilingualText>
+        </ObjectList>
+      </SW.Blocks.CompileUnit>
+      <SW.Blocks.CompileUnit ID="D" CompositionName="CompileUnits">
+        <AttributeList>
+          <NetworkSource><FlgNet xmlns="http://www.siemens.com/automation/Openness/SW/NetworkSource/FlgNet/v4">
+  <Parts>
+    <Access Scope="GlobalVariable" UId="21">
+      <Symbol>
+        <Component Name="Load_Cell_Ink" />
+      </Symbol>
+    </Access>
+    <Access Scope="GlobalVariable" UId="22">
+      <Symbol>
+        <Component Name="WebDB" />
+        <Component Name="WeightFluidTank" />
+      </Symbol>
+    </Access>
+    <Call UId="23">
+      <CallInfo Name="LoadCell" BlockType="FB">
+        <Instance Scope="GlobalVariable" UId="24">
+          <Component Name="LoadCell_FluidTankWeight_DB" />
+        </Instance>
+        <Parameter Name="MinValue" Section="Input" Type="UInt" />
+        <Parameter Name="MaxValue" Section="Input" Type="UInt" />
+        <Parameter Name="ILoadCell" Section="Input" Type="UInt" />
+        <Parameter Name="Const_V" Section="Input" Type="UInt" />
+        <Parameter Name="Const_SubWeight" Section="Input" Type="Real" />
+        <Parameter Name="Const_Kg" Section="Input" Type="UInt" />
+        <Parameter Name="OWeight" Section="Output" Type="UInt" />
+      </CallInfo>
+    </Call>
+  </Parts>
+  <Wires>
+    <Wire UId="30">
+      <Powerrail />
+      <NameCon UId="23" Name="en" />
+    </Wire>
+    <Wire UId="31">
+      <OpenCon UId="25" />
+      <NameCon UId="23" Name="MinValue" />
+    </Wire>
+    <Wire UId="32">
+      <OpenCon UId="26" />
+      <NameCon UId="23" Name="MaxValue" />
+    </Wire>
+    <Wire UId="33">
+      <IdentCon UId="21" />
+      <NameCon UId="23" Name="ILoadCell" />
+    </Wire>
+    <Wire UId="34">
+      <OpenCon UId="27" />
+      <NameCon UId="23" Name="Const_V" />
+    </Wire>
+    <Wire UId="35">
+      <OpenCon UId="28" />
+      <NameCon UId="23" Name="Const_SubWeight" />
+    </Wire>
+    <Wire UId="36">
+      <OpenCon UId="29" />
+      <NameCon UId="23" Name="Const_Kg" />
+    </Wire>
+    <Wire UId="37">
+      <NameCon UId="23" Name="OWeight" />
+      <IdentCon UId="22" />
+    </Wire>
+  </Wires>
+</FlgNet></NetworkSource>
+          <ProgrammingLanguage>LAD</ProgrammingLanguage>
+        </AttributeList>
+        <ObjectList>
+          <MultilingualText ID="E" CompositionName="Comment">
+            <ObjectList>
+              <MultilingualTextItem ID="F" CompositionName="Items">
+                <AttributeList>
+                  <Culture>en-US</Culture>
+                  <Text />
+                </AttributeList>
+              </MultilingualTextItem>
+            </ObjectList>
+          </MultilingualText>
+          <MultilingualText ID="10" CompositionName="Title">
+            <ObjectList>
+              <MultilingualTextItem ID="11" CompositionName="Items">
+                <AttributeList>
+                  <Culture>en-US</Culture>
+                  <Text>Fluid Tank Weight</Text>
+                </AttributeList>
+              </MultilingualTextItem>
+            </ObjectList>
+          </MultilingualText>
+        </ObjectList>
+      </SW.Blocks.CompileUnit>
+      <SW.Blocks.CompileUnit ID="12" CompositionName="CompileUnits">
+        <AttributeList>
+          <NetworkSource><FlgNet xmlns="http://www.siemens.com/automation/Openness/SW/NetworkSource/FlgNet/v4">
+  <Parts>
+    <Access Scope="GlobalVariable" UId="21">
+      <Symbol>
+        <Component Name="Load_Cell_Waste" />
+      </Symbol>
+    </Access>
+    <Access Scope="LiteralConstant" UId="22">
+      <Constant>
+        <ConstantType>UInt</ConstantType>
+        <ConstantValue>10</ConstantValue>
+      </Constant>
+    </Access>
+    <Access Scope="GlobalVariable" UId="23">
+      <Symbol>
+        <Component Name="WebDB" />
+        <Component Name="WeightWastTank" />
+      </Symbol>
+    </Access>
+    <Call UId="24">
+      <CallInfo Name="LoadCell" BlockType="FB">
+        <Instance Scope="GlobalVariable" UId="25">
+          <Component Name="LoadCell_WasteTankWeight_DB" />
+        </Instance>
+        <Parameter Name="MinValue" Section="Input" Type="UInt" />
+        <Parameter Name="MaxValue" Section="Input" Type="UInt" />
+        <Parameter Name="ILoadCell" Section="Input" Type="UInt" />
+        <Parameter Name="Const_V" Section="Input" Type="UInt" />
+        <Parameter Name="Const_SubWeight" Section="Input" Type="Real" />
+        <Parameter Name="Const_Kg" Section="Input" Type="UInt" />
+        <Parameter Name="OWeight" Section="Output" Type="UInt" />
+      </CallInfo>
+    </Call>
+  </Parts>
+  <Wires>
+    <Wire UId="30">
+      <Powerrail />
+      <NameCon UId="24" Name="en" />
+    </Wire>
+    <Wire UId="31">
+      <OpenCon UId="26" />
+      <NameCon UId="24" Name="MinValue" />
+    </Wire>
+    <Wire UId="32">
+      <OpenCon UId="27" />
+      <NameCon UId="24" Name="MaxValue" />
+    </Wire>
+    <Wire UId="33">
+      <IdentCon UId="21" />
+      <NameCon UId="24" Name="ILoadCell" />
+    </Wire>
+    <Wire UId="34">
+      <IdentCon UId="22" />
+      <NameCon UId="24" Name="Const_V" />
+    </Wire>
+    <Wire UId="35">
+      <OpenCon UId="28" />
+      <NameCon UId="24" Name="Const_SubWeight" />
+    </Wire>
+    <Wire UId="36">
+      <OpenCon UId="29" />
+      <NameCon UId="24" Name="Const_Kg" />
+    </Wire>
+    <Wire UId="37">
+      <NameCon UId="24" Name="OWeight" />
+      <IdentCon UId="23" />
+    </Wire>
+  </Wires>
+</FlgNet></NetworkSource>
+          <ProgrammingLanguage>LAD</ProgrammingLanguage>
+        </AttributeList>
+        <ObjectList>
+          <MultilingualText ID="13" CompositionName="Comment">
+            <ObjectList>
+              <MultilingualTextItem ID="14" CompositionName="Items">
+                <AttributeList>
+                  <Culture>en-US</Culture>
+                  <Text />
+                </AttributeList>
+              </MultilingualTextItem>
+            </ObjectList>
+          </MultilingualText>
+          <MultilingualText ID="15" CompositionName="Title">
+            <ObjectList>
+              <MultilingualTextItem ID="16" CompositionName="Items">
+                <AttributeList>
+                  <Culture>en-US</Culture>
+                  <Text>Fluid Waste Weight</Text>
+                </AttributeList>
+              </MultilingualTextItem>
+            </ObjectList>
+          </MultilingualText>
+        </ObjectList>
+      </SW.Blocks.CompileUnit>
+      <SW.Blocks.CompileUnit ID="17" CompositionName="CompileUnits">
+        <AttributeList>
+          <NetworkSource><FlgNet xmlns="http://www.siemens.com/automation/Openness/SW/NetworkSource/FlgNet/v4">
+  <Parts>
+    <Access Scope="GlobalVariable" UId="21">
+      <Symbol>
+        <Component Name="MainDB" />
+        <Component Name="Step10" />
+      </Symbol>
+    </Access>
+    <Access Scope="GlobalVariable" UId="22">
+      <Symbol>
+        <Component Name="WebDB" />
+        <Component Name="SystemStatus" />
+        <Component Name="Emergency" />
+      </Symbol>
+    </Access>
+    <Access Scope="GlobalVariable" UId="23">
+      <Symbol>
+        <Component Name="ESTOP_Button" />
+      </Symbol>
+    </Access>
+    <Access Scope="GlobalVariable" UId="24">
+      <Symbol>
+        <Component Name="MainDB" />
+        <Component Name="Step40" />
+      </Symbol>
+    </Access>
+    <Access Scope="GlobalVariable" UId="25">
+      <Symbol>
+        <Component Name="WebDB" />
+        <Component Name="SystemStatus" />
+        <Component Name="Emergency" />
+      </Symbol>
+    </Access>
+    <Access Scope="GlobalVariable" UId="26">
+      <Symbol>
+        <Component Name="ESTOP_Button" />
+      </Symbol>
+    </Access>
+    <Access Scope="GlobalVariable" UId="27">
+      <Symbol>
+        <Component Name="ESTOP_Button" />
+      </Symbol>
+    </Access>
+    <Access Scope="GlobalVariable" UId="28">
+      <Symbol>
+        <Component Name="WebDB" />
+        <Component Name="SystemStatus" />
+        <Component Name="Emergency" />
+      </Symbol>
+    </Access>
+    <Access Scope="GlobalVariable" UId="29">
+      <Symbol>
+        <Component Name="MainDB" />
+        <Component Name="Step50" />
+      </Symbol>
+    </Access>
+    <Access Scope="GlobalVariable" UId="30">
+      <Symbol>
+        <Component Name="ESTOP_Button" />
+      </Symbol>
+    </Access>
+    <Access Scope="GlobalVariable" UId="31">
+      <Symbol>
+        <Component Name="MainDB" />
+        <Component Name="Step30" />
+      </Symbol>
+    </Access>
+    <Access Scope="GlobalVariable" UId="32">
+      <Symbol>
+        <Component Name="MainDB" />
+        <Component Name="Step20" />
+      </Symbol>
+    </Access>
+    <Access Scope="GlobalVariable" UId="33">
+      <Symbol>
+        <Component Name="WebDB" />
+        <Component Name="SystemStatus" />
+        <Component Name="Emergency" />
+      </Symbol>
+    </Access>
+    <Access Scope="GlobalVariable" UId="34">
+      <Symbol>
+        <Component Name="ESTOP_Button" />
+      </Symbol>
+    </Access>
+    <Access Scope="GlobalVariable" UId="35">
+      <Symbol>
+        <Component Name="LED_1_Output" />
+      </Symbol>
+    </Access>
+    <Access Scope="GlobalVariable" UId="36">
+      <Symbol>
+        <Component Name="LED_2_Output" />
+      </Symbol>
+    </Access>
+    <Part Name="Contact" UId="37" />
+    <Part Name="Contact" UId="38">
+      <Negated Name="operand" />
+    </Part>
+    <Part Name="Contact" UId="39" />
+    <Part Name="Contact" UId="40" />
+    <Part Name="Contact" UId="41">
+      <Negated Name="operand" />
+    </Part>
+    <Part Name="Contact" UId="42" />
+    <Part Name="Contact" UId="43">
+      <Negated Name="operand" />
+    </Part>
+    <Part Name="Contact" UId="44" />
+    <Part Name="O" UId="45">
+      <TemplateValue Name="Card" Type="Cardinality">2</TemplateValue>
+    </Part>
+    <Part Name="Contact" UId="46" />
+    <Part Name="Contact" UId="47" />
+    <Part Name="Contact" UId="48" />
+    <Part Name="Contact" UId="49" />
+    <Part Name="O" UId="50">
+      <TemplateValue Name="Card" Type="Cardinality">2</TemplateValue>
+    </Part>
+    <Part Name="Contact" UId="51">
+      <Negated Name="operand" />
+    </Part>
+    <Part Name="Contact" UId="52" />
+    <Call UId="53">
+      <CallInfo Name="LED_Behavior" BlockType="FB">
+        <Instance Scope="GlobalVariable" UId="54">
+          <Component Name="LED_Behavior_DB" />
+        </Instance>
+        <Parameter Name="RED" Section="Input" Type="Bool" />
+        <Parameter Name="GREEN" Section="Input" Type="Bool" />
+        <Parameter Name="RED_BLINK" Section="Input" Type="Bool" />
+        <Parameter Name="GREEN_BLINK" Section="Input" Type="Bool" />
+        <Parameter Name="RED_GREEN_BLINK" Section="Input" Type="Bool" />
+        <Parameter Name="LED_1_Output" Section="Output" Type="Bool" />
+        <Parameter Name="LED_2_Output" Section="Output" Type="Bool" />
+      </CallInfo>
+    </Call>
+  </Parts>
+  <Wires>
+    <Wire UId="55">
+      <Powerrail />
+      <NameCon UId="53" Name="en" />
+      <NameCon UId="37" Name="in" />
+      <NameCon UId="40" Name="in" />
+      <NameCon UId="43" Name="in" />
+      <NameCon UId="44" Name="in" />
+      <NameCon UId="46" Name="in" />
+      <NameCon UId="48" Name="in" />
+      <NameCon UId="49" Name="in" />
+    </Wire>
+    <Wire UId="56">
+      <IdentCon UId="21" />
+      <NameCon UId="37" Name="operand" />
+    </Wire>
+    <Wire UId="57">
+      <NameCon UId="37" Name="out" />
+      <NameCon UId="38" Name="in" />
+    </Wire>
+    <Wire UId="58">
+      <IdentCon UId="22" />
+      <NameCon UId="38" Name="operand" />
+    </Wire>
+    <Wire UId="59">
+      <NameCon UId="38" Name="out" />
+      <NameCon UId="39" Name="in" />
+    </Wire>
+    <Wire UId="60">
+      <IdentCon UId="23" />
+      <NameCon UId="39" Name="operand" />
+    </Wire>
+    <Wire UId="61">
+      <NameCon UId="39" Name="out" />
+      <NameCon UId="53" Name="RED" />
+    </Wire>
+    <Wire UId="62">
+      <IdentCon UId="24" />
+      <NameCon UId="40" Name="operand" />
+    </Wire>
+    <Wire UId="63">
+      <NameCon UId="40" Name="out" />
+      <NameCon UId="41" Name="in" />
+    </Wire>
+    <Wire UId="64">
+      <IdentCon UId="25" />
+      <NameCon UId="41" Name="operand" />
+    </Wire>
+    <Wire UId="65">
+      <NameCon UId="41" Name="out" />
+      <NameCon UId="42" Name="in" />
+    </Wire>
+    <Wire UId="66">
+      <IdentCon UId="26" />
+      <NameCon UId="42" Name="operand" />
+    </Wire>
+    <Wire UId="67">
+      <NameCon UId="42" Name="out" />
+      <NameCon UId="53" Name="GREEN" />
+    </Wire>
+    <Wire UId="68">
+      <IdentCon UId="27" />
+      <NameCon UId="43" Name="operand" />
+    </Wire>
+    <Wire UId="69">
+      <NameCon UId="43" Name="out" />
+      <NameCon UId="45" Name="in1" />
+    </Wire>
+    <Wire UId="70">
+      <IdentCon UId="28" />
+      <NameCon UId="44" Name="operand" />
+    </Wire>
+    <Wire UId="71">
+      <NameCon UId="44" Name="out" />
+      <NameCon UId="45" Name="in2" />
+    </Wire>
+    <Wire UId="72">
+      <NameCon UId="45" Name="out" />
+      <NameCon UId="53" Name="RED_BLINK" />
+    </Wire>
+    <Wire UId="73">
+      <IdentCon UId="29" />
+      <NameCon UId="46" Name="operand" />
+    </Wire>
+    <Wire UId="74">
+      <NameCon UId="46" Name="out" />
+      <NameCon UId="47" Name="in" />
+    </Wire>
+    <Wire UId="75">
+      <IdentCon UId="30" />
+      <NameCon UId="47" Name="operand" />
+    </Wire>
+    <Wire UId="76">
+      <NameCon UId="47" Name="out" />
+      <NameCon UId="53" Name="GREEN_BLINK" />
+    </Wire>
+    <Wire UId="77">
+      <IdentCon UId="31" />
+      <NameCon UId="48" Name="operand" />
+    </Wire>
+    <Wire UId="78">
+      <NameCon UId="48" Name="out" />
+      <NameCon UId="50" Name="in1" />
+    </Wire>
+    <Wire UId="79">
+      <IdentCon UId="32" />
+      <NameCon UId="49" Name="operand" />
+    </Wire>
+    <Wire UId="80">
+      <NameCon UId="49" Name="out" />
+      <NameCon UId="50" Name="in2" />
+    </Wire>
+    <Wire UId="81">
+      <NameCon UId="50" Name="out" />
+      <NameCon UId="51" Name="in" />
+    </Wire>
+    <Wire UId="82">
+      <IdentCon UId="33" />
+      <NameCon UId="51" Name="operand" />
+    </Wire>
+    <Wire UId="83">
+      <NameCon UId="51" Name="out" />
+      <NameCon UId="52" Name="in" />
+    </Wire>
+    <Wire UId="84">
+      <IdentCon UId="34" />
+      <NameCon UId="52" Name="operand" />
+    </Wire>
+    <Wire UId="85">
+      <NameCon UId="52" Name="out" />
+      <NameCon UId="53" Name="RED_GREEN_BLINK" />
+    </Wire>
+    <Wire UId="86">
+      <NameCon UId="53" Name="LED_1_Output" />
+      <IdentCon UId="35" />
+    </Wire>
+    <Wire UId="87">
+      <NameCon UId="53" Name="LED_2_Output" />
+      <IdentCon UId="36" />
+    </Wire>
+  </Wires>
+</FlgNet></NetworkSource>
+          <ProgrammingLanguage>LAD</ProgrammingLanguage>
+        </AttributeList>
+        <ObjectList>
+          <MultilingualText ID="18" CompositionName="Comment">
+            <ObjectList>
+              <MultilingualTextItem ID="19" CompositionName="Items">
+                <AttributeList>
+                  <Culture>en-US</Culture>
+                  <Text />
+                </AttributeList>
+              </MultilingualTextItem>
+            </ObjectList>
+          </MultilingualText>
+          <MultilingualText ID="1A" CompositionName="Title">
+            <ObjectList>
+              <MultilingualTextItem ID="1B" CompositionName="Items">
+                <AttributeList>
+                  <Culture>en-US</Culture>
+                  <Text>Led Behavior</Text>
+                </AttributeList>
+              </MultilingualTextItem>
+            </ObjectList>
+          </MultilingualText>
+        </ObjectList>
+      </SW.Blocks.CompileUnit>
+      <SW.Blocks.CompileUnit ID="1C" CompositionName="CompileUnits">
+        <AttributeList>
+          <NetworkSource><FlgNet xmlns="http://www.siemens.com/automation/Openness/SW/NetworkSource/FlgNet/v4">
+  <Parts>
+    <Access Scope="GlobalVariable" UId="21">
+      <Symbol>
+        <Component Name="ESTOP_Button" />
+      </Symbol>
+    </Access>
+    <Access Scope="GlobalVariable" UId="22">
+      <Symbol>
+        <Component Name="MachineDB" />
+        <Component Name="SerialNumber" />
+      </Symbol>
+    </Access>
+    <Access Scope="GlobalVariable" UId="23">
+      <Symbol>
+        <Component Name="MachineDB" />
+        <Component Name="ArmadilloOption" />
+        <Component Name="CappingStationOption" />
+      </Symbol>
+    </Access>
+    <Access Scope="GlobalVariable" UId="24">
+      <Symbol>
+        <Component Name="WebDB" />
+        <Component Name="Start_Machine" />
+      </Symbol>
+    </Access>
+    <Access Scope="GlobalVariable" UId="25">
+      <Symbol>
+        <Component Name="CappingSensor" />
+      </Symbol>
+    </Access>
+    <Access Scope="GlobalVariable" UId="26">
+      <Symbol>
+        <Component Name="WebDB" />
+        <Component Name="XOutput" />
+        <Component Name="DriveMoving" />
+      </Symbol>
+    </Access>
+    <Access Scope="GlobalVariable" UId="27">
+      <Symbol>
+        <Component Name="WebDB" />
+        <Component Name="YOutput" />
+        <Component Name="DriveMoving" />
+      </Symbol>
+    </Access>
+    <Access Scope="GlobalVariable" UId="28">
+      <Symbol>
+        <Component Name="WebDB" />
+        <Component Name="SystemStatus" />
+        <Component Name="DoorSensor" />
+      </Symbol>
+    </Access>
+    <Access Scope="GlobalVariable" UId="29">
+      <Symbol>
+        <Component Name="WebDB" />
+        <Component Name="CappingStationInput" />
+        <Component Name="CSMoveUP" />
+      </Symbol>
+    </Access>
+    <Access Scope="GlobalVariable" UId="30">
+      <Symbol>
+        <Component Name="WebDB" />
+        <Component Name="CappingStationInput" />
+        <Component Name="CSMoveDOWN" />
+      </Symbol>
+    </Access>
+    <Access Scope="GlobalVariable" UId="31">
+      <Symbol>
+        <Component Name="WebDB" />
+        <Component Name="CappingStationOuput" />
+        <Component Name="CSPositionUP" />
+      </Symbol>
+    </Access>
+    <Access Scope="GlobalVariable" UId="32">
+      <Symbol>
+        <Component Name="WebDB" />
+        <Component Name="CappingStationOuput" />
+        <Component Name="CSPositionDOWN" />
+      </Symbol>
+    </Access>
+    <Access Scope="GlobalVariable" UId="33">
+      <Symbol>
+        <Component Name="WebDB" />
+        <Component Name="CappingStationOuput" />
+        <Component Name="CSXYMotionLock" />
+      </Symbol>
+    </Access>
+    <Access Scope="GlobalVariable" UId="34">
+      <Symbol>
+        <Component Name="WebDB" />
+        <Component Name="CappingStationOuput" />
+        <Component Name="CSPosition" />
+      </Symbol>
+    </Access>
+    <Call UId="35">
+      <CallInfo Name="Capping_Station" BlockType="FB">
+        <Instance Scope="GlobalVariable" UId="36">
+          <Component Name="Capping_Station_DB" />
+        </Instance>
+        <Parameter Name="ESTOP" Section="Input" Type="Bool" />
+        <Parameter Name="SerialNumber" Section="Input" Type="Int" />
+        <Parameter Name="CappingOption" Section="Input" Type="Int" />
+        <Parameter Name="MachineStart" Section="Input" Type="Bool" />
+        <Parameter Name="CappingSensor" Section="Input" Type="UInt" />
+        <Parameter Name="JogPOS" Section="Input" Type="Bool" />
+        <Parameter Name="JogNEG" Section="Input" Type="Bool" />
+        <Parameter Name="MoveRel" Section="Input" Type="Bool" />
+        <Parameter Name="AxisXNotMoving" Section="Input" Type="Bool" />
+        <Parameter Name="AxisYNotMoving" Section="Input" Type="Bool" />
+        <Parameter Name="DoorSensor" Section="Input" Type="Bool" />
+        <Parameter Name="MovingUP" Section="Output" Type="Bool" />
+        <Parameter Name="MovingDOWN" Section="Output" Type="Bool" />
+        <Parameter Name="CSPositionUP" Section="Output" Type="Bool" />
+        <Parameter Name="CSPositionDOWN" Section="Output" Type="Bool" />
+        <Parameter Name="CSXYMotionLock" Section="Output" Type="Bool" />
+        <Parameter Name="CappingPosition" Section="Output" Type="UInt" />
+        <Parameter Name="MaintenanceNeeded" Section="Output" Type="Bool" />
+        <Parameter Name="CSMoveUP" Section="InOut" Type="Bool" />
+        <Parameter Name="CSMoveDOWN" Section="InOut" Type="Bool" />
+      </CallInfo>
+    </Call>
+  </Parts>
+  <Wires>
+    <Wire UId="43">
+      <Powerrail />
+      <NameCon UId="35" Name="en" />
+    </Wire>
+    <Wire UId="44">
+      <IdentCon UId="21" />
+      <NameCon UId="35" Name="ESTOP" />
+    </Wire>
+    <Wire UId="45">
+      <IdentCon UId="22" />
+      <NameCon UId="35" Name="SerialNumber" />
+    </Wire>
+    <Wire UId="46">
+      <IdentCon UId="23" />
+      <NameCon UId="35" Name="CappingOption" />
+    </Wire>
+    <Wire UId="47">
+      <IdentCon UId="24" />
+      <NameCon UId="35" Name="MachineStart" />
+    </Wire>
+    <Wire UId="48">
+      <IdentCon UId="25" />
+      <NameCon UId="35" Name="CappingSensor" />
+    </Wire>
+    <Wire UId="49">
+      <OpenCon UId="37" />
+      <NameCon UId="35" Name="JogPOS" />
+    </Wire>
+    <Wire UId="50">
+      <OpenCon UId="38" />
+      <NameCon UId="35" Name="JogNEG" />
+    </Wire>
+    <Wire UId="51">
+      <OpenCon UId="39" />
+      <NameCon UId="35" Name="MoveRel" />
+    </Wire>
+    <Wire UId="52">
+      <IdentCon UId="26" />
+      <NameCon UId="35" Name="AxisXNotMoving" />
+    </Wire>
+    <Wire UId="53">
+      <IdentCon UId="27" />
+      <NameCon UId="35" Name="AxisYNotMoving" />
+    </Wire>
+    <Wire UId="54">
+      <IdentCon UId="28" />
+      <NameCon UId="35" Name="DoorSensor" />
+    </Wire>
+    <Wire UId="55">
+      <IdentCon UId="29" />
+      <NameCon UId="35" Name="CSMoveUP" />
+    </Wire>
+    <Wire UId="56">
+      <IdentCon UId="30" />
+      <NameCon UId="35" Name="CSMoveDOWN" />
+    </Wire>
+    <Wire UId="57">
+      <NameCon UId="35" Name="MovingUP" />
+      <OpenCon UId="40" />
+    </Wire>
+    <Wire UId="58">
+      <NameCon UId="35" Name="MovingDOWN" />
+      <OpenCon UId="41" />
+    </Wire>
+    <Wire UId="59">
+      <NameCon UId="35" Name="CSPositionUP" />
+      <IdentCon UId="31" />
+    </Wire>
+    <Wire UId="60">
+      <NameCon UId="35" Name="CSPositionDOWN" />
+      <IdentCon UId="32" />
+    </Wire>
+    <Wire UId="61">
+      <NameCon UId="35" Name="CSXYMotionLock" />
+      <IdentCon UId="33" />
+    </Wire>
+    <Wire UId="62">
+      <NameCon UId="35" Name="CappingPosition" />
+      <IdentCon UId="34" />
+    </Wire>
+    <Wire UId="63">
+      <NameCon UId="35" Name="MaintenanceNeeded" />
+      <OpenCon UId="42" />
+    </Wire>
+  </Wires>
+</FlgNet></NetworkSource>
+          <ProgrammingLanguage>LAD</ProgrammingLanguage>
+        </AttributeList>
+        <ObjectList>
+          <MultilingualText ID="1D" CompositionName="Comment">
+            <ObjectList>
+              <MultilingualTextItem ID="1E" CompositionName="Items">
+                <AttributeList>
+                  <Culture>en-US</Culture>
+                  <Text />
+                </AttributeList>
+              </MultilingualTextItem>
+            </ObjectList>
+          </MultilingualText>
+          <MultilingualText ID="1F" CompositionName="Title">
+            <ObjectList>
+              <MultilingualTextItem ID="20" CompositionName="Items">
+                <AttributeList>
+                  <Culture>en-US</Culture>
+                  <Text>Capping Station</Text>
+                </AttributeList>
+              </MultilingualTextItem>
+            </ObjectList>
+          </MultilingualText>
+        </ObjectList>
+      </SW.Blocks.CompileUnit>
+      <SW.Blocks.CompileUnit ID="21" CompositionName="CompileUnits">
+        <AttributeList>
+          <NetworkSource><FlgNet xmlns="http://www.siemens.com/automation/Openness/SW/NetworkSource/FlgNet/v4">
+  <Parts>
+    <Access Scope="GlobalVariable" UId="21">
+      <Symbol>
+        <Component Name="FTON_FirstTurnON" />
+        <Component Name="FTON_Turn_On_Test_Blocks" />
+      </Symbol>
+    </Access>
+    <Access Scope="GlobalVariable" UId="22">
+      <Symbol>
+        <Component Name="FTON_FirstTurnON" />
+        <Component Name="FTON_Run_Test_01" />
+      </Symbol>
+    </Access>
+    <Access Scope="GlobalVariable" UId="23">
+      <Symbol>
+        <Component Name="WebDB" />
+        <Component Name="Z2Output" />
+        <Component Name="ActualPosition" />
+      </Symbol>
+    </Access>
+    <Access Scope="GlobalVariable" UId="24">
+      <Symbol>
+        <Component Name="WebDB" />
+        <Component Name="Z2Output" />
+        <Component Name="HomingValid" />
+      </Symbol>
+    </Access>
+    <Access Scope="GlobalVariable" UId="25">
+      <Symbol>
+        <Component Name="WebDB" />
+        <Component Name="Z2Input" />
+        <Component Name="StartTask" />
+      </Symbol>
+    </Access>
+    <Access Scope="GlobalVariable" UId="26">
+      <Symbol>
+        <Component Name="WebDB" />
+        <Component Name="Z2Input" />
+        <Component Name="StartTask" />
+      </Symbol>
+    </Access>
+    <Access Scope="GlobalVariable" UId="27">
+      <Symbol>
+        <Component Name="WebDB" />
+        <Component Name="Start_Machine" />
+      </Symbol>
+    </Access>
+    <Access Scope="GlobalVariable" UId="28">
+      <Symbol>
+        <Component Name="WebDB" />
+        <Component Name="Z2Input" />
+        <Component Name="SetValuePosition" />
+      </Symbol>
+    </Access>
+    <Part Name="Contact" UId="29" />
+    <Call UId="30">
+      <CallInfo Name="Initial_Test_Squence" BlockType="FB">
+        <Instance Scope="GlobalVariable" UId="31">
+          <Component Name="Initial_Test_Squence_DB" />
+        </Instance>
+        <Parameter Name="ON" Section="Input" Type="Bool" />
+        <Parameter Name="Position" Section="Input" Type="DInt" />
+        <Parameter Name="HomingOK" Section="Input" Type="Bool" />
+        <Parameter Name="InputTask" Section="Input" Type="Bool" />
+        <Parameter Name="StepSizeInput" Section="Input" Type="DInt" />
+        <Parameter Name="AmountOfSteps" Section="Input" Type="Int" />
+        <Parameter Name="StartMachine" Section="Output" Type="Bool" />
+        <Parameter Name="StartHoming" Section="Output" Type="Bool" />
+        <Parameter Name="StepSizeOutput" Section="Output" Type="DInt" />
+        <Parameter Name="TestFinished" Section="Output" Type="Bool" />
+        <Parameter Name="StartPosition" Section="Output" Type="DInt" />
+        <Parameter Name="EndPositon" Section="Output" Type="DInt" />
+        <Parameter Name="StartTask" Section="InOut" Type="Bool" />
+      </CallInfo>
+    </Call>
+  </Parts>
+  <Wires>
+    <Wire UId="38">
+      <Powerrail />
+      <NameCon UId="29" Name="in" />
+    </Wire>
+    <Wire UId="39">
+      <IdentCon UId="21" />
+      <NameCon UId="29" Name="operand" />
+    </Wire>
+    <Wire UId="40">
+      <NameCon UId="29" Name="out" />
+      <NameCon UId="30" Name="en" />
+    </Wire>
+    <Wire UId="41">
+      <IdentCon UId="22" />
+      <NameCon UId="30" Name="ON" />
+    </Wire>
+    <Wire UId="42">
+      <IdentCon UId="23" />
+      <NameCon UId="30" Name="Position" />
+    </Wire>
+    <Wire UId="43">
+      <IdentCon UId="24" />
+      <NameCon UId="30" Name="HomingOK" />
+    </Wire>
+    <Wire UId="44">
+      <IdentCon UId="25" />
+      <NameCon UId="30" Name="InputTask" />
+    </Wire>
+    <Wire UId="45">
+      <OpenCon UId="32" />
+      <NameCon UId="30" Name="StepSizeInput" />
+    </Wire>
+    <Wire UId="46">
+      <OpenCon UId="33" />
+      <NameCon UId="30" Name="AmountOfSteps" />
+    </Wire>
+    <Wire UId="47">
+      <IdentCon UId="26" />
+      <NameCon UId="30" Name="StartTask" />
+    </Wire>
+    <Wire UId="48">
+      <NameCon UId="30" Name="StartMachine" />
+      <IdentCon UId="27" />
+    </Wire>
+    <Wire UId="49">
+      <NameCon UId="30" Name="StartHoming" />
+      <OpenCon UId="34" />
+    </Wire>
+    <Wire UId="50">
+      <NameCon UId="30" Name="StepSizeOutput" />
+      <IdentCon UId="28" />
+    </Wire>
+    <Wire UId="51">
+      <NameCon UId="30" Name="TestFinished" />
+      <OpenCon UId="35" />
+    </Wire>
+    <Wire UId="52">
+      <NameCon UId="30" Name="StartPosition" />
+      <OpenCon UId="36" />
+    </Wire>
+    <Wire UId="53">
+      <NameCon UId="30" Name="EndPositon" />
+      <OpenCon UId="37" />
+    </Wire>
+  </Wires>
+</FlgNet></NetworkSource>
+          <ProgrammingLanguage>LAD</ProgrammingLanguage>
+        </AttributeList>
+        <ObjectList>
+          <MultilingualText ID="22" CompositionName="Comment">
+            <ObjectList>
+              <MultilingualTextItem ID="23" CompositionName="Items">
+                <AttributeList>
+                  <Culture>en-US</Culture>
+                  <Text />
+                </AttributeList>
+              </MultilingualTextItem>
+            </ObjectList>
+          </MultilingualText>
+          <MultilingualText ID="24" CompositionName="Title">
+            <ObjectList>
+              <MultilingualTextItem ID="25" CompositionName="Items">
+                <AttributeList>
+                  <Culture>en-US</Culture>
+                  <Text>Initial Test Sequence</Text>
+                </AttributeList>
+              </MultilingualTextItem>
+            </ObjectList>
+          </MultilingualText>
+        </ObjectList>
+      </SW.Blocks.CompileUnit>
+      <SW.Blocks.CompileUnit ID="26" CompositionName="CompileUnits">
+        <AttributeList>
+          <NetworkSource><FlgNet xmlns="http://www.siemens.com/automation/Openness/SW/NetworkSource/FlgNet/v4">
+  <Parts>
+    <Access Scope="GlobalVariable" UId="21">
+      <Symbol>
+        <Component Name="MachineDB" />
+        <Component Name="ArmadilloOption" />
+        <Component Name="UVOption" />
+      </Symbol>
+    </Access>
+    <Access Scope="LiteralConstant" UId="22">
+      <Constant>
+        <ConstantType>Int</ConstantType>
+        <ConstantValue>1</ConstantValue>
+      </Constant>
+    </Access>
+    <Access Scope="GlobalVariable" UId="23">
+      <Symbol>
+        <Component Name="WebDB" />
+        <Component Name="UVLampInput" />
+        <Component Name="UVLampEnable" />
+      </Symbol>
+    </Access>
+    <Access Scope="GlobalVariable" UId="24">
+      <Symbol>
+        <Component Name="SENSOR_DOOR" />
+      </Symbol>
+    </Access>
+    <Access Scope="GlobalVariable" UId="25">
+      <Symbol>
+        <Component Name="SENSOR_DOOR_2" />
+      </Symbol>
+    </Access>
+    <Access Scope="GlobalVariable" UId="26">
+      <Symbol>
+        <Component Name="SENSOR_DOOR_3" />
+      </Symbol>
+    </Access>
+    <Access Scope="GlobalVariable" UId="27">
+      <Symbol>
+        <Component Name="SENSOR_DOOR_4" />
+      </Symbol>
+    </Access>
+    <Access Scope="GlobalVariable" UId="28">
+      <Symbol>
+        <Component Name="SENSOR_DOOR_5" />
+      </Symbol>
+    </Access>
+    <Access Scope="GlobalVariable" UId="29">
+      <Symbol>
+        <Component Name="SENSOR_DOOR_6" />
+      </Symbol>
+    </Access>
+    <Access Scope="GlobalVariable" UId="30">
+      <Symbol>
+        <Component Name="ESTOP_Button" />
+      </Symbol>
+    </Access>
+    <Access Scope="GlobalVariable" UId="31">
+      <Symbol>
+        <Component Name="WebDB" />
+        <Component Name="Start_Machine" />
+      </Symbol>
+    </Access>
+    <Access Scope="GlobalVariable" UId="32">
+      <Symbol>
+        <Component Name="WebDB" />
+        <Component Name="UVLampInput" />
+        <Component Name="UVLampMode" />
+      </Symbol>
+    </Access>
+    <Access Scope="GlobalVariable" UId="33">
+      <Symbol>
+        <Component Name="WebDB" />
+        <Component Name="UVLampInput" />
+        <Component Name="UVLampSetpoint" />
+      </Symbol>
+    </Access>
+    <Access Scope="GlobalVariable" UId="34">
+      <Symbol>
+        <Component Name="WebDB" />
+        <Component Name="UVLampInput" />
+        <Component Name="UVLampMaintenance" />
+      </Symbol>
+    </Access>
+    <Access Scope="GlobalVariable" UId="35">
+      <Symbol>
+        <Component Name="UV_Error_Signal" />
+      </Symbol>
+    </Access>
+    <Access Scope="GlobalVariable" UId="36">
+      <Symbol>
+        <Component Name="WebDB" />
+        <Component Name="XOutput" />
+        <Component Name="ActualPosition" />
+      </Symbol>
+    </Access>
+    <Access Scope="GlobalVariable" UId="37">
+      <Symbol>
+        <Component Name="WebDB" />
+        <Component Name="YOutput" />
+        <Component Name="ActualPosition" />
+      </Symbol>
+    </Access>
+    <Access Scope="GlobalVariable" UId="38">
+      <Symbol>
+        <Component Name="FTON_FirstTurnON" />
+        <Component Name="FTON_UV_Status_Fake" />
+      </Symbol>
+    </Access>
+    <Access Scope="GlobalVariable" UId="39">
+      <Symbol>
+        <Component Name="WebDB" />
+        <Component Name="UVLampInput" />
+        <Component Name="UVLampONOFF" />
+      </Symbol>
+    </Access>
+    <Access Scope="GlobalVariable" UId="40">
+      <Symbol>
+        <Component Name="WebDB" />
+        <Component Name="UVLampOutput" />
+        <Component Name="UVLampEnabled" />
+      </Symbol>
+    </Access>
+    <Access Scope="GlobalVariable" UId="41">
+      <Symbol>
+        <Component Name="WebDB" />
+        <Component Name="UVLampOutput" />
+        <Component Name="UVLampWorking" />
+      </Symbol>
+    </Access>
+    <Access Scope="GlobalVariable" UId="42">
+      <Symbol>
+        <Component Name="UV_CTRL_ON_OFF" />
+      </Symbol>
+    </Access>
+    <Access Scope="GlobalVariable" UId="43">
+      <Symbol>
+        <Component Name="UV_Dimming" />
+      </Symbol>
+    </Access>
+    <Access Scope="GlobalVariable" UId="44">
+      <Symbol>
+        <Component Name="WebDB" />
+        <Component Name="UVLampOutput" />
+        <Component Name="UVLampIntensity" />
+      </Symbol>
+    </Access>
+    <Access Scope="GlobalVariable" UId="45">
+      <Symbol>
+        <Component Name="WebDB" />
+        <Component Name="UVLampOutput" />
+        <Component Name="UVLampError" />
+      </Symbol>
+    </Access>
+    <Part Name="Eq" UId="46">
+      <TemplateValue Name="SrcType" Type="Type">Int</TemplateValue>
+    </Part>
+    <Part Name="Contact" UId="47" />
+    <Part Name="Contact" UId="48" />
+    <Part Name="Contact" UId="49" />
+    <Part Name="Contact" UId="50" />
+    <Part Name="Contact" UId="51" />
+    <Part Name="Contact" UId="52" />
+    <Part Name="Contact" UId="53" />
+    <Call UId="54">
+      <CallInfo Name="UVLamp" BlockType="FB">
+        <Instance Scope="GlobalVariable" UId="55">
+          <Component Name="UVLamp_DB" />
+        </Instance>
+        <Parameter Name="Emergency" Section="Input" Type="Bool" />
+        <Parameter Name="MachineStart" Section="Input" Type="Bool" />
+        <Parameter Name="LampEnable" Section="Input" Type="Bool" />
+        <Parameter Name="LampMode" Section="Input" Type="Int" />
+        <Parameter Name="LampSetpointInput" Section="Input" Type="Real" />
+        <Parameter Name="LampMaintenance" Section="Input" Type="Int" />
+        <Parameter Name="LampFaultSignal" Section="Input" Type="Bool" />
+        <Parameter Name="DoorSensor" Section="Input" Type="Bool" />
+        <Parameter Name="XPosition" Section="Input" Type="DInt" />
+        <Parameter Name="YPosition" Section="Input" Type="DInt" />
+        <Parameter Name="WorkingRegionXstart" Section="Input" Type="DInt" />
+        <Parameter Name="WorkingRegionXend" Section="Input" Type="DInt" />
+        <Parameter Name="WorkingRegionYstart" Section="Input" Type="DInt" />
+        <Parameter Name="WorkingRegionYend" Section="Input" Type="DInt" />
+        <Parameter Name="DevelopmentMode" Section="Input" Type="Bool" />
+        <Parameter Name="FirstTurnOn" Section="Input" Type="Bool" />
+        <Parameter Name="LampEnabled" Section="Output" Type="Bool" />
+        <Parameter Name="LampWorking" Section="Output" Type="Bool" />
+        <Parameter Name="LampOutONOFF" Section="Output" Type="Bool" />
+        <Parameter Name="LampDimming" Section="Output" Type="UInt" />
+        <Parameter Name="LampIntensity" Section="Output" Type="Real" />
+        <Parameter Name="LampError" Section="Output" Type="Bool" />
+        <Parameter Name="LampStatus" Section="Output" Type="Int" />
+        <Parameter Name="LampInONOFF" Section="InOut" Type="Bool" />
+      </CallInfo>
+    </Call>
+  </Parts>
+  <Wires>
+    <Wire UId="62">
+      <Powerrail />
+      <NameCon UId="46" Name="pre" />
+      <NameCon UId="47" Name="in" />
+      <NameCon UId="48" Name="in" />
+    </Wire>
+    <Wire UId="63">
+      <IdentCon UId="21" />
+      <NameCon UId="46" Name="in1" />
+    </Wire>
+    <Wire UId="64">
+      <IdentCon UId="22" />
+      <NameCon UId="46" Name="in2" />
+    </Wire>
+    <Wire UId="65">
+      <NameCon UId="46" Name="out" />
+      <NameCon UId="54" Name="en" />
+    </Wire>
+    <Wire UId="66">
+      <IdentCon UId="23" />
+      <NameCon UId="47" Name="operand" />
+    </Wire>
+    <Wire UId="67">
+      <NameCon UId="47" Name="out" />
+      <NameCon UId="54" Name="LampEnable" />
+    </Wire>
+    <Wire UId="68">
+      <IdentCon UId="24" />
+      <NameCon UId="48" Name="operand" />
+    </Wire>
+    <Wire UId="69">
+      <NameCon UId="48" Name="out" />
+      <NameCon UId="49" Name="in" />
+    </Wire>
+    <Wire UId="70">
+      <IdentCon UId="25" />
+      <NameCon UId="49" Name="operand" />
+    </Wire>
+    <Wire UId="71">
+      <NameCon UId="49" Name="out" />
+      <NameCon UId="50" Name="in" />
+    </Wire>
+    <Wire UId="72">
+      <IdentCon UId="26" />
+      <NameCon UId="50" Name="operand" />
+    </Wire>
+    <Wire UId="73">
+      <NameCon UId="50" Name="out" />
+      <NameCon UId="51" Name="in" />
+    </Wire>
+    <Wire UId="74">
+      <IdentCon UId="27" />
+      <NameCon UId="51" Name="operand" />
+    </Wire>
+    <Wire UId="75">
+      <NameCon UId="51" Name="out" />
+      <NameCon UId="52" Name="in" />
+    </Wire>
+    <Wire UId="76">
+      <IdentCon UId="28" />
+      <NameCon UId="52" Name="operand" />
+    </Wire>
+    <Wire UId="77">
+      <NameCon UId="52" Name="out" />
+      <NameCon UId="53" Name="in" />
+    </Wire>
+    <Wire UId="78">
+      <IdentCon UId="29" />
+      <NameCon UId="53" Name="operand" />
+    </Wire>
+    <Wire UId="79">
+      <NameCon UId="53" Name="out" />
+      <NameCon UId="54" Name="DoorSensor" />
+    </Wire>
+    <Wire UId="80">
+      <IdentCon UId="30" />
+      <NameCon UId="54" Name="Emergency" />
+    </Wire>
+    <Wire UId="81">
+      <IdentCon UId="31" />
+      <NameCon UId="54" Name="MachineStart" />
+    </Wire>
+    <Wire UId="82">
+      <IdentCon UId="32" />
+      <NameCon UId="54" Name="LampMode" />
+    </Wire>
+    <Wire UId="83">
+      <IdentCon UId="33" />
+      <NameCon UId="54" Name="LampSetpointInput" />
+    </Wire>
+    <Wire UId="84">
+      <IdentCon UId="34" />
+      <NameCon UId="54" Name="LampMaintenance" />
+    </Wire>
+    <Wire UId="85">
+      <IdentCon UId="35" />
+      <NameCon UId="54" Name="LampFaultSignal" />
+    </Wire>
+    <Wire UId="86">
+      <IdentCon UId="36" />
+      <NameCon UId="54" Name="XPosition" />
+    </Wire>
+    <Wire UId="87">
+      <IdentCon UId="37" />
+      <NameCon UId="54" Name="YPosition" />
+    </Wire>
+    <Wire UId="88">
+      <OpenCon UId="56" />
+      <NameCon UId="54" Name="WorkingRegionXstart" />
+    </Wire>
+    <Wire UId="89">
+      <OpenCon UId="57" />
+      <NameCon UId="54" Name="WorkingRegionXend" />
+    </Wire>
+    <Wire UId="90">
+      <OpenCon UId="58" />
+      <NameCon UId="54" Name="WorkingRegionYstart" />
+    </Wire>
+    <Wire UId="91">
+      <OpenCon UId="59" />
+      <NameCon UId="54" Name="WorkingRegionYend" />
+    </Wire>
+    <Wire UId="92">
+      <OpenCon UId="60" />
+      <NameCon UId="54" Name="DevelopmentMode" />
+    </Wire>
+    <Wire UId="93">
+      <IdentCon UId="38" />
+      <NameCon UId="54" Name="FirstTurnOn" />
+    </Wire>
+    <Wire UId="94">
+      <IdentCon UId="39" />
+      <NameCon UId="54" Name="LampInONOFF" />
+    </Wire>
+    <Wire UId="95">
+      <NameCon UId="54" Name="LampEnabled" />
+      <IdentCon UId="40" />
+    </Wire>
+    <Wire UId="96">
+      <NameCon UId="54" Name="LampWorking" />
+      <IdentCon UId="41" />
+    </Wire>
+    <Wire UId="97">
+      <NameCon UId="54" Name="LampOutONOFF" />
+      <IdentCon UId="42" />
+    </Wire>
+    <Wire UId="98">
+      <NameCon UId="54" Name="LampDimming" />
+      <IdentCon UId="43" />
+    </Wire>
+    <Wire UId="99">
+      <NameCon UId="54" Name="LampIntensity" />
+      <IdentCon UId="44" />
+    </Wire>
+    <Wire UId="100">
+      <NameCon UId="54" Name="LampError" />
+      <IdentCon UId="45" />
+    </Wire>
+    <Wire UId="101">
+      <NameCon UId="54" Name="LampStatus" />
+      <OpenCon UId="61" />
+    </Wire>
+  </Wires>
+</FlgNet></NetworkSource>
+          <ProgrammingLanguage>LAD</ProgrammingLanguage>
+        </AttributeList>
+        <ObjectList>
+          <MultilingualText ID="27" CompositionName="Comment">
+            <ObjectList>
+              <MultilingualTextItem ID="28" CompositionName="Items">
+                <AttributeList>
+                  <Culture>en-US</Culture>
+                  <Text />
+                </AttributeList>
+              </MultilingualTextItem>
+            </ObjectList>
+          </MultilingualText>
+          <MultilingualText ID="29" CompositionName="Title">
+            <ObjectList>
+              <MultilingualTextItem ID="2A" CompositionName="Items">
+                <AttributeList>
+                  <Culture>en-US</Culture>
+                  <Text>UV Lamp</Text>
+                </AttributeList>
+              </MultilingualTextItem>
+            </ObjectList>
+          </MultilingualText>
+        </ObjectList>
+      </SW.Blocks.CompileUnit>
+      <SW.Blocks.CompileUnit ID="2B" CompositionName="CompileUnits">
+        <AttributeList>
+          <NetworkSource><FlgNet xmlns="http://www.siemens.com/automation/Openness/SW/NetworkSource/FlgNet/v4">
+  <Parts>
+    <Access Scope="GlobalVariable" UId="21">
+      <Symbol>
+        <Component Name="MachineDB" />
+        <Component Name="ArmadilloOption" />
+        <Component Name="StacklightOption" />
+      </Symbol>
+    </Access>
+    <Access Scope="LiteralConstant" UId="22">
+      <Constant>
+        <ConstantType>Int</ConstantType>
+        <ConstantValue>1</ConstantValue>
+      </Constant>
+    </Access>
+    <Access Scope="GlobalVariable" UId="23">
+      <Symbol>
+        <Component Name="ESTOP_Button" />
+      </Symbol>
+    </Access>
+    <Access Scope="GlobalVariable" UId="24">
+      <Symbol>
+        <Component Name="WebDB" />
+        <Component Name="StacklightInput" />
+        <Component Name="StacklightMode" />
+      </Symbol>
+    </Access>
+    <Access Scope="GlobalVariable" UId="25">
+      <Symbol>
+        <Component Name="WebDB" />
+        <Component Name="Ready_Devices" />
+      </Symbol>
+    </Access>
+    <Access Scope="GlobalVariable" UId="26">
+      <Symbol>
+        <Component Name="WebDB" />
+        <Component Name="SystemStatus" />
+        <Component Name="DoorSensor" />
+      </Symbol>
+    </Access>
+    <Access Scope="GlobalVariable" UId="27">
+      <Symbol>
+        <Component Name="WebDB" />
+        <Component Name="Start_Machine" />
+      </Symbol>
+    </Access>
+    <Access Scope="GlobalVariable" UId="28">
+      <Symbol>
+        <Component Name="WebDB" />
+        <Component Name="StacklightInput" />
+        <Component Name="NOAHPrinting" />
+      </Symbol>
+    </Access>
+    <Access Scope="GlobalVariable" UId="29">
+      <Symbol>
+        <Component Name="WebDB" />
+        <Component Name="Fault_Devices" />
+      </Symbol>
+    </Access>
+    <Access Scope="GlobalVariable" UId="30">
+      <Symbol>
+        <Component Name="WebDB" />
+        <Component Name="StacklightInput" />
+        <Component Name="NOAHFluidError" />
+      </Symbol>
+    </Access>
+    <Access Scope="GlobalVariable" UId="31">
+      <Symbol>
+        <Component Name="LED_1_Output" />
+      </Symbol>
+    </Access>
+    <Access Scope="GlobalVariable" UId="32">
+      <Symbol>
+        <Component Name="LED_2_Output" />
+      </Symbol>
+    </Access>
+    <Access Scope="GlobalVariable" UId="33">
+      <Symbol>
+        <Component Name="WebDB" />
+        <Component Name="StacklightInput" />
+        <Component Name="NOAHConnected" />
+      </Symbol>
+    </Access>
+    <Access Scope="GlobalVariable" UId="34">
+      <Symbol>
+        <Component Name="WebDB" />
+        <Component Name="StacklightOutput" />
+        <Component Name="StacklightStatus" />
+      </Symbol>
+    </Access>
+    <Access Scope="GlobalVariable" UId="35">
+      <Symbol>
+        <Component Name="WebDB" />
+        <Component Name="StacklightOutput" />
+        <Component Name="StacklightColor" />
+      </Symbol>
+    </Access>
+    <Access Scope="GlobalVariable" UId="36">
+      <Symbol>
+        <Component Name="Stacklight01" />
+      </Symbol>
+    </Access>
+    <Access Scope="GlobalVariable" UId="37">
+      <Symbol>
+        <Component Name="Stacklight02" />
+      </Symbol>
+    </Access>
+    <Part Name="Eq" UId="38">
+      <TemplateValue Name="SrcType" Type="Type">Int</TemplateValue>
+    </Part>
+    <Call UId="39">
+      <CallInfo Name="Stacklight" BlockType="FB">
+        <Instance Scope="GlobalVariable" UId="40">
+          <Component Name="Stacklight_DB" />
+        </Instance>
+        <Parameter Name="Emergency" Section="Input" Type="Bool" />
+        <Parameter Name="Mode" Section="Input" Type="Int" />
+        <Parameter Name="RedIn" Section="Input" Type="Bool" />
+        <Parameter Name="YellowIn" Section="Input" Type="Bool" />
+        <Parameter Name="GreenIn" Section="Input" Type="Bool" />
+        <Parameter Name="ReadyDevices" Section="Input" Type="Bool" />
+        <Parameter Name="DoorOpen" Section="Input" Type="Bool" />
+        <Parameter Name="Xvelocity" Section="Input" Type="DInt" />
+        <Parameter Name="Yvelocity" Section="Input" Type="DInt" />
+        <Parameter Name="MachineReadyPLC" Section="Input" Type="Bool" />
+        <Parameter Name="MachineReadyNOAH" Section="Input" Type="Bool" />
+        <Parameter Name="MachinePrintingPLC" Section="Input" Type="Bool" />
+        <Parameter Name="MachinePrintingNOAH" Section="Input" Type="Bool" />
+        <Parameter Name="MachineErrorPLC" Section="Input" Type="Bool" />
+        <Parameter Name="MachineErrorNOAH" Section="Input" Type="Bool" />
+        <Parameter Name="LED01" Section="Input" Type="Bool" />
+        <Parameter Name="LED02" Section="Input" Type="Bool" />
+        <Parameter Name="Maintenance" Section="Input" Type="Int" />
+        <Parameter Name="Status" Section="Output" Type="Int" />
+        <Parameter Name="OutputColor" Section="Output" Type="Int" />
+        <Parameter Name="StacklightCTRL01" Section="Output" Type="Bool" />
+        <Parameter Name="StacklightCTRL02" Section="Output" Type="Bool" />
+        <Parameter Name="MachineConnectedNOAH" Section="InOut" Type="Bool" />
+      </CallInfo>
+    </Call>
+  </Parts>
+  <Wires>
+    <Wire UId="49">
+      <Powerrail />
+      <NameCon UId="38" Name="pre" />
+    </Wire>
+    <Wire UId="50">
+      <IdentCon UId="21" />
+      <NameCon UId="38" Name="in1" />
+    </Wire>
+    <Wire UId="51">
+      <IdentCon UId="22" />
+      <NameCon UId="38" Name="in2" />
+    </Wire>
+    <Wire UId="52">
+      <NameCon UId="38" Name="out" />
+      <NameCon UId="39" Name="en" />
+    </Wire>
+    <Wire UId="53">
+      <IdentCon UId="23" />
+      <NameCon UId="39" Name="Emergency" />
+    </Wire>
+    <Wire UId="54">
+      <IdentCon UId="24" />
+      <NameCon UId="39" Name="Mode" />
+    </Wire>
+    <Wire UId="55">
+      <OpenCon UId="41" />
+      <NameCon UId="39" Name="RedIn" />
+    </Wire>
+    <Wire UId="56">
+      <OpenCon UId="42" />
+      <NameCon UId="39" Name="YellowIn" />
+    </Wire>
+    <Wire UId="57">
+      <OpenCon UId="43" />
+      <NameCon UId="39" Name="GreenIn" />
+    </Wire>
+    <Wire UId="58">
+      <IdentCon UId="25" />
+      <NameCon UId="39" Name="ReadyDevices" />
+    </Wire>
+    <Wire UId="59">
+      <IdentCon UId="26" />
+      <NameCon UId="39" Name="DoorOpen" />
+    </Wire>
+    <Wire UId="60">
+      <OpenCon UId="44" />
+      <NameCon UId="39" Name="Xvelocity" />
+    </Wire>
+    <Wire UId="61">
+      <OpenCon UId="45" />
+      <NameCon UId="39" Name="Yvelocity" />
+    </Wire>
+    <Wire UId="62">
+      <IdentCon UId="27" />
+      <NameCon UId="39" Name="MachineReadyPLC" />
+    </Wire>
+    <Wire UId="63">
+      <OpenCon UId="46" />
+      <NameCon UId="39" Name="MachineReadyNOAH" />
+    </Wire>
+    <Wire UId="64">
+      <OpenCon UId="47" />
+      <NameCon UId="39" Name="MachinePrintingPLC" />
+    </Wire>
+    <Wire UId="65">
+      <IdentCon UId="28" />
+      <NameCon UId="39" Name="MachinePrintingNOAH" />
+    </Wire>
+    <Wire UId="66">
+      <IdentCon UId="29" />
+      <NameCon UId="39" Name="MachineErrorPLC" />
+    </Wire>
+    <Wire UId="67">
+      <IdentCon UId="30" />
+      <NameCon UId="39" Name="MachineErrorNOAH" />
+    </Wire>
+    <Wire UId="68">
+      <IdentCon UId="31" />
+      <NameCon UId="39" Name="LED01" />
+    </Wire>
+    <Wire UId="69">
+      <IdentCon UId="32" />
+      <NameCon UId="39" Name="LED02" />
+    </Wire>
+    <Wire UId="70">
+      <OpenCon UId="48" />
+      <NameCon UId="39" Name="Maintenance" />
+    </Wire>
+    <Wire UId="71">
+      <IdentCon UId="33" />
+      <NameCon UId="39" Name="MachineConnectedNOAH" />
+    </Wire>
+    <Wire UId="72">
+      <NameCon UId="39" Name="Status" />
+      <IdentCon UId="34" />
+    </Wire>
+    <Wire UId="73">
+      <NameCon UId="39" Name="OutputColor" />
+      <IdentCon UId="35" />
+    </Wire>
+    <Wire UId="74">
+      <NameCon UId="39" Name="StacklightCTRL01" />
+      <IdentCon UId="36" />
+    </Wire>
+    <Wire UId="75">
+      <NameCon UId="39" Name="StacklightCTRL02" />
+      <IdentCon UId="37" />
+    </Wire>
+  </Wires>
+</FlgNet></NetworkSource>
+          <ProgrammingLanguage>LAD</ProgrammingLanguage>
+        </AttributeList>
+        <ObjectList>
+          <MultilingualText ID="2C" CompositionName="Comment">
+            <ObjectList>
+              <MultilingualTextItem ID="2D" CompositionName="Items">
+                <AttributeList>
+                  <Culture>en-US</Culture>
+                  <Text />
+                </AttributeList>
+              </MultilingualTextItem>
+            </ObjectList>
+          </MultilingualText>
+          <MultilingualText ID="2E" CompositionName="Title">
+            <ObjectList>
+              <MultilingualTextItem ID="2F" CompositionName="Items">
+                <AttributeList>
+                  <Culture>en-US</Culture>
+                  <Text>Stacklight</Text>
+                </AttributeList>
+              </MultilingualTextItem>
+            </ObjectList>
+          </MultilingualText>
+        </ObjectList>
+      </SW.Blocks.CompileUnit>
+      <SW.Blocks.CompileUnit ID="30" CompositionName="CompileUnits">
+        <AttributeList>
+          <NetworkSource><FlgNet xmlns="http://www.siemens.com/automation/Openness/SW/NetworkSource/FlgNet/v4">
+  <Parts>
+    <Access Scope="GlobalVariable" UId="21">
+      <Symbol>
+        <Component Name="FTON_FirstTurnON" />
+        <Component Name="FTON_ControlButtons" />
+      </Symbol>
+    </Access>
+    <Access Scope="GlobalVariable" UId="22">
+      <Symbol>
+        <Component Name="JOGPOS_BTN_Z1" />
+      </Symbol>
+    </Access>
+    <Access Scope="GlobalVariable" UId="23">
+      <Symbol>
+        <Component Name="JOGNEG_BTN_Z1" />
+      </Symbol>
+    </Access>
+    <Access Scope="GlobalVariable" UId="24">
+      <Symbol>
+        <Component Name="JOGPOS_BTN_Z2" />
+      </Symbol>
+    </Access>
+    <Access Scope="GlobalVariable" UId="25">
+      <Symbol>
+        <Component Name="JOGNEG_BTN_Z2" />
+      </Symbol>
+    </Access>
+    <Access Scope="GlobalVariable" UId="26">
+      <Symbol>
+        <Component Name="Control_Buttons_Activation_DB" />
+        <Component Name="Control_Buttons_ActivatedOUT" />
+      </Symbol>
+    </Access>
+    <Access Scope="GlobalVariable" UId="27">
+      <Symbol>
+        <Component Name="JOGPOS_BTN_Z1" />
+      </Symbol>
+    </Access>
+    <Access Scope="GlobalVariable" UId="28">
+      <Symbol>
+        <Component Name="JOGNEG_BTN_Z1" />
+      </Symbol>
+    </Access>
+    <Access Scope="GlobalVariable" UId="29">
+      <Symbol>
+        <Component Name="JOGPOS_BTN_Z2" />
+      </Symbol>
+    </Access>
+    <Access Scope="GlobalVariable" UId="30">
+      <Symbol>
+        <Component Name="JOGNEG_BTN_Z2" />
+      </Symbol>
+    </Access>
+    <Access Scope="GlobalVariable" UId="31">
+      <Symbol>
+        <Component Name="WebDB" />
+        <Component Name="XOutput" />
+        <Component Name="HomingValid" />
+      </Symbol>
+    </Access>
+    <Access Scope="GlobalVariable" UId="32">
+      <Symbol>
+        <Component Name="WebDB" />
+        <Component Name="YOutput" />
+        <Component Name="HomingValid" />
+      </Symbol>
+    </Access>
+    <Access Scope="GlobalVariable" UId="33">
+      <Symbol>
+        <Component Name="WebDB" />
+        <Component Name="Z1Output" />
+        <Component Name="HomingValid" />
+      </Symbol>
+    </Access>
+    <Access Scope="GlobalVariable" UId="34">
+      <Symbol>
+        <Component Name="WebDB" />
+        <Component Name="Z2Output" />
+        <Component Name="HomingValid" />
+      </Symbol>
+    </Access>
+    <Access Scope="GlobalVariable" UId="35">
+      <Symbol>
+        <Component Name="Control_Buttons_Activation_DB" />
+        <Component Name="Control_Buttons_Move_Permission" />
+      </Symbol>
+    </Access>
+    <Access Scope="GlobalVariable" UId="36">
+      <Symbol>
+        <Component Name="WebDB" />
+        <Component Name="Ready_Devices" />
+      </Symbol>
+    </Access>
+    <Access Scope="GlobalVariable" UId="37">
+      <Symbol>
+        <Component Name="WebDB" />
+        <Component Name="XInput" />
+        <Component Name="JogPos" />
+      </Symbol>
+    </Access>
+    <Access Scope="GlobalVariable" UId="38">
+      <Symbol>
+        <Component Name="WebDB" />
+        <Component Name="XInput" />
+        <Component Name="JogNeg" />
+      </Symbol>
+    </Access>
+    <Access Scope="GlobalVariable" UId="39">
+      <Symbol>
+        <Component Name="WebDB" />
+        <Component Name="YInput" />
+        <Component Name="JogPos" />
+      </Symbol>
+    </Access>
+    <Access Scope="GlobalVariable" UId="40">
+      <Symbol>
+        <Component Name="WebDB" />
+        <Component Name="YInput" />
+        <Component Name="JogNeg" />
+      </Symbol>
+    </Access>
+    <Access Scope="GlobalVariable" UId="41">
+      <Symbol>
+        <Component Name="WebDB" />
+        <Component Name="Z1Input" />
+        <Component Name="JogPos" />
+      </Symbol>
+    </Access>
+    <Access Scope="GlobalVariable" UId="42">
+      <Symbol>
+        <Component Name="WebDB" />
+        <Component Name="Z1Input" />
+        <Component Name="JogNeg" />
+      </Symbol>
+    </Access>
+    <Access Scope="GlobalVariable" UId="43">
+      <Symbol>
+        <Component Name="WebDB" />
+        <Component Name="Z2Input" />
+        <Component Name="JogPos" />
+      </Symbol>
+    </Access>
+    <Access Scope="GlobalVariable" UId="44">
+      <Symbol>
+        <Component Name="WebDB" />
+        <Component Name="Z2Input" />
+        <Component Name="JogNeg" />
+      </Symbol>
+    </Access>
+    <Access Scope="GlobalVariable" UId="45">
+      <Symbol>
+        <Component Name="WebDB" />
+        <Component Name="XInput" />
+        <Component Name="StartHoming" />
+      </Symbol>
+    </Access>
+    <Access Scope="GlobalVariable" UId="46">
+      <Symbol>
+        <Component Name="WebDB" />
+        <Component Name="YInput" />
+        <Component Name="StartHoming" />
+      </Symbol>
+    </Access>
+    <Access Scope="GlobalVariable" UId="47">
+      <Symbol>
+        <Component Name="WebDB" />
+        <Component Name="Z1Input" />
+        <Component Name="StartHoming" />
+      </Symbol>
+    </Access>
+    <Access Scope="GlobalVariable" UId="48">
+      <Symbol>
+        <Component Name="WebDB" />
+        <Component Name="Z2Input" />
+        <Component Name="StartHoming" />
+      </Symbol>
+    </Access>
+    <Access Scope="GlobalVariable" UId="49">
+      <Symbol>
+        <Component Name="WebDB" />
+        <Component Name="Start_Machine" />
+      </Symbol>
+    </Access>
+    <Part Name="Contact" UId="50" />
+    <Call UId="51">
+      <CallInfo Name="Control_Buttons_Activation" BlockType="FB">
+        <Instance Scope="GlobalVariable" UId="52">
+          <Component Name="Control_Buttons_Activation_DB" />
+        </Instance>
+        <Parameter Name="JogInZ1pos" Section="Input" Type="Bool" />
+        <Parameter Name="JogInZ1neg" Section="Input" Type="Bool" />
+        <Parameter Name="JogInZ2pos" Section="Input" Type="Bool" />
+        <Parameter Name="JogInZ2neg" Section="Input" Type="Bool" />
+        <Parameter Name="Control_Buttons_Move_Permission" Section="Output" Type="Bool" />
+        <Parameter Name="Control_Buttons_ActivatedOUT" Section="Output" Type="Bool" />
+      </CallInfo>
+    </Call>
+    <Part Name="Contact" UId="53" />
+    <Call UId="54">
+      <CallInfo Name="Control_Buttons_Manipulate" BlockType="FB">
+        <Instance Scope="GlobalVariable" UId="55">
+          <Component Name="Control_Buttons_Manipulate_DB" />
+        </Instance>
+        <Parameter Name="JogInZ1pos" Section="Input" Type="Bool" />
+        <Parameter Name="JogInZ1neg" Section="Input" Type="Bool" />
+        <Parameter Name="JogInZ2pos" Section="Input" Type="Bool" />
+        <Parameter Name="JogInZ2neg" Section="Input" Type="Bool" />
+        <Parameter Name="InXhome" Section="Input" Type="Bool" />
+        <Parameter Name="InYhome" Section="Input" Type="Bool" />
+        <Parameter Name="InZ1home" Section="Input" Type="Bool" />
+        <Parameter Name="InZ2home" Section="Input" Type="Bool" />
+        <Parameter Name="MovePermission" Section="Input" Type="Bool" />
+        <Parameter Name="ReadyDevices" Section="Input" Type="Bool" />
+        <Parameter Name="JogOutXpos" Section="Output" Type="Bool" />
+        <Parameter Name="JogOutXneg" Section="Output" Type="Bool" />
+        <Parameter Name="JogOutYpos" Section="Output" Type="Bool" />
+        <Parameter Name="JogOutYneg" Section="Output" Type="Bool" />
+        <Parameter Name="JogOutZ1pos" Section="Output" Type="Bool" />
+        <Parameter Name="JogOutZ1neg" Section="Output" Type="Bool" />
+        <Parameter Name="JogOutZ2pos" Section="Output" Type="Bool" />
+        <Parameter Name="JogOutZ2neg" Section="Output" Type="Bool" />
+        <Parameter Name="XHoming" Section="Output" Type="Bool" />
+        <Parameter Name="YHoming" Section="Output" Type="Bool" />
+        <Parameter Name="Z1Homing" Section="Output" Type="Bool" />
+        <Parameter Name="Z2Homing" Section="Output" Type="Bool" />
+        <Parameter Name="StartMachine" Section="Output" Type="Bool" />
+      </CallInfo>
+    </Call>
+  </Parts>
+  <Wires>
+    <Wire UId="58">
+      <Powerrail />
+      <NameCon UId="50" Name="in" />
+      <NameCon UId="53" Name="in" />
+    </Wire>
+    <Wire UId="59">
+      <IdentCon UId="21" />
+      <NameCon UId="50" Name="operand" />
+    </Wire>
+    <Wire UId="60">
+      <NameCon UId="50" Name="out" />
+      <NameCon UId="51" Name="en" />
+    </Wire>
+    <Wire UId="61">
+      <IdentCon UId="22" />
+      <NameCon UId="51" Name="JogInZ1pos" />
+    </Wire>
+    <Wire UId="62">
+      <IdentCon UId="23" />
+      <NameCon UId="51" Name="JogInZ1neg" />
+    </Wire>
+    <Wire UId="63">
+      <IdentCon UId="24" />
+      <NameCon UId="51" Name="JogInZ2pos" />
+    </Wire>
+    <Wire UId="64">
+      <IdentCon UId="25" />
+      <NameCon UId="51" Name="JogInZ2neg" />
+    </Wire>
+    <Wire UId="65">
+      <NameCon UId="51" Name="Control_Buttons_Move_Permission" />
+      <OpenCon UId="56" />
+    </Wire>
+    <Wire UId="66">
+      <NameCon UId="51" Name="Control_Buttons_ActivatedOUT" />
+      <OpenCon UId="57" />
+    </Wire>
+    <Wire UId="67">
+      <IdentCon UId="26" />
+      <NameCon UId="53" Name="operand" />
+    </Wire>
+    <Wire UId="68">
+      <NameCon UId="53" Name="out" />
+      <NameCon UId="54" Name="en" />
+    </Wire>
+    <Wire UId="69">
+      <IdentCon UId="27" />
+      <NameCon UId="54" Name="JogInZ1pos" />
+    </Wire>
+    <Wire UId="70">
+      <IdentCon UId="28" />
+      <NameCon UId="54" Name="JogInZ1neg" />
+    </Wire>
+    <Wire UId="71">
+      <IdentCon UId="29" />
+      <NameCon UId="54" Name="JogInZ2pos" />
+    </Wire>
+    <Wire UId="72">
+      <IdentCon UId="30" />
+      <NameCon UId="54" Name="JogInZ2neg" />
+    </Wire>
+    <Wire UId="73">
+      <IdentCon UId="31" />
+      <NameCon UId="54" Name="InXhome" />
+    </Wire>
+    <Wire UId="74">
+      <IdentCon UId="32" />
+      <NameCon UId="54" Name="InYhome" />
+    </Wire>
+    <Wire UId="75">
+      <IdentCon UId="33" />
+      <NameCon UId="54" Name="InZ1home" />
+    </Wire>
+    <Wire UId="76">
+      <IdentCon UId="34" />
+      <NameCon UId="54" Name="InZ2home" />
+    </Wire>
+    <Wire UId="77">
+      <IdentCon UId="35" />
+      <NameCon UId="54" Name="MovePermission" />
+    </Wire>
+    <Wire UId="78">
+      <IdentCon UId="36" />
+      <NameCon UId="54" Name="ReadyDevices" />
+    </Wire>
+    <Wire UId="79">
+      <NameCon UId="54" Name="JogOutXpos" />
+      <IdentCon UId="37" />
+    </Wire>
+    <Wire UId="80">
+      <NameCon UId="54" Name="JogOutXneg" />
+      <IdentCon UId="38" />
+    </Wire>
+    <Wire UId="81">
+      <NameCon UId="54" Name="JogOutYpos" />
+      <IdentCon UId="39" />
+    </Wire>
+    <Wire UId="82">
+      <NameCon UId="54" Name="JogOutYneg" />
+      <IdentCon UId="40" />
+    </Wire>
+    <Wire UId="83">
+      <NameCon UId="54" Name="JogOutZ1pos" />
+      <IdentCon UId="41" />
+    </Wire>
+    <Wire UId="84">
+      <NameCon UId="54" Name="JogOutZ1neg" />
+      <IdentCon UId="42" />
+    </Wire>
+    <Wire UId="85">
+      <NameCon UId="54" Name="JogOutZ2pos" />
+      <IdentCon UId="43" />
+    </Wire>
+    <Wire UId="86">
+      <NameCon UId="54" Name="JogOutZ2neg" />
+      <IdentCon UId="44" />
+    </Wire>
+    <Wire UId="87">
+      <NameCon UId="54" Name="XHoming" />
+      <IdentCon UId="45" />
+    </Wire>
+    <Wire UId="88">
+      <NameCon UId="54" Name="YHoming" />
+      <IdentCon UId="46" />
+    </Wire>
+    <Wire UId="89">
+      <NameCon UId="54" Name="Z1Homing" />
+      <IdentCon UId="47" />
+    </Wire>
+    <Wire UId="90">
+      <NameCon UId="54" Name="Z2Homing" />
+      <IdentCon UId="48" />
+    </Wire>
+    <Wire UId="91">
+      <NameCon UId="54" Name="StartMachine" />
+      <IdentCon UId="49" />
+    </Wire>
+  </Wires>
+</FlgNet></NetworkSource>
+          <ProgrammingLanguage>LAD</ProgrammingLanguage>
+        </AttributeList>
+        <ObjectList>
+          <MultilingualText ID="31" CompositionName="Comment">
+            <ObjectList>
+              <MultilingualTextItem ID="32" CompositionName="Items">
+                <AttributeList>
+                  <Culture>en-US</Culture>
+                  <Text>Control addon that can be activated at the early stage of commisioning multiple machines at the same time to control X and Y axis jogging without PC.
+
+To activate control buttons: enable function blocks in FTON and type with jog buttons combination: Z1 up, Z2 down, Z2 up, Z1 down, Z1 up, Z2 down, Z2 up, Z1 down,
+
+Deactivate: hold all 4 buttons at the same time</Text>
+                </AttributeList>
+              </MultilingualTextItem>
+            </ObjectList>
+          </MultilingualText>
+          <MultilingualText ID="33" CompositionName="Title">
+            <ObjectList>
+              <MultilingualTextItem ID="34" CompositionName="Items">
+                <AttributeList>
+                  <Culture>en-US</Culture>
+                  <Text>Control Buttons</Text>
+                </AttributeList>
+              </MultilingualTextItem>
+            </ObjectList>
+          </MultilingualText>
+        </ObjectList>
+      </SW.Blocks.CompileUnit>
+      <SW.Blocks.CompileUnit ID="35" CompositionName="CompileUnits">
+        <AttributeList>
+          <NetworkSource><FlgNet xmlns="http://www.siemens.com/automation/Openness/SW/NetworkSource/FlgNet/v4">
+  <Parts>
+    <Access Scope="GlobalVariable" UId="21">
+      <Symbol>
+        <Component Name="FTON_FirstTurnON" />
+        <Component Name="FTON_Data_Logging_CreateFile" />
+      </Symbol>
+    </Access>
+    <Access Scope="GlobalVariable" UId="22">
+      <Symbol>
+        <Component Name="ZAxis_RelativeMotion_Test_DB" />
+        <Component Name="CreateLogFile" />
+      </Symbol>
+    </Access>
+    <Access Scope="GlobalVariable" UId="23">
+      <Symbol>
+        <Component Name="FTON_FirstTurnON" />
+        <Component Name="FTON_Data_Logging_StartLogging" />
+      </Symbol>
+    </Access>
+    <Access Scope="GlobalVariable" UId="24">
+      <Symbol>
+        <Component Name="ZAxis_RelativeMotion_Test_DB" />
+        <Component Name="StartLog" />
+      </Symbol>
+    </Access>
+    <Access Scope="GlobalVariable" UId="25">
+      <Symbol>
+        <Component Name="WebDB" />
+        <Component Name="Z1Input" />
+        <Component Name="StartTask" />
+      </Symbol>
+    </Access>
+    <Access Scope="LiteralConstant" UId="26">
+      <Constant>
+        <ConstantType>String</ConstantType>
+        <ConstantValue>'Start Task Command WebDB Z1'</ConstantValue>
+      </Constant>
+    </Access>
+    <Access Scope="GlobalVariable" UId="27">
+      <Symbol>
+        <Component Name="WebDB" />
+        <Component Name="Z1Input" />
+        <Component Name="Relative" />
+      </Symbol>
+    </Access>
+    <Access Scope="LiteralConstant" UId="28">
+      <Constant>
+        <ConstantType>String</ConstantType>
+        <ConstantValue>'Relative Mode Z1 Input'</ConstantValue>
+      </Constant>
+    </Access>
+    <Access Scope="GlobalVariable" UId="29">
+      <Symbol>
+        <Component Name="WebDB" />
+        <Component Name="Z1Input" />
+        <Component Name="SetValuePosition" />
+      </Symbol>
+    </Access>
+    <Access Scope="LiteralConstant" UId="30">
+      <Constant>
+        <ConstantType>String</ConstantType>
+        <ConstantValue>'Set Value Position Z1'</ConstantValue>
+      </Constant>
+    </Access>
+    <Access Scope="GlobalVariable" UId="31">
+      <Symbol>
+        <Component Name="WebDB" />
+        <Component Name="Z1Input" />
+        <Component Name="SetValueVelocity" />
+      </Symbol>
+    </Access>
+    <Access Scope="LiteralConstant" UId="32">
+      <Constant>
+        <ConstantType>String</ConstantType>
+        <ConstantValue>'Z1 Input SetValueVelocity'</ConstantValue>
+      </Constant>
+    </Access>
+    <Access Scope="GlobalVariable" UId="33">
+      <Symbol>
+        <Component Name="WebDB" />
+        <Component Name="Z1Output" />
+        <Component Name="ActualPosition" />
+      </Symbol>
+    </Access>
+    <Access Scope="LiteralConstant" UId="34">
+      <Constant>
+        <ConstantType>String</ConstantType>
+        <ConstantValue>'Actual Position Z1'</ConstantValue>
+      </Constant>
+    </Access>
+    <Access Scope="LiteralConstant" UId="35">
+      <Constant>
+        <ConstantType>String</ConstantType>
+        <ConstantValue>'Comment'</ConstantValue>
+      </Constant>
+    </Access>
+    <Access Scope="GlobalVariable" UId="36">
+      <Symbol>
+        <Component Name="Valuestobelogged" />
+        <Component Name="Datatobelogged" />
+        <Component Name="Variable01_Bool" />
+      </Symbol>
+    </Access>
+    <Access Scope="GlobalVariable" UId="37">
+      <Symbol>
+        <Component Name="Valuestobelogged" />
+        <Component Name="Datatobelogged" />
+        <Component Name="Variable02_Bool" />
+      </Symbol>
+    </Access>
+    <Access Scope="GlobalVariable" UId="38">
+      <Symbol>
+        <Component Name="Valuestobelogged" />
+        <Component Name="Datatobelogged" />
+        <Component Name="Variable03_Dint" />
+      </Symbol>
+    </Access>
+    <Access Scope="GlobalVariable" UId="39">
+      <Symbol>
+        <Component Name="Valuestobelogged" />
+        <Component Name="Datatobelogged" />
+        <Component Name="Variable04_Dint" />
+      </Symbol>
+    </Access>
+    <Access Scope="GlobalVariable" UId="40">
+      <Symbol>
+        <Component Name="Valuestobelogged" />
+        <Component Name="Datatobelogged" />
+        <Component Name="Variable05_Dint" />
+      </Symbol>
+    </Access>
+    <Access Scope="GlobalVariable" UId="41">
+      <Symbol>
+        <Component Name="Valuestobelogged" />
+        <Component Name="Datatobelogged" />
+        <Component Name="Variable06_Dint" />
+      </Symbol>
+    </Access>
+    <Access Scope="GlobalVariable" UId="42">
+      <Symbol>
+        <Component Name="Valuestobelogged" />
+        <Component Name="LogColumns" />
+      </Symbol>
+    </Access>
+    <Part Name="Contact" UId="43" />
+    <Part Name="Contact" UId="44" />
+    <Part Name="O" UId="45">
+      <TemplateValue Name="Card" Type="Cardinality">2</TemplateValue>
+    </Part>
+    <Part Name="Contact" UId="46" />
+    <Part Name="Contact" UId="47" />
+    <Part Name="O" UId="48">
+      <TemplateValue Name="Card" Type="Cardinality">2</TemplateValue>
+    </Part>
+    <Call UId="49">
+      <CallInfo Name="DataLogging" BlockType="FB">
+        <Instance Scope="GlobalVariable" UId="50">
+          <Component Name="DataLogging_DB" />
+        </Instance>
+        <Parameter Name="CreateFile" Section="Input" Type="Bool" />
+        <Parameter Name="StartLogging" Section="Input" Type="Bool" />
+        <Parameter Name="Variable01in_Bool" Section="Input" Type="Bool" />
+        <Parameter Name="Name_01" Section="Input" Type="String" />
+        <Parameter Name="Variable02in_Bool" Section="Input" Type="Bool" />
+        <Parameter Name="Name_02" Section="Input" Type="String" />
+        <Parameter Name="Variable03in_Dint" Section="Input" Type="DInt" />
+        <Parameter Name="Name_03" Section="Input" Type="String" />
+        <Parameter Name="Variable04in_Dint" Section="Input" Type="DInt" />
+        <Parameter Name="Name_04" Section="Input" Type="String" />
+        <Parameter Name="Variable05in_Dint" Section="Input" Type="DInt" />
+        <Parameter Name="Name_05" Section="Input" Type="String" />
+        <Parameter Name="Variable06in_Dint" Section="Input" Type="DInt" />
+        <Parameter Name="Name_06" Section="Input" Type="String" />
+        <Parameter Name="Variable01out_Bool" Section="Output" Type="Bool" />
+        <Parameter Name="Variable02out_Bool" Section="Output" Type="Bool" />
+        <Parameter Name="Variable03out_Dint" Section="Output" Type="DInt" />
+        <Parameter Name="Variable04out_Dint" Section="Output" Type="DInt" />
+        <Parameter Name="Variable05out_Dint" Section="Output" Type="DInt" />
+        <Parameter Name="Variable06out_Dint" Section="Output" Type="DInt" />
+        <Parameter Name="LogColumns" Section="Output" Type="String" />
+      </CallInfo>
+    </Call>
+  </Parts>
+  <Wires>
+    <Wire UId="52">
+      <Powerrail />
+      <NameCon UId="49" Name="en" />
+      <NameCon UId="43" Name="in" />
+      <NameCon UId="44" Name="in" />
+      <NameCon UId="46" Name="in" />
+      <NameCon UId="47" Name="in" />
+    </Wire>
+    <Wire UId="53">
+      <IdentCon UId="21" />
+      <NameCon UId="43" Name="operand" />
+    </Wire>
+    <Wire UId="54">
+      <NameCon UId="43" Name="out" />
+      <NameCon UId="45" Name="in1" />
+    </Wire>
+    <Wire UId="55">
+      <IdentCon UId="22" />
+      <NameCon UId="44" Name="operand" />
+    </Wire>
+    <Wire UId="56">
+      <NameCon UId="44" Name="out" />
+      <NameCon UId="45" Name="in2" />
+    </Wire>
+    <Wire UId="57">
+      <NameCon UId="45" Name="out" />
+      <NameCon UId="49" Name="CreateFile" />
+    </Wire>
+    <Wire UId="58">
+      <IdentCon UId="23" />
+      <NameCon UId="46" Name="operand" />
+    </Wire>
+    <Wire UId="59">
+      <NameCon UId="46" Name="out" />
+      <NameCon UId="48" Name="in1" />
+    </Wire>
+    <Wire UId="60">
+      <IdentCon UId="24" />
+      <NameCon UId="47" Name="operand" />
+    </Wire>
+    <Wire UId="61">
+      <NameCon UId="47" Name="out" />
+      <NameCon UId="48" Name="in2" />
+    </Wire>
+    <Wire UId="62">
+      <NameCon UId="48" Name="out" />
+      <NameCon UId="49" Name="StartLogging" />
+    </Wire>
+    <Wire UId="63">
+      <IdentCon UId="25" />
+      <NameCon UId="49" Name="Variable01in_Bool" />
+    </Wire>
+    <Wire UId="64">
+      <IdentCon UId="26" />
+      <NameCon UId="49" Name="Name_01" />
+    </Wire>
+    <Wire UId="65">
+      <IdentCon UId="27" />
+      <NameCon UId="49" Name="Variable02in_Bool" />
+    </Wire>
+    <Wire UId="66">
+      <IdentCon UId="28" />
+      <NameCon UId="49" Name="Name_02" />
+    </Wire>
+    <Wire UId="67">
+      <IdentCon UId="29" />
+      <NameCon UId="49" Name="Variable03in_Dint" />
+    </Wire>
+    <Wire UId="68">
+      <IdentCon UId="30" />
+      <NameCon UId="49" Name="Name_03" />
+    </Wire>
+    <Wire UId="69">
+      <IdentCon UId="31" />
+      <NameCon UId="49" Name="Variable04in_Dint" />
+    </Wire>
+    <Wire UId="70">
+      <IdentCon UId="32" />
+      <NameCon UId="49" Name="Name_04" />
+    </Wire>
+    <Wire UId="71">
+      <IdentCon UId="33" />
+      <NameCon UId="49" Name="Variable05in_Dint" />
+    </Wire>
+    <Wire UId="72">
+      <IdentCon UId="34" />
+      <NameCon UId="49" Name="Name_05" />
+    </Wire>
+    <Wire UId="73">
+      <OpenCon UId="51" />
+      <NameCon UId="49" Name="Variable06in_Dint" />
+    </Wire>
+    <Wire UId="74">
+      <IdentCon UId="35" />
+      <NameCon UId="49" Name="Name_06" />
+    </Wire>
+    <Wire UId="75">
+      <NameCon UId="49" Name="Variable01out_Bool" />
+      <IdentCon UId="36" />
+    </Wire>
+    <Wire UId="76">
+      <NameCon UId="49" Name="Variable02out_Bool" />
+      <IdentCon UId="37" />
+    </Wire>
+    <Wire UId="77">
+      <NameCon UId="49" Name="Variable03out_Dint" />
+      <IdentCon UId="38" />
+    </Wire>
+    <Wire UId="78">
+      <NameCon UId="49" Name="Variable04out_Dint" />
+      <IdentCon UId="39" />
+    </Wire>
+    <Wire UId="79">
+      <NameCon UId="49" Name="Variable05out_Dint" />
+      <IdentCon UId="40" />
+    </Wire>
+    <Wire UId="80">
+      <NameCon UId="49" Name="Variable06out_Dint" />
+      <IdentCon UId="41" />
+    </Wire>
+    <Wire UId="81">
+      <NameCon UId="49" Name="LogColumns" />
+      <IdentCon UId="42" />
+    </Wire>
+  </Wires>
+</FlgNet></NetworkSource>
+          <ProgrammingLanguage>LAD</ProgrammingLanguage>
+        </AttributeList>
+        <ObjectList>
+          <MultilingualText ID="36" CompositionName="Comment">
+            <ObjectList>
+              <MultilingualTextItem ID="37" CompositionName="Items">
+                <AttributeList>
+                  <Culture>en-US</Culture>
+                  <Text>Details to start the logging process:
+1) Activate web server
+2) Set variables to log by assigning them to DataLogging block inputs
+3) Create logging file in the FTON
+4) Start logging in the FTON
+5) Download the file via web server
+
+There is a limited amount of data that can be written due to limited memory capacity. The file will be overwritten after certain amount of records. It is possible to create a new file based on amount of records, should be developed in the future.</Text>
+                </AttributeList>
+              </MultilingualTextItem>
+            </ObjectList>
+          </MultilingualText>
+          <MultilingualText ID="38" CompositionName="Title">
+            <ObjectList>
+              <MultilingualTextItem ID="39" CompositionName="Items">
+                <AttributeList>
+                  <Culture>en-US</Culture>
+                  <Text>Data Logging</Text>
+                </AttributeList>
+              </MultilingualTextItem>
+            </ObjectList>
+          </MultilingualText>
+        </ObjectList>
+      </SW.Blocks.CompileUnit>
+      <SW.Blocks.CompileUnit ID="3A" CompositionName="CompileUnits">
+        <AttributeList>
+          <NetworkSource><FlgNet xmlns="http://www.siemens.com/automation/Openness/SW/NetworkSource/FlgNet/v4">
+  <Parts>
+    <Access Scope="GlobalVariable" UId="21">
+      <Symbol>
+        <Component Name="Tests_Executing" />
+        <Component Name="Test01_Enable" />
+      </Symbol>
+    </Access>
+    <Access Scope="GlobalVariable" UId="22">
+      <Symbol>
+        <Component Name="Tests_Executing" />
+        <Component Name="Test01_Start" />
+      </Symbol>
+    </Access>
+    <Access Scope="GlobalVariable" UId="23">
+      <Symbol>
+        <Component Name="Tests_Executing" />
+        <Component Name="Test01_End" />
+      </Symbol>
+    </Access>
+    <Access Scope="GlobalVariable" UId="24">
+      <Symbol>
+        <Component Name="WebDB" />
+        <Component Name="Z2Output" />
+        <Component Name="DriveMoving" />
+      </Symbol>
+    </Access>
+    <Access Scope="GlobalVariable" UId="25">
+      <Symbol>
+        <Component Name="WebDB" />
+        <Component Name="Z2Input" />
+        <Component Name="StartTask" />
+      </Symbol>
+    </Access>
+    <Access Scope="GlobalVariable" UId="26">
+      <Symbol>
+        <Component Name="WebDB" />
+        <Component Name="Z2Input" />
+        <Component Name="SetValuePosition" />
+      </Symbol>
+    </Access>
+    <Part Name="Contact" UId="27" />
+    <Call UId="28">
+      <CallInfo Name="ZAxis_RelativeMotion_Test" BlockType="FB">
+        <Instance Scope="GlobalVariable" UId="29">
+          <Component Name="ZAxis_RelativeMotion_Test_DB" />
+        </Instance>
+        <Parameter Name="StartTest" Section="Input" Type="Bool" />
+        <Parameter Name="EndTest" Section="Input" Type="Bool" />
+        <Parameter Name="AmountOfSteps" Section="Input" Type="DInt" />
+        <Parameter Name="StepSizeInput" Section="Input" Type="DInt" />
+        <Parameter Name="Position" Section="Input" Type="DInt" />
+        <Parameter Name="AxisMoving" Section="Input" Type="Bool" />
+        <Parameter Name="StartTask" Section="Output" Type="Bool" />
+        <Parameter Name="StepSize" Section="Output" Type="DInt" />
+        <Parameter Name="StepNumber" Section="Output" Type="DInt" />
+        <Parameter Name="CreateLogFile" Section="Output" Type="Bool" />
+        <Parameter Name="StartLog" Section="Output" Type="Bool" />
+        <Parameter Name="Comment" Section="Output" Type="String" />
+      </CallInfo>
+    </Call>
+  </Parts>
+  <Wires>
+    <Wire UId="37">
+      <Powerrail />
+      <NameCon UId="27" Name="in" />
+    </Wire>
+    <Wire UId="38">
+      <IdentCon UId="21" />
+      <NameCon UId="27" Name="operand" />
+    </Wire>
+    <Wire UId="39">
+      <NameCon UId="27" Name="out" />
+      <NameCon UId="28" Name="en" />
+    </Wire>
+    <Wire UId="40">
+      <IdentCon UId="22" />
+      <NameCon UId="28" Name="StartTest" />
+    </Wire>
+    <Wire UId="41">
+      <IdentCon UId="23" />
+      <NameCon UId="28" Name="EndTest" />
+    </Wire>
+    <Wire UId="42">
+      <OpenCon UId="30" />
+      <NameCon UId="28" Name="AmountOfSteps" />
+    </Wire>
+    <Wire UId="43">
+      <OpenCon UId="31" />
+      <NameCon UId="28" Name="StepSizeInput" />
+    </Wire>
+    <Wire UId="44">
+      <OpenCon UId="32" />
+      <NameCon UId="28" Name="Position" />
+    </Wire>
+    <Wire UId="45">
+      <IdentCon UId="24" />
+      <NameCon UId="28" Name="AxisMoving" />
+    </Wire>
+    <Wire UId="46">
+      <NameCon UId="28" Name="StartTask" />
+      <IdentCon UId="25" />
+    </Wire>
+    <Wire UId="47">
+      <NameCon UId="28" Name="StepSize" />
+      <IdentCon UId="26" />
+    </Wire>
+    <Wire UId="48">
+      <NameCon UId="28" Name="StepNumber" />
+      <OpenCon UId="33" />
+    </Wire>
+    <Wire UId="49">
+      <NameCon UId="28" Name="CreateLogFile" />
+      <OpenCon UId="34" />
+    </Wire>
+    <Wire UId="50">
+      <NameCon UId="28" Name="StartLog" />
+      <OpenCon UId="35" />
+    </Wire>
+    <Wire UId="51">
+      <NameCon UId="28" Name="Comment" />
+      <OpenCon UId="36" />
+    </Wire>
+  </Wires>
+</FlgNet></NetworkSource>
+          <ProgrammingLanguage>LAD</ProgrammingLanguage>
+        </AttributeList>
+        <ObjectList>
+          <MultilingualText ID="3B" CompositionName="Comment">
+            <ObjectList>
+              <MultilingualTextItem ID="3C" CompositionName="Items">
+                <AttributeList>
+                  <Culture>en-US</Culture>
+                  <Text>NOT FINISHED, NOT CHECKED
+Test block to execute Z axis motion directly from the PLC.</Text>
+                </AttributeList>
+              </MultilingualTextItem>
+            </ObjectList>
+          </MultilingualText>
+          <MultilingualText ID="3D" CompositionName="Title">
+            <ObjectList>
+              <MultilingualTextItem ID="3E" CompositionName="Items">
+                <AttributeList>
+                  <Culture>en-US</Culture>
+                  <Text>Testing</Text>
+                </AttributeList>
+              </MultilingualTextItem>
+            </ObjectList>
+          </MultilingualText>
+        </ObjectList>
+      </SW.Blocks.CompileUnit>
+      <MultilingualText ID="3F" CompositionName="Title">
+        <ObjectList>
+          <MultilingualTextItem ID="40" CompositionName="Items">
+            <AttributeList>
+              <Culture>en-US</Culture>
+              <Text>"Main Program Sweep (Cycle)"</Text>
+            </AttributeList>
+          </MultilingualTextItem>
+        </ObjectList>
+      </MultilingualText>
+    </ObjectList>
+  </SW.Blocks.OB>
+</Document>
